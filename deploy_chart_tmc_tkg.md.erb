@@ -1,0 +1,30 @@
+To deploy the Bitnami MariaDB Helm chart, follow the instructions below:
+
+* Add the Bitnami Helm charts repository:
+
+        $  helm repo add bitnami https://charts.bitnami.com/bitnami
+
+* Deploy the [Bitnami MariaDB Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb). Replace the PASSWORD placeholder with a password for the MariaDB administrator account.
+
+        $ helm install mariadb bitnami/mariadb --set rootUser.password=PASSWORD
+
+* Once the deployment completes, refer to the output to obtain the MariaDB service URL:
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-chart-notes.png', 'Chart output' %>
+
+* Test the deployment by using the commands below to create a new MariaDB client pod. Replace the PASSWORD placeholder with the MariaDB administrator password.
+
+        $ kubectl run mariadb-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mariadb:10.3.23-debian-10-r25 --namespace default --command -- bash
+        $ mysql -h mariadb.default.svc.cluster.local -uroot -pPASSWORD
+
+* Execute some example SQL commands using the MariaDB CLI to confirm the operation of the MariaDB cluster:
+
+        USE my_database;
+        CREATE TABLE accounts (id INT NOT NULL, username VARCHAR(255) NOT NULL);
+        INSERT INTO accounts VALUES (1, 'james'), (2, 'john');
+        SELECT * FROM accounts;
+        exit
+
+    The following image demonstrates the output you should see:
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/mariadb-client.png', 'SQL client usage' %>

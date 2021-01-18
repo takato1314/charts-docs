@@ -1,0 +1,21 @@
+<%
+=begin
+apps: odoo
+platforms: kubernetes
+id: use_existing_database
+title: Use an external database
+category: configuration
+weight: 30
+=end %>
+
+Sometimes you may want to have Odoo connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [externalDatabase parameter](https://github.com/bitnami/charts/tree/master/bitnami/odoo#parameters). You should also disable the PostgreSQL installation with the postgresql.enabled option. For example using the following parameters:
+
+~~~
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.port=3306
+~~~
+
+> NOTE: If you disable PostgreSQL per above you MUST supply values for the externalDatabase connection.

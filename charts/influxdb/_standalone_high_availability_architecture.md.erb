@@ -1,0 +1,25 @@
+<%
+=begin
+apps: influxdb
+platforms: kubernetes
+id: standalone_high_availability_architecture
+title: Standalone vs High Availability architecture
+category: configuration
+weight: 30
+highlight: 30
+=end %>
+
+You can install the InfluxDB chart with two different architecture setups: "standalone" or "high-availability", you can use the architecture parameter:
+
+~~~
+architecture="standalone"
+architecture="high-availability"
+~~~
+
+The standalone architecture installs a deployment with one InfluxDB server (it cannot be scaled):
+
+<%= documentation_img '/images/img/platforms/kubernetes/charts/influxdb-standalone-architecture.png', 'InfluxDB standalone architecture' %>
+
+The high availability install a statefulset with N InfluxDB servers and M InfluxDB Relay instances:
+
+<%= documentation_img '/images/img/platforms/kubernetes/charts/influxdb-ha-architecture.png', 'InfluxDB HA architecture' %>

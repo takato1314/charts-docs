@@ -1,0 +1,44 @@
+<%
+=begin
+apps: mysql
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml* file. You can use this file instead of the default one. Find below examples of editing the production parameters to customize the deployment:
+
+* Force users to specify a password:
+
+        - root.forcePassword: false
+        + root.forcePassword: true
+
+        - db.forcePassword: false
+        + db.forcePassword: true
+
+        - replication.forcePassword: false
+        + replication.forcePassword: true
+
+* Change desired number of slave replicas:
+      
+        - slave.replicas: 1
+        + slave.replicas: 2
+
+#### Initialize a fresh instance
+
+The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. 
+
+In order to execute the scripts, they must be located inside the chart folder *files/docker-entrypoint-initdb.d* so they can be consumed as a ConfigMap. The allowed extensions are:
+
+* *.sh*
+* *.sql*  
+* *.sql.gz*
+
+<% if current.app == 'mariadb' %>
+#### Next steps
+
+Learn how to deploy a MariaDB replication cluster in a production environment and then configuring a PHP application to use this Kubernetes deployment as its datastore [by following this tutorial](https://docs.bitnami.com/tutorials/integrate-lamp-mariadb-kubernetes/).
+<% end %>

@@ -1,0 +1,17 @@
+<%
+=begin
+apps: apache
+platforms: kubernetes
+id: enable_metrics
+title: Enable metrics
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+The chart optionally can start a metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint (port 9117) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the example [Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
+
+To start a side-car Prometheus exporter, use the *values-production.yaml* file to deploy the chart by enabling the following parameter:
+
+    - metrics.enabled: false
+    + metrics.enabled: true

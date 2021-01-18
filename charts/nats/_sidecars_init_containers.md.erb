@@ -1,0 +1,21 @@
+<%
+=begin
+apps: nats
+platforms: kubernetes
+id: sidecars_init_containers
+title: Sidecars and Init Containers
+category: administration
+weight: 80
+=end %>
+
+If you have a need for additional containers to run within the same pod as NATS (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~

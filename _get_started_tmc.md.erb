@@ -1,0 +1,125 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: get_started_tmc
+=end %>
+
+### Introduction
+
+[VMware Tanzu Mission Control](https://cloud.vmware.com/tanzu-mission-control) (TMC) is a centralized management platform to operate and secure Kubernetes infrastructure deployed across multiple clouds and managed by multiple teams. It allows you to create groups of clusters created directly from the TMC dashboard or attached from external cloud providers to have a unified overview of your infrastructure.
+
+From the TMC user interface, you have full control of your multi-cloud deployments. This enables you to easily perform Kubernetes tasks such as upgrading clusters, setting policies and configurations, understanding the health of clusters, and much more.
+
+This guide gets you started with basic operations in Tanzu Mission Control. At the end of this guide, you will have learnt you how to use Tanzu Mission Control to create a cluster (or attach an existing one) and deploy a MariaDB database cluster using the Bitnami MariaDB Helm chart. In addition, this guide shows you as an appendix how to attach a Kubernetes cluster deployed through the Azure Kubernetes Service (AKS).
+
+### Assumptions and prerequisites
+
+This guide makes the following assumptions:
+
+* You have access to the [VMWare Cloud Services Portal (CSP)](https://console.cloud.vmware.com/) and your organization has Tanzu Mission Control available in the "My Services" section in CSP. If not, [talk with an expert to request access](https://k8s.vmware.com/tanzu-mission-control/?utm_source=google&utm_medium=cpc&gclid=EAIaIQobChMIweX-iom46AIVm4FaBR1yJAWIEAAYASAAEgKYgfD_Bw).
+* You have an AWS cloud account connected to Tanzu Mission Control to provision a new cluster. [Learn how to connect Tanzu Mission Control with an AWS cloud account](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-getstart/GUID-34E91A36-4D85-4AEF-9FDC-05D92E09BFFA.html).
+* You have the *kubectl* CLI and the Helm v3.x package manager installed. Learn how to install [*kubectl* and Helm v3.x](/<%= platform_path %>/kubernetes/get-started-kubernetes/#step-3-install-kubectl-command-line).
+
+> NOTE: Tanzu Mission Control will initially support provisioning, upgrading and scaling clusters on AWS, with other environments coming soon.
+
+This guide uses the [Bitnami MariaDB Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) as an example of deploying an application in a cluster created from TMC. The steps are similar for other [Bitnami Helm charts](https://github.com/bitnami/charts/).
+
+### Step 1: Create a new cluster group
+
+> TIP: This step creates a new cluster group in TMC. If you or your organization have already created a cluster group, you can go straight to [Step 2](#step-2-create-a-new-cluster).
+
+<%= partial 'platforms/kubernetes/create_cluster_group_tmc_tkg.md.erb' %>
+
+### Step 2: Provision a new cluster
+
+Tanzu Mission Control allows you to directly provision a cluster from your AWS account. Once the cluster is deployed, you will be able to add new node pools, monitor its workloads, and manage access, image registry and network policies directly from the TMC admin panel.
+
+<%= partial 'platforms/kubernetes/create_cluster_tmc_tkg.md.erb' %>
+
+> NOTE: Tanzu Mission Control bundles [VMware Tanzu Kubernetes Grid](https://tanzu.vmware.com/kubernetes-grid) to simplify the management of your cluster lifecycle. You can see all the in-cluster services that are automatically deployed when provisioning your cluster by [checking the pods running in the cluster nodes](#check-cluster-components-and-resources). To keep your cluster always updated with the latest version of Tanzu Kubernetes Grid, check out [Step 5](#step-5-upgrade-your-cluster) of this guide.
+
+#### Check cluster components and resources
+
+* To check cluster components and resources, navigate through the different tabs available in the cluster overview screen. You can check in detail, for example, the status and health of the cluster nodes. To do so:
+
+  * Click the "Nodes" tab and, from the list of cluster nodes, select a node to inspect.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-check-nodes.png', 'Check cluster nodes' %>
+
+  * In the resulting screen, you will find general information related to the node such as the kernel version, container runtime, or the pod CIDR. You can also see important information about node status, CPU and memory usage. Scroll down to see a list of the pods deployed in that node:
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-check-nodes-detail.png', 'Check a specific node in detail' %>
+
+  * You can also inspect a specific pod by clicking on it. You will see information about the cluster, node, workspace and namespace to which that pod is associated. If you scroll down, you can find information about the container running in that pod and the *yaml* file that describes the containers and parameters of the running pod as shown below:
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-check-pods.png', 'Check pods' %>
+
+### Step 3: Access the cluster
+
+<%= partial 'platforms/kubernetes/connect_cluster_tmc_tkg.md.erb' %>
+
+Congratulations! You are now authenticated in your cluster.
+
+### Step 4: Deploy the Bitnami MariaDB Helm chart
+
+<%= partial 'platforms/kubernetes/deploy_chart_tmc_tkg.md.erb' %>
+
+### Step 5: Upgrade your cluster
+
+> IMPORTANT: This section only applies to those clusters that have been provisioned directly from Tanzu Mission Control.
+
+<%= partial 'platforms/kubernetes/upgrade_cluster_tmc_tkg.md.erb' %>
+
+### Appendix: Attach an existing cluster running on AKS
+
+Tanzu Mission Control allows you to attach clusters that are running in other clouds. This provides a unified overview of your cluster infrastructure in a single interface allowing better visibility and control. This guide uses a cluster running on AKS, but the process to attach the cluster is similar for other Kubernetes cloud services (mainly differing in how the authentication process works).
+
+> NOTE: This section assumes that you have an account to create a new cluster or have an existing cluster already provisioned. This guide uses Azure Kubernetes Service (AKS) for the scenario of attaching an existing cluster. [Learn how to provision a Kubernetes cluster using AKS](https://docs.bitnami.com/kubernetes/get-started-aks/).
+
+To attach a cluster running on AKS to your TMC dashboard, follow these steps:
+
+* Navigate to the "Clusters" section and click the "Attach cluster" button.
+* Start the process by registering your cluster. Select a cluster group, enter a name for your cluster, and optionally, a description and labels. Click "Register" to continue.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-attach-azure-cluster.png', 'Attach cluster' %>
+
+* In the resulting screen, you will find a *kubectl* command for installing the VMware Tanzu Mission Control agent and a *yaml* file that contains the credentials that permit the cluster to attach to the cluster agent service. These credentials are valid for 48 hours.
+* Copy the *kubectl* command and run it in the terminal to complete the process.
+
+     <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-agent-instructions.png', 'Install the VMware Tanzu Mission Control agent' %>
+
+> NOTE: Before installing the VMware Tanzu Mission Control agent, make sure that you are in the proper context by accessing your AKS cluster. Run the following command to configure *kubectl* to use the credentials for the AKS cluster:
+>
+>     $ az aks get-credentials --name aks-cluster --resource-group aks-resource-group
+>
+> After accessing your cluster, run *kubectl config get-contexts* to make sure that you are authenticated in the right cluster.
+
+  You will see how the *yaml* manifest runs a small set of extensions in your cluster to connect it with the cluster agent service.
+
+<%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-run-command-attach.png', 'Installing the cluster agent service' %>
+
+* TMC will now verify your connection. Wait until this verification process completes and then click the "Continue" button to finish the process.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-attach-cluster-connection.png', 'Verifying connection' %>
+
+* Congratulations, your cluster is attached to TMC and visible from the list of clusters that belong to the selected cluster group.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-attached.png', 'Cluster attached' %>
+
+  Now you can monitor your cluster from the TMC dashboard and check its nodes, namespaces, workloads, policies, or run an inspection.
+
+<%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-overview-attached.png', 'Overview actions for an attached cluster' %>
+
+### Useful links
+
+* [Bitnami Helm charts](https://bitnami.com/stacks/helm)
+* [Bitnami MariaDB Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb)
+* [Get Started with Bitnami and Kubernetes](https://docs.bitnami.com/kubernetes/)
+* [VMware Tanzu Mission Control](https://tanzu.vmware.com/mission-control)
+* [VMware Tanzu Mission Control Request Access](https://k8s.vmware.com/tanzu-mission-control/?utm_source=google&utm_medium=cpc&gclid=EAIaIQobChMIweX-iom46AIVm4FaBR1yJAWIEAAYASAAEgKYgfD_Bw)
+* [VMware Tanzu Mission Control Documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/)
+* [VMware Tanzu Mission Control Release Notes](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/rn/VMware-Tanzu-Mission-Control-Release-Notes.html)
+* [VMware Tanzu Mission Control Hands-On Lab](https://labs.hol.vmware.com/HOL/catalogs/lab/6965)
+* [VMware Tanzu Kubernetes Grid](https://tanzu.vmware.com/kubernetes-grid)
+* [VMware Tanzu Kubernetes Grid Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/index.html)

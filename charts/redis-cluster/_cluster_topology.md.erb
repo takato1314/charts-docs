@@ -1,0 +1,24 @@
+<%
+=begin
+apps: redis-cluster
+platforms: kubernetes
+id: cluster_topology
+title: Redis Cluster topology
+category: get-started
+weight: 70
+=end %>
+
+The Redis Cluster Helm Chart will deploy by default three Redis masters and three replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to access the Redis Cluster from outside you have to set *cluster.externalAccess.enabled=true* at deployment time as described in [this how to deploy the Redis Cluster guide](https://docs.bitnami.com/tutorials/deploy-redis-cluster-tmc-helm-chart/#step-6-access-redis-cluster-from-a-different-machine). 
+
+The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using *redis-cli* you will need to provide the *-c* flag for *redis-cli* to follow the redirection automatically.
+
+In case the master crashes, one of his the slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis nodes with *cluster.nodes* and the number of replicas that will be assigned to each master with *cluster.replicas*. For example:
+
+~~~
+cluster.nodes=9 ( 3 master plus 2 replicas for each master)
+cluster.replicas=2
+~~~
+
+Providing the values above, the cluster will have 3 masters and, each master, will have 2 replicas.
+
+> NOTE: By default *cluster.init* will be set to "true" in order to initialize the Redis Cluster in the first installation. If for testing purpose you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set *cluster.init* to "false".

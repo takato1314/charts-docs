@@ -1,0 +1,34 @@
+<%
+=begin
+apps: thanos
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Enable Thanos Compactor:
+
+    - compactor.enabled: false
+    + compactor.enabled: true
+
+* Enable Thanos Store Gateway:
+
+    - storegateway.enabled: false
+    + storegateway.enabled: true
+
+* Enable Thanos Ruler:
+
+    - ruler.enabled: false
+    + ruler.enabled: true
+
+* Enable Prometheus Metrics:
+
+    - metrics.enabled: false
+    + metrics.enabled: true
+    - metrics.serviceMonitor: false
+    + metrics.serviceMonitor: true

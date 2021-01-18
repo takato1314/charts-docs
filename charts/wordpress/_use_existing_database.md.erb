@@ -1,0 +1,23 @@
+<%
+=begin
+apps: wordpress
+platforms: kubernetes
+id: use_existing_database
+title: Use an external database
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+Sometimes you may want to have Wordpress connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [externalDatabase parameter](https://github.com/bitnami/charts/tree/master/bitnami/wordpress#parameters). You should also disable the MariaDB installation with the mariadb.enabled option. For example with the following parameters:
+
+~~~
+mariadb.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
+~~~
+
+> NOTE: If you disable MariaDB per above you MUST supply values for the externalDatabase connection.

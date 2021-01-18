@@ -1,0 +1,17 @@
+<%
+=begin
+apps: elasticsearch
+platforms: kubernetes
+id: enable_metrics
+title: Enable metrics
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+The chart optionally can start a metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint (port 8080) is not exposed and it is expected that the metrics are collected from inside the Kubernetes cluster using something similar as the described in the example Prometheus scrape configuration.
+
+* Start a Prometheus exporter:
+
+    - metrics.enabled: false
+    + metrics.enabled: true

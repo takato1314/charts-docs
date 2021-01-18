@@ -1,0 +1,28 @@
+<%
+=begin
+apps: redis, redis-cluster
+platforms: kubernetes
+id: network_policy 
+title: Network Policy
+category: administration
+weight: 80
+=end %>
+
+To enable network policy for Redis, install a [networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/#before-you-begin), and set *networkPolicy.enabled* to *true*.
+
+For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for all pods in the namespace:
+
+    $ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+
+With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis. This label will be displayed in the output after a successful install.
+
+With *networkPolicy.ingressNSMatchLabels* pods from other namespaces can connect to Redis. Set *networkPolicy.ingressNSPodMatchLabels* to match pod labels in matched namespace. For example, for a namespace labeled *redis=external* and pods in that namespace labeled *redis-client=true* the fields should be set:
+
+~~~
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    redis: external
+  ingressNSPodMatchLabels:
+    redis-client: true
+~~~

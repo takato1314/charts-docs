@@ -1,0 +1,25 @@
+<%
+=begin
+apps: mariadb
+platforms: kubernetes
+id: add_nodes
+title: Add a new node to the cluster
+category: administration
+weight: 30
+highlight: 30
+=end %>
+
+To add a new node to your MariaDB cluster, you need to upgrade your installation by providing some parameters to the *helm upgrade* command:
+
+* Pass as *rootUser.password* the password used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
+* Set the desired number of nodes at *slave.replicas*.
+
+The following will be an example to add more nodes:
+
+~~~
+$ helm upgrade my-release bitnami/mariadb \
+--set rootUser.password=ROOT_PASSWORD \
+--set slave.replicas=NUMBER_OF_REPLICAS 
+~~~
+
+> NOTE: You need to substitute the placeholder ROOT_PASSWORD with the value obtained from instructions in the installation notes. Also replace NUMBER_OF_REPLICAS with the total number of nodes you want to add to the existing cluster.

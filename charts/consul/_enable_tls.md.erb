@@ -1,0 +1,58 @@
+<%
+=begin
+apps: consul
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS for Consul
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however this is not required. There are three common use cases:
+
+* Helm generates / manages certificate secrets
+* User generates / manages certificates separately
+* An additional tool (like kube-lego) manages the secrets for the application
+
+In the first two cases, one will need a certificate and a key. We would expect them to look like this:
+
+* Certificate files should look like (and there can be more than one certificate if there is a certificate chain):
+
+
+    -----BEGIN CERTIFICATE-----
+    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+    ...
+    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+    -----END CERTIFICATE-----
+
+* Keys should look like:
+
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+    ...
+    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+    -----END RSA PRIVATE KEY-----
+
+If you are going to use Helm to manage the certificates, please copy these values into the certificate and key values for a given ingress.secrets entry.
+
+Please see this [example](https://github.com/kubernetes-retired/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
+
+### Enable TLS encryption between servers
+
+You must manually create a secret containing your PEM-encoded certificate authority, your PEM-encoded certificate, and your PEM-encoded private key.
+
+> NOTE: Take into account that you will need to create a config map with the proper configuration.
+
+If the secret is specified, the chart will locate those files at */opt/bitnami/consul/certs/*, so you will want to use the below snippet to configure HashiCorp Consul TLS encryption in your config map:
+
+~~~
+  "ca_file": "/opt/bitnami/consul/certs/ca.pem",
+  "cert_file": "/opt/bitnami/consul/certs/consul.pem",
+  "key_file": "/opt/bitnami/consul/certs/consul-key.pem",
+  "verify_incoming": true,
+  "verify_outgoing": true,
+  "verify_server_hostname": true,
+~~~
+
+After creating the secret, you can install the helm chart specyfing the secret name using *tlsEncryptionSecretName=consul-tls-encryption*.

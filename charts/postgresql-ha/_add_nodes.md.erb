@@ -1,0 +1,29 @@
+<%
+=begin
+apps: postgresql-ha
+platforms: kubernetes
+id: add_nodes
+title: Add a new node to the cluster
+category: administration
+weight: 30
+highlight: 30
+=end %>
+
+To add a new node to your PostgreSQL HA cluster, you need to upgrade your installation by providing some parameters to the *helm upgrade* command:
+
+* Pass as password the *password* used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
+* Set the desired number of nodes at *replicaCount*.
+* Use the *--replicaCount* flag to modify the number of nodes in your PostgreSQL-HA deployment.
+* Replace *bitnami/postgresql* with *bitnami/postgresql-repmgr* which includes and configures *repmgr*. Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
+
+The following will be an example to add more nodes:
+
+~~~
+$ helm upgrade my-release bitnami/postgresql-ha \
+--set password=POSTGRESQL_PASSWORD \
+--set repmgrPassword=REPMGR_PASSWORD \
+--set replicaCount=NUMBER_OF_REPLICAS \
+--set upgradeRepmgrExtension=true
+~~~
+
+> NOTE: You need to substitute the placeholders POSTGRESQL_PASSWORD, and [REPMGR_PASSWORD] with the values obtained from instructions in the installation notes. Also replace NUMBER_OF_REPLICAS with the total number of nodes you want to add to the existing cluster.

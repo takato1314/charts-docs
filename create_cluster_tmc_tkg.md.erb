@@ -1,0 +1,19 @@
+To create a new cluster, follow the instructions below:
+
+* Navigate to the "Clusters" page.
+* Click the "New cluster" button and select the AWS account to use for the cluster.
+* Enter a name for the cluster, choose the cluster group, and click "Next" to continue the process.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-create-cluster-select-group.png', 'Create a cluster' %>
+
+* Configure your control plane by selecting the purpose of the cluster: development or production. Set the cluster availability zones and click "Next".
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-create-cluster-control-plane.png', 'Configure control plane' %>
+
+* In the resulting screen, check the default node pool and add new worker nodes by clicking "New node pool". To finish the process, click "Create".
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-default-node-pool.png', 'Configure cluster network' %>
+
+You will be redirected to the cluster dashboard. The process of creating the cluster may take several minutes. Once the cluster is created, you will see important information related to the nodes, pods, health and resources of the cluster.
+
+<%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-overview.png', 'Cluster created' %>

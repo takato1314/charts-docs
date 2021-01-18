@@ -1,0 +1,22 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_persistence_volumes
+title: Troubleshoot persistence volumes issues
+category: troubleshooting
+weight: 30
+highlight: 30
+=end %>
+
+### Detect issues
+
+To check if the status of your persistence volumes, run the *kubectl get pvc* command. If the output message shows that your PVC status is *pending* and you are using a Bitnami Helm chart, this may be because your cluster does not support dynamic provisioning (such as a bare metal cluster). In this case, the pod is unable to start because the cluster is unable to fulfil the request for a persistent volume and attach it to the container. 
+
+<%= documentation_img '/images/img/platforms/kubernetes/troubleshoot-kubernetes-deployments-3.png', 'Check the status of your PVC' %>
+
+### Solve issues
+
+To fix this, you must manually configure some persistent volumes or set up a *StorageClass* resource and provisioner for dynamic volume provisioning, such as the [NFS provisioner](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs). [Learn more about dynamic provisioning and storage classes](https://kubernetes.io/blog/2017/03/dynamic-provisioning-and-storage-classes-kubernetes/).
+
+You can also check out this guide to learn how to [deploy applications on Kubernetes with Helm and scalable NFS storage](https://docs.bitnami.com/tutorials/deploy-applications-nfs-kubernetes)

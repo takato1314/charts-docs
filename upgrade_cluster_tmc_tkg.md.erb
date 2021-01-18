@@ -1,0 +1,17 @@
+You can easily keep the cluster up-to-date using Tanzu Mission Control. Check if there is a new version of the [Tanzu Kubernetes Grid](https://tanzu.vmware.com/kubernetes-grid) available for your cluster by following the steps below:
+
+> NOTE: It is highly recommended that you create a backup of the cluster before running the upgrade process. Check out [this guide](https://docs.bitnami.com/tutorials/backup-restore-bitnami-deployments-velero/) to learn how to backup and restore Bitnami Helm chart deployments using [Velero](https://velero.io/).
+
+* Select the cluster to upgrade. If a new version of the Tanzu Kubernetes Grid is available, the "Upgrade" button will be active. Click it to start the upgrade process.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-upgrade.png', 'Upgrade your cluster' %>
+
+* In the resulting window, you will see a warning message about the upgrade process and a list of the latest available version(s) of Tanzu Kubernetes Grid. Select the version you wish to upgrade to and click "Upgrade" to start the process.
+
+    <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-tanzu-kubernetes-grid.png', 'Upgrade your cluster' %>
+
+* Track the progress of the upgrade in the "Clusters" section.
+
+Once the upgrade is complete, the version number associated with your cluster will change to the latest one.
+
+<%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-upgrading.png', 'Upgrading your cluster' %>

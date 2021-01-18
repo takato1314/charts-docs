@@ -1,0 +1,38 @@
+<%
+=begin
+apps: rabbitmq
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS for RabbitMQ
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+To enable TLS support you must generate the certificates using [RabbitMQ documentation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation).
+
+You must include in your *values.yaml* the caCertificate, serverCertificate and serverKey files.
+
+~~~
+  caCertificate: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDRTCCAi2gAwIBAgIJAJPh+paO6a3cMA0GCSqGSIb3DQEBCwUAMDExIDAeBgNV
+    ...
+    -----END CERTIFICATE-----
+  serverCertificate: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDqjCCApKgAwIBAgIBATANBgkqhkiG9w0BAQsFADAxMSAwHgYDVQQDDBdUTFNH
+    ...
+    -----END CERTIFICATE-----
+  serverKey: |-
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEA2iX3M4d3LHrRAoVUbeFZN3EaGzKhyBsz7GWwTgETiNj+AL7p
+    ....
+    -----END RSA PRIVATE KEY-----
+~~~
+
+This will be generate a secret with the certs, but is possible specify an existing secret using existingSecret: *name-of-existing-secret-to-rabbitmq*. The secret is of type *kubernetes.io/tls*.
+
+Disabling [failIfNoPeerCert](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) allows a TLS connection if client fails to provide a certificate.
+
+[sslOptionsVerify](https://www.rabbitmq.com/ssl.html#peer-verification-configuration): When the sslOptionsVerify option is set to verify_peer, the client does send us a certificate, the node must perform peer verification. When set to verify_none, peer verification will be disabled and certificate exchange won't be performed.

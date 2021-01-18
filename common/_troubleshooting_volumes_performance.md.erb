@@ -1,0 +1,30 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_volumes_performance
+title: Troubleshoot Kubernetes persistence volumes performance
+category: troubleshooting
+weight: 70
+=end %>
+
+### Detect issues
+
+If the application does not finish the initialization and continuously restarts, it may be because a fail in both the *readinessProbes* and *ivenessProbes* are failing. You can use the *kubectl logs* command to check the startup logs and obtained more detailed information. 
+
+To detect if the problem lies with the the Persistence Volume Claim (PVC) technology, launch the chart again, but this time, disable the persistence:
+
+~~~
+- persistence.enabled: true
++ persistence.enabled: false
+~~~
+
+If the startup goes fine, then the drop in the performance is due to the PVC. 
+
+### Solve issues
+
+There are two different ways to solve this issue: 
+
+* Option 1: Check the available storage classes that your Kubernetes solution provides (that would depend on the cloud provider you choose). The best option here is to check the cloud provider documentation and find available alternatives. If alternatives exist, try them to see if they provide better performance.
+
+* Option 2: If changing the PVC storage class is not an available option, the best solution is to tweak the liveness and readiness probes to higher values (such as the *initialDelaySeconds* or the *periodSeconds* values).

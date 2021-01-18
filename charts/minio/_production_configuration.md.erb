@@ -1,0 +1,48 @@
+<%
+=begin
+apps: minio
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* MinIO server mode:
+
+    - mode: standalone
+    + mode: distributed
+
+* Disable MinIO Web UI:
+
+    - disableWebUI: false
+    + disableWebUI: true
+
+* Annotations to be added to pods:
+
+    - podAnnotations: {}
+    + podAnnotations:
+    +   prometheus.io/scrape: "true"
+    +   prometheus.io/path: "/minio/prometheus/metrics"
+    +   prometheus.io/port: "9000"
+
+* Pod resources:
+
+    - resources: {}
+    + resources:
+    +   requests:
+    +     memory: 256Mi
+    +     cpu: 250m
+
+* Enable NetworkPolicy:
+
+    - networkPolicy.enabled: false
+    + networkPolicy.enabled: true
+
+* Don't require client label for connections:
+
+    - networkPolicy.allowExternal: true
+    + networkPolicy.allowExternal: false

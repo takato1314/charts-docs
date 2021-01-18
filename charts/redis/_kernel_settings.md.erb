@@ -1,0 +1,35 @@
+<%
+=begin
+apps: redis
+platforms: kubernetes
+id: kernel_settings
+title: Host Kernel settings
+category: administration
+weight: 50
+=end %>
+
+Redis may require some changes in the kernel of the host machine to work as expected, in particular increasing the somaxconn value and disabling transparent huge pages. To do so, you can set up a privileged initContainer with the sysctlImage config values, for example:
+
+~~~
+sysctlImage:
+  enabled: true
+  mountHostSys: true
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      install_packages procps
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
+~~~
+
+Alternatively, for Kubernetes 1.12+ you can set securityContext.sysctls which will configure sysctls for master and slave pods. Example:
+
+~~~
+securityContext:
+  sysctls:
+  - name: net.core.somaxconn
+    value: "10000"
+~~~
+
+Note that this will not disable transparent huge tables.

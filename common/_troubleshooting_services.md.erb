@@ -1,0 +1,66 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_services
+title: Troubleshoot Services
+category: troubleshooting
+weight: 70
+=end %>
+
+### Detect issues
+
+Sometimes, when you start a new installation in Kubernetes you may find that a Service doesn't respond when you try to access it, although it was created by a pod in a deployment.
+
+First you can check that the Service you are trying to access actually exists, by running the following (replace SVC-NAME with the name of the service you want to access): 
+
+    $ kubectl get svc SVC-NAME
+
+* If the Service exists, you should see an output message similar to this: 
+
+        NAME           TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)            AGE
+        SVC-NAME       LoadBalancer   10.63.245.23    35.242.213.194   5432:32749/TCP     1m
+
+* If the Service doesn't exist, then you will get an output message similar to this:
+
+        No resources found.
+        Error from server (NotFound): services "SVC-NAME" not found
+
+### Solve issues
+
+To create a Service you can either start the Service with a *.yaml* file or create it directly from the terminal window. 
+
+#### Start a Service with a *.yaml* file
+
+Remember to replace in your file the SVC-NAME, PORT, and TARGET-PORT placeholders with the name of the Service, and the ports you want to set for your Service.
+
+~~~
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: SVC-NAME
+  name: SVC-NAME
+spec:
+  selector:
+    app: SVC-NAME
+  ports:
+  - name: default
+    protocol: TCP
+    port: PORT
+    targetPort: TARGET-PORT
+~~~
+
+#### Create a Service using the *kubectl* CLI
+
+To create a Service, run the following commands:
+
+    $ kubectl expose deployment SVC-NAME --port=PORT --target-port=TARGET-PORT
+
+You should get a message similar to this:
+
+    service/SVC-NAME exposed
+
+* Check that the Service was correctly created by running the *kubectl get svc* command again:
+
+        $ kubectl get svc SVC-NAME

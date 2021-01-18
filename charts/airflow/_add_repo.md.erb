@@ -1,0 +1,19 @@
+<%
+=begin
+apps: apache-airflow
+platforms: kubernetes
+id: add_repo
+title: Install the Apache Airflow chart
+category: get-started
+weight: 10
+highlight: 10
+=end %>
+
+
+<%= partial 'platforms/kubernetes/add_repo_intro.md.erb' %>
+
+* Install Apache Airflow by running the following:
+
+  > NOTE: Remember that MY-RELEASE is a placeholder, replace it with the name you want to give to the chart or add the `--generate-name` to give the chart a random name.
+
+        $ helm install MY-RELEASE bitnami/airflow

@@ -1,0 +1,30 @@
+To deploy applications in the cluster, it is necessary to first connect to it. To do this, follow the steps below:
+
+  * Click the "Access this cluster" button in the navigation panel.
+  * Click the "click here" link. Following this link takes you to a page with instructions to download and install the Tanzu Mission Control Command-Line Interface (CLI) (*tmc*).
+
+      <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-access-instructions-1.png', 'Download TMC CLI' %>
+
+  * On the resulting page, click "Download CLI" and download the CLI for your platform.
+  * Once the download is complete, move the downloaded binary to a directory in your execution path using the instructions shown for your platform.
+  * Execute the command below to start the Tanzu Mission Control CLI:
+
+          $ tmc login
+
+      You will be prompted for an API token. If you have one, enter it at the prompt or, if not, create a new token as described below.
+
+  * Navigate to the displayed URL, where you will be further prompted for various inputs to create an API token for Tanzu Mission Control.
+    * Enter a context name. This name must match your TMC organization domain.
+    * Select the default values unless you prefer different ones.
+
+    Your API token will be created and displayed. Copy the API token and enter it in the Tanzu Mission Control CLI to complete the CLI login process.
+
+  * Navigate back to the cluster detail page in Tanzu Mission Control. From the "Access this cluster" dialog box, click "Download Kubeconfig file" and configure *kubectl* to connect to the cluster by executing the command below:
+
+      <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-cluster-access-instructions-2.png', 'Download Kubeconfig file' %>
+
+      A new window will open in your browser to confirm that the TMC login flow is complete.
+
+      <%= documentation_img '/images/img/platforms/kubernetes/get-started-tmc/tmc-login.png', 'TMC Access cluster complete process' %>
+
+  * Confirm that you are able to successfully access the cluster by running the *kubectl cluster-info* command.

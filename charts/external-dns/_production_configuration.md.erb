@@ -1,0 +1,26 @@
+<%
+=begin
+apps: external-dns
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Desired number of ExternalDNS replicas:
+
+~~~
+- replicas: 1
++ replicas: 3
+~~~
+
+* Enable prometheus to access external-dns metrics endpoint:
+
+~~~
+- metrics.enabled: false
++ metrics.enabled: true
+~~~

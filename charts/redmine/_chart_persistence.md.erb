@@ -1,0 +1,31 @@
+<%
+=begin
+apps: redmine
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami Redmine image](https://github.com/bitnami/bitnami-docker-redmine) stores the Redmine data and configurations at the */bitnami/redmine* path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
+
+See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/redmine#parameters) to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaims
+
+The following example includes two PVCs, one for Redmine and another for MariaDB.
+
+* Create the PersistentVolume
+* Create the PersistentVolumeClaim
+* Create the directory, on a worker
+* Install the chart
+
+    $ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB bitnami/redmine
+
+### Replicas
+
+Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the replicas option must be set to 1. If the persistent volume supports more than one writer (RWX), ie NFS, replicas can be greater than 1.

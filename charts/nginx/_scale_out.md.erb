@@ -1,0 +1,18 @@
+<%
+=begin
+apps: nginx
+platforms: kubernetes
+id: scale_out
+title: Scale out the cluster
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+
+To scale the NGINX cluster, just perform a normal upgrade setting the *replicaCount* value to the desired number of nodes. For example, use the command below to scale the cluster up to three replicas:
+
+~~~
+$ helm upgrade bitnami/nginx \
+  --set replicaCount=3
+~~~

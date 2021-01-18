@@ -1,0 +1,16 @@
+<%
+=begin
+apps: postgresql
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami PostgreSQL image](https://github.com/bitnami/bitnami-docker-postgresql) stores the PostgreSQL data and configurations at the */bitnami/postgresql* path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#parameters) to configure the PVC or to disable persistence.
+
+If you already have data in it, you will fail to sync to standby nodes for all commits, details can refer to [code](https://github.com/bitnami/bitnami-docker-postgresql/blob/8725fe1d7d30ebe8d9a16e9175d05f7ad9260c93/9.6/debian-9/rootfs/libpostgresql.sh#L518-L556). If you need to use those data, please covert them to sql and import after *helm install* finished.

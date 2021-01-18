@@ -1,0 +1,24 @@
+<%
+=begin
+apps: harbor
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+These are the options to configure the data persistence of your chart:
+
+* Disable: The data does not survive the termination of a pod.
+* Persistent Volume Claim(default): A default StorageClass is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the storageClass or set existingClaim if you have already existing persistent volumes to use.
+* External Storage (only for images and charts): For images and charts, the external storages are supported for *azure*, *gcs*, *s3 swift* and *oss*.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions. As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting volumePermissions.enabled to *true*.

@@ -1,0 +1,18 @@
+<%
+=begin
+apps: kibana
+platforms: kubernetes
+id: use_custom_init_scripts
+title: Use custom init scripts
+category: administration
+weight: 60
+=end %>
+
+For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in /docker-entrypoint.init-db. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the initScriptsCM and initScriptsSecret values.
+
+~~~
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+~~~

@@ -1,0 +1,14 @@
+<%
+=begin
+apps: mariadb-galera
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami MariaDB Galera image](https://github.com/bitnami/bitnami-docker-mariadb-galera) stores the MariaDB Galera data and configurations at the */bitnami/mariadb-galera* path of the container.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.

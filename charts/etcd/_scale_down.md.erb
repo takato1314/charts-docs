@@ -1,0 +1,17 @@
+<%
+=begin
+apps: etcd
+platforms: kubernetes
+id: scale_down
+title: Scale down the cluster
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To scale down the etcd cluster just perform a normal upgrade setting the *statefulset.replicaCount* value to the desired number of nodes. For example, reduce the cluster to the default one replica:
+
+~~~
+$ helm upgrade bitnami/etcd \
+--set statefulset.replicaCount=1
+~~~

@@ -1,0 +1,39 @@
+<%
+=begin
+apps: postgresql
+platforms: kubernetes
+id: production_configuration
+title: Production configuration and horizontal scaling
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml8:
+
+* Enable replication:
+
+    - replication.enabled: false
+    + replication.enabled: true
+
+* Number of slaves replicas:
+
+    - replication.slaveReplicas: 1
+    + replication.slaveReplicas: 2
+
+* Set synchronous commit mode:
+
+    - replication.synchronousCommit: "off"
+    + replication.synchronousCommit: "on"
+
+* Number of replicas that will have synchronous replication:
+
+    - replication.numSynchronousReplicas: 0
+    + replication.numSynchronousReplicas: 1
+
+* Start a Prometheus Exporter:
+
+    - metrics.enabled: false
+    + metrics.enabled: true
+
+To horizontally scale this chart, you can use the *--replicaCount* flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the *values-production.yaml* file or modify the parameters shown above.

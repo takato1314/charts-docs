@@ -1,0 +1,16 @@
+<%
+=begin
+apps: tomcat
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami Tomcat image](https://github.com/bitnami/bitnami-docker-tomcat) stores the Tomcat data and configurations at the */bitnami/tomcat* path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
+
+See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/tomcat#parameters) to configure the PVC or to disable persistence.

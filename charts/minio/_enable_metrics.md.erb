@@ -1,0 +1,23 @@
+<%
+=begin
+apps: minio
+platforms: kubernetes
+id: enable_metrics
+title: Prometheus Exporter
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+MinIO exports Prometheus metrics at */minio/prometheus/metrics*. To allow Prometheus collecting your MinIO metrics, modify the *values.yaml* adding the corresponding annotations:
+
+~~~
+- podAnnotations: {}
++ podAnnotations:
++   prometheus.io/scrape: "true"
++   prometheus.io/path: "/minio/prometheus/metrics"
++   prometheus.io/port: "9000"
+~~~
+
+Find more information about MinIO metrics at [MinIO official documentation](https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html).
+

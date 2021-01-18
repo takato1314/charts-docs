@@ -1,0 +1,22 @@
+<%
+=begin
+apps: fluentd
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+* Number of aggregator nodes:
+  
+    - aggregator.replicaCount: 1
+    + aggregator.replicaCount: 2
+
+* Enable prometheus to access fluentd metrics endpoint:
+
+    - metrics.enabled: false
+    + metrics.enabled: true
+
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the aggregator.replicaCount parameter.

@@ -1,0 +1,22 @@
+<%
+=begin
+apps: postgresql
+platforms: kubernetes
+id: scale_down
+title: Scale down the cluster
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To scale down the PostgreSQL cluster just perform a normal upgrade setting the *replication.slaveReplicas* value to the desired number of nodes. For example, reduce the cluster to the default one replica:
+
+~~~
+$ helm upgrade bitnami/postgresql \
+--set password=POSTGRESQL_PASSWORD \
+--set replication.enabled=true \
+--set replication.slaveReplicas=1 \
+--set set replication.repl_password=REPLICATION_PASSWORD
+~~~
+
+> NOTE: You need to substitute the placeholders POSTGRESQL_PASSWORD and REPLICATION_PASSWORD with the values obtained from instructions in the installation notes.

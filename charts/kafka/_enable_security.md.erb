@@ -1,0 +1,27 @@
+<%
+=begin
+apps: kafka
+platforms: kubernetes
+id: enable_security
+title: Enable security for Kafka and Zookeeper
+category: administration
+weight: 60
+=end %>
+
+You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use *sasl_tls* authentication for client communications, [while using *tls* for inter-broker communications](/#enable-tls/). This table shows the available protocols and the security they provide:
+
+| Method |	Authentication | Encryption via TLS |
+|---------|-----------------|--------------------|
+| plaintext |	None	| No |
+| tls	| None	| Yes |
+| mtls | Yes (two-way authentication) |	Yes |
+| sasl | Yes (via SASL)	| No |
+| sasl_tls	| Yes (via SASL) | Yes |
+
+### Enable SASL Authentication
+
+If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
+
+* *auth.jaas.clientUser* / *auth.jaas.clientPassword:* when enabling SASL authentication for communications with clients.
+* *auth.jaas.interBrokerUser* / *auth.jaas.interBrokerPassword*: when enabling SASL authentication for inter-broker communications.
+* *auth.jaas.zookeeperUser* / *auth.jaas.zookeeperPassword*: In the case that the Zookeeper chart is deployed with SASL authentication enabled.

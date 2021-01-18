@@ -1,0 +1,17 @@
+<%
+=begin
+apps: spark
+platforms: kubernetes
+id: submit_application
+title: Submit an application
+category: administration
+weight: 10
+=end %>
+
+To submit an application to the cluster use the spark-submit script. You can obtain the script [here](https://github.com/apache/spark/tree/master/bin). For example, to deploy one of the example applications:
+
+    $ ./bin/spark-submit   --class org.apache.spark.examples.SparkPi   --master spark://<master-IP>:<master-cluster-port>   --deploy-mode cluster  ./examples/jars/spark-examples_2.11-2.4.3.jar   1000
+
+Where the master IP and port must be changed by you master IP address and port.
+
+Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).

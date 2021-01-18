@@ -1,0 +1,19 @@
+<%
+=begin
+apps: kube-state-metrics
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Increase the number of kube-state-metrics Pod replicas:
+
+~~~
+-   replicaCount: 1
++   replicaCount: 2
+~~

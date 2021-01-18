@@ -1,0 +1,162 @@
+<%
+=begin
+apps: elasticsearch
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Init container that performs the *sysctl* operation to modify Kernel settings (needed sometimes to avoid boot errors):
+
+    - sysctlImage.enabled: true
+    + sysctlImage.enabled: false
+
+* Desired number of Elasticsearch master-eligible nodes:
+
+    - master.replicas: 2
+    + master.replicas: 3
+
+* Enable the liveness probe (master-eligible nodes pod):
+
+    - master.livenessProbe.enabled: false
+    -   #  initialDelaySeconds: 90
+    -   #  periodSeconds: 10
+    -   #  timeoutSeconds: 5
+    -   #  successThreshold: 1
+    -   #  failureThreshold: 5
+    + master.livenessProbe.enabled: true
+    +   initialDelaySeconds: 90
+    +   periodSeconds: 10
+    +   timeoutSeconds: 5
+    +   successThreshold: 1
+    +   failureThreshold: 5
+
+* Enable the readiness probe (master-eligible nodes pod):
+
+    - master.readinessProbe.enabled: false
+    -   #  initialDelaySeconds: 90
+    -   #  periodSeconds: 10
+    -   #  timeoutSeconds: 5
+    -   #  successThreshold: 1
+    -   #  failureThreshold: 5
+    + master.readinessProbe.enabled: true
+    +   initialDelaySeconds: 90
+    +   periodSeconds: 10
+    +   timeoutSeconds: 5
+    +   successThreshold: 1
+    +   failureThreshold: 5
+
+* Enable the liveness probe (coordinating-only nodes pod):
+
+    - coordinating.livenessProbe.enabled: false
+    -   #  initialDelaySeconds: 90
+    -   #  periodSeconds: 10
+    -   #  timeoutSeconds: 5
+    -   #  successThreshold: 1
+    -   #  failureThreshold: 5
+    + coordinating.livenessProbe.enabled: true
+    +   initialDelaySeconds: 90
+    +   periodSeconds: 10
+    +   timeoutSeconds: 5
+    +   successThreshold: 1
+    +   failureThreshold: 5
+
+* Enable the readiness probe (coordinating-only nodes pod):
+
+    - coordinating.readinessProbe.enabled: false
+    -   #  initialDelaySeconds: 90
+    -   #  periodSeconds: 10
+    -   #  timeoutSeconds: 5
+    -   #  successThreshold: 1
+    -   #  failureThreshold: 5
+    + coordinating.readinessProbe.enabled: true
+    +   initialDelaySeconds: 90
+    +   periodSeconds: 10
+    +   timeoutSeconds: 5
+    +   successThreshold: 1
+    +   failureThreshold: 5
+
+* Desired number of Elasticsearch data nodes:
+
+    - data.replicas: 2
+    + data.replicas: 3
+
+* Enable the liveness probe (data nodes pod):
+
+    - data.livenessProbe.enabled: false
+    -   #  initialDelaySeconds: 90
+    -   #  periodSeconds: 10
+    -   #  timeoutSeconds: 5
+    -   #  successThreshold: 1
+    -   #  failureThreshold: 5
+    + data.livenessProbe.enabled: true
+    +   initialDelaySeconds: 90
+    +   periodSeconds: 10
+    +   timeoutSeconds: 5
+    +   successThreshold: 1
+    +   failureThreshold: 5
+
+* Enable the readiness probe (data nodes pod):
+ 
+   - data.readinessProbe.enabled: false
+   -   #  initialDelaySeconds: 90
+   -   #  periodSeconds: 10
+   -   #  timeoutSeconds: 5
+   -   #  successThreshold: 1
+   -   #  failureThreshold: 5
+   + data.readinessProbe.enabled: true
+   +   initialDelaySeconds: 90
+   +   periodSeconds: 10
+   +   timeoutSeconds: 5
+   +   successThreshold: 1
+   +   failureThreshold: 5
+
+* Enable ingest nodes:
+
+   - ingest.enabled: false
+   + ingest.enabled: true
+
+* Enable the liveness probe (ingest nodes pod):
+
+   - ingest.livenessProbe.enabled: false
+   -   #  initialDelaySeconds: 90
+   -   #  periodSeconds: 10
+   -   #  timeoutSeconds: 5
+   -   #  successThreshold: 1
+   -   #  failureThreshold: 5
+   + ingest.livenessProbe.enabled: true
+   +   initialDelaySeconds: 90
+   +   periodSeconds: 10
+   +   timeoutSeconds: 5
+   +   successThreshold: 1
+   +   failureThreshold: 5
+
+* Enable the readiness probe (ingest nodes pod):
+
+   - ingest.readinessProbe.enabled: false
+   -   #  initialDelaySeconds: 90
+   -   #  periodSeconds: 10
+   -   #  timeoutSeconds: 5
+   -   #  successThreshold: 1
+   -   #  failureThreshold: 5
+   + ingest.readinessProbe.enabled: true
+   +   initialDelaySeconds: 90
+   +   periodSeconds: 10
+   +   timeoutSeconds: 5
+   +   successThreshold: 1
+   +   failureThreshold: 5
+
+* Enable prometheus exporter:
+
+   - metrics.enabled: false
+   + metrics.enabled: true
+
+* Enable bundled Kibana:
+
+   - global.kibanaEnabled: false
+   + global.kibanaEnabled: true

@@ -1,0 +1,19 @@
+<%
+=begin
+apps: kibana
+platforms: kubernetes
+id: install_plugins
+title: Install plugins
+category: configuration
+weight: 70
+=end %>
+
+The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the plugins value:
+
+~~~
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
+plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+~~~
+
+> NOTE: Make sure that the plugin is available for the Kibana version you are deploying.

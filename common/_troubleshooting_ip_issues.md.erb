@@ -1,0 +1,19 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_ip_issues
+title: Find the external IP address of a node
+category: troubleshooting
+weight: 60
+=end %>
+
+If you are not able to find the external IP address of a node, you can run the following commands to get it:
+
+    $ kubectl get nodes -o yaml
+
+ <%= documentation_img '/images/img/platforms/kubernetes/troubleshoot-kubernetes-deployments-4.png', 'Check nodes IP address' %>
+
+If you are using Minikube, you can alternatively use the command below:
+
+    $ minikube ip

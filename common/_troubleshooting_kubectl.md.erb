@@ -1,0 +1,39 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_kubectl
+title: Troubleshoot kubectl issues
+category: troubleshooting
+weight: 50
+=end %>
+
+### Detect issues
+
+There are two common scenarios due to errors when running *kubectl*:
+
+* Error 1: *kubectl* does not permit access to certain resources. This occurs when you run the  *kubectl* command and see the following error:
+
+        the server does not allow access to the requested resource
+
+* Error 2: *kubectl* is not able to find your nodes. This occurs when you run the *kubectl get nodes* command and see the following error:
+
+        the server doesn't have a resource type "nodes"
+
+### Solve issues
+
+#### Error 1: *kubectl* does not permit access to certain resources
+
+You probably are experiencing issues with the Kubernetes Role-Based Access Control (RBAC) policies. This typically occurs when RBAC is enabled, which is the default situation from Kubernetes 1.6 onwards. 
+
+To resolve this issue, you must create and deploy the necessary RBAC policies for users and resources. [Read our RBAC guide for more information and examples](https://docs.bitnami.com/tutorials/configure-rbac-in-your-kubernetes-cluster/).
+
+#### Error 2: *kubectl* is not able to find your nodes
+
+This occurs because the authentication credentials are not correctly set. 
+
+To resolve this, copy the configuration file */etc/kubernetes/admin.conf* to *~/.kube/config* in a regular user account (with *sudo* if necessary) and try again. 
+
+> IMPORTANT: This command should not be performed in the *root* user account.
+
+     $ cp /etc/kubernetes/admin.conf ~/.kube/config

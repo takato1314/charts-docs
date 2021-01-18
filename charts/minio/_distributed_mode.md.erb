@@ -1,0 +1,20 @@
+<%
+=begin
+apps: minio
+platforms: kubernetes
+id: distributed_mode
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+You can start the MinIO chart in distributed mode with the following parameter: 
+
+~~~
+mode=distributed
+~~~
+
+This chart sets Minio server in distributed mode with 4 nodes by default. You can change the number of nodes setting the statefulset.replicaCount parameter, for example to *statefulset.replicaCount=8*.
+
+> NOTE: that the number of replicas must even, greater than 4 and lower than 32.

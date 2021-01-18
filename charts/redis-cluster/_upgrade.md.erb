@@ -1,0 +1,12 @@
+<%
+=begin
+apps: redis-cluster
+platforms: kubernetes
+id: upgrade
+title: Helm upgrade
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+By default *cluster.init* will be set to "true" in order to initialize the Redis Cluster in the first installation. If for testing purpose you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set *cluster.init* to "false".
