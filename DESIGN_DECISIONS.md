@@ -6,7 +6,7 @@ to the Bitnami Helm charts.
 Use the following format for contributing to this document:
 
 ```
-  ### YYYY-MM-DD: <Title for the design decision>
+  ## YYYY-MM-DD: <Title for the design decision>
 
   <Reasoning and explanation>
 ```
