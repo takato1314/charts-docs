@@ -14,5 +14,4 @@ Use the following format for contributing to this document
 ## 2021-01-19: Creation of the design decisions document
 
 In order to improve the transparency as well as making the onboarding easier for contributors,
-we decided to create this document. As several changes are coming in the following weeks, we
-expect updates to this document very soon.
+we decided to create this document.
