@@ -1,7 +1,6 @@
 # Bitnami Helm charts design decisions
 
-The following document is meant to log all reasoning and design decisions with respect
-to the Bitnami Helm charts.
+The following document is meant to log all reasoning and design decisions with respect to the Bitnami Helm charts.
 
 Use the following format for contributing to this document:
 
