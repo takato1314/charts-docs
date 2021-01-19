@@ -1,0 +1,62 @@
+<%
+=begin
+apps: moodle
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS for Moodle
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+### Ingress without TLS
+
+For using ingress (example without TLS):
+
+~~~
+ingress.enabled=True
+ingress.hosts[0]=moodle.domain.com
+serviceType=ClusterIP
+moodleUsername=admin
+moodlePassword=password
+mariadb.mariadbRootPassword=secretpassword
+~~~
+
+These are the three mandatory parameters when Ingress is desired: 
+
+* ingress.enabled=True
+* ingress.hosts[0]=moodle.domain.com
+* serviceType=ClusterIP
+
+### Ingress TLS
+
+If your cluster allows automatic creation/retrieval of TLS certificates (e.g. kube-lego), please refer to the documentation for that mechanism.
+
+To manually configure TLS, first create/retrieve a key & certificate pair for the address(es) you wish to protect. Then create a TLS secret (named moodle-server-tls in this example) in the namespace. Include the secret's name, along with the desired hostnames, in the Ingress TLS section of your custom *values.yaml* file:
+
+~~~
+ingress:
+  ## If true, Moodle server Ingress will be created
+  ##
+  enabled: true
+
+  ## Moodle server Ingress annotations
+  ##
+  annotations: {}
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: 'true'
+
+  ## Moodle server Ingress hostnames
+  ## Must be provided if Ingress is enabled
+  ##
+  hosts:
+    - moodle.domain.com
+
+  ## Moodle server Ingress TLS configuration
+  ## Secrets must be manually created in the namespace
+  ##
+  tls:
+    - secretName: moodle-server-tls
+      hosts:
+        - moodle.domain.com
+~~~

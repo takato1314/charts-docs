@@ -1,0 +1,29 @@
+<%
+=begin
+apps: apache-airflow
+platforms: kubernetes
+id: load_files
+title: Load DAG files
+category: administration
+weight: 10
+=end %>
+
+There are three different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
+
+### Option 1: Load locally from the *files* folder
+
+If you plan to deploy the chart from your filesystem, you can copy your DAG files inside the *files/dags* directory. A config map will be created with those files and it will be mounted in all airflow nodes.
+
+### Option 2: Specify an existing config map
+
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option airflow.dagsConfigMap.
+
+### Option 3: Get your DAG files from a GitHub repository
+
+You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the options below. Remember to replace the USERNAME and REPOSITORY placeholders with the URL that corresponds to your repository.
+
+~~~
+airflow.cloneDagFilesFromGit.enabled=true
+airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
+airflow.cloneDagFilesFromGit.branch=master
+~~~

@@ -1,0 +1,31 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: understand_network_security_policies
+title: Understand network security policies
+category: configuration
+weight: 30
+highlight: 30
+=end %>
+
+A network policy is a set of network traffic rules applied to a given group of pods in a Kubernetes cluster. Just like every element in Kubernetes, it is modeled using an API Resource: *NetworkPolicy*. The following describes the broad structure of a network policy:
+
+* The *metadata* section of the policy specifies its name.
+* The *spec* section of the policy outlines the key criteria a pod must fulfil in order to be allowed to run.
+
+Here is a brief description of the main options available (you can find more details in the official Kubernetes API Reference):
+
+* *podSelector*: if the conditions defined in the next element apply, the podSelector establishes which pods the network can accept traffic from (destination pods from now on). Pods can be specified using the following criteria:
+  * *namespaceSelector*: a pod belongs to a given namespace.
+  * *labelSelector*: a pod contains a given label.
+
+* *Network Policy Ingress Rules (ingress)*: establishes a set of allowed traffic rules. You can specify:
+  * *from* (origin pods): specifies which pods are allowed to access the previously specified destination pods. Just like with destination pods, these origin pods can be specified using NamespaceSelectors and LabelSelectors.
+  * *ports* (allowed ports): specifies which destination pod's ports can be accessed by the origin pods.
+
+  You can find an example of what this looks like in the [Kubernetes official documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+
+### Next steps: Install Kubernetes network plugins
+
+To learn more about how to secure your deployments with network policies, [check out the following guide](https://docs.bitnami.com/tutorials/secure-your-kubernetes-application-with-networkpolicies/) to find a list of Kubernetes network plugins and a use case. 

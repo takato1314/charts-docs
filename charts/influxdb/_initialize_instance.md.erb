@@ -1,0 +1,17 @@
+<%
+=begin
+apps: influxdb
+platforms: kubernetes
+id: initialize_instance 
+title: Initialize a fresh instance 
+category: administration
+weight: 20
+=end %>
+
+The [Bitnami InfluxDB](https://github.com/bitnami/bitnami-docker-influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder files/docker-entrypoint-initdb.d so they can be consumed as a ConfigMap.
+
+Alternatively, you can specify custom scripts using the influxdb.initdbScripts parameter.
+
+In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the influxdb.initdbScriptsCM parameter. Note that this will override the two previous options. parameter.
+
+The allowed extensions are *.sh*, and *.txt*.

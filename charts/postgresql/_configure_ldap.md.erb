@@ -1,0 +1,32 @@
+<%
+=begin
+apps: postgresql
+platforms: kubernetes
+id: configure_ldap
+title: LDAP configuration
+category: configuration
+weight: 50
+=end %>
+
+LDAP support can be enabled in the chart by specifying the *ldap.* parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+
+* *ldap.enabled*: Enable LDAP support. Defaults to false.
+* *ldap.url*: LDAP URL beginning in the form ldap[s]://<hostname>:<port>. No defaults.
+* *ldap.server*: IP address or name of the LDAP server. No defaults.
+* *ldap.port*: 	Port number on the LDAP server to connect to. No defaults.
+* *ldap.port*: 	Port number on the LDAP server to connect to.
+* *ldap.basedn*: Root DN to begin the search for the user in. No defaults.
+* *ldap.binddn*: DN of user to bind to LDAP. No defaults.
+* *ldap.bind_password*: LDAP bind password. No defaults.
+
+For example:
+
+~~~
+ldap.enabled="true"
+ldap.url="ldap://my_ldap_server"
+ldap.basedn="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bind_password="admin"
+~~~
+
+Next, login to the PostgreSQL server using the psql client and add the PAM authenticated LDAP users.

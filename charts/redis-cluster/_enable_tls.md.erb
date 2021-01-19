@@ -1,0 +1,36 @@
+<%
+=begin
+apps: redis-cluster, redis
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+TLS support can be enabled in the chart by specifying the *tls.* parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+* *tls.enabled*: Enable TLS support. Defaults to false
+* *tls.certificatesSecret*: Name of the secret that contains the certificates. No defaults.
+* *tls.certFilename*: Certificate filename. No defaults.
+* *tls.certKeyFilename*: Certificate key filename. No defaults.
+* *tls.certCAFilename*: CA Certificate filename. No defaults.
+
+For example:
+
+First, create the secret with the certificates files:
+
+     $ kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+
+Then, use the following parameters:
+
+~~~
+tls.enabled="true"
+tls.certificatesSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+~~~
+
+> NOTE: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod may not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.

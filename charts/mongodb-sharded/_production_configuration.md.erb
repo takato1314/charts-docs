@@ -1,0 +1,44 @@
+<%
+=begin
+apps: mongodb-sharded
+platforms: kubernetes
+id: production_configuration
+title: Production configuration and horizontal scaling
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Increase shards to 4:
+
+    - shards: 2
+    + shards: 4
+
+* Increase config server replicaset sive:
+
+    - configsvr.replicas: 1
+    + configsvr.replicas: 3
+
+* Increase data nodes per shard:
+
+    - shardsvr.dataNode.replicas: 1
+    + shardsvr.dataNode.replicas: 2
+
+* Enable arbiter node on each shard:
+
+    - shardsvr.arbiter.replicas: 0
+    + shardsvr.arbiter.replicas: 1
+
+* Start a side-car Prometheus exporter:
+
+    - metrics.enabled: false
+    + metrics.enabled: true
+
+#### Sharding
+
+This chart deploys a sharded cluster by default. Some characteristics of this chart are:
+
+* It allows HA by enabling replication on the shards and the config servers. The mongos instances can be scaled horizontally as well.
+* The number of secondary and arbiter nodes can be scaled out independently.

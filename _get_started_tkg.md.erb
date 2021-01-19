@@ -1,0 +1,70 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: get_started_tkg
+=end %>
+
+### Introduction
+
+[VMware Tanzu Kubernetes Grid](https://tanzu.vmware.com/kubernetes-grid) (TKG) is an implementation of Kubernetes that is tested and supported by VMware. It can run both on-premise in vSphere and in the public cloud. It includes signed and supported versions of open source applications to provide all the key services required for a production Kubernetes environment.
+
+Some of the key advantages of Tanzu Kubernetes Grid are:
+
+* Consistent, secure and upstream-compatible Kubernetes experience
+* Pre-integrated and validated components for services such as networking, authentication, ingress control, and logging
+* Support for large-scale, multicluster Kubernetes environments with proper workload isolation
+* Compatible with private clouds, public clouds and edge environments
+* Automated multi-region configuration and policy management
+* 24/7 production support from VMware
+
+[VMware Tanzu Mission Control](https://tanzu.vmware.com/mission-control) (TMC) is a dashboard for centrally provisioning and securing Kubernetes clusters (including TKG clusters) across multiple teams and clouds. Once the cluster is operational, [Bitnami's pre-configured and secure Helm charts](https://github.com/bitnami/charts/) can be used to deploy Kubernetes-ready applications on it.
+
+This tutorial will walk you, step by step, through the process of provisioning a new Tanzu Kubernetes Grid cluster on Amazon EC2 using Tanzu Mission Control and then deploying an application on it using Bitnami's Helm charts.
+
+### Assumptions and prerequisites
+
+This guide makes the following assumptions:
+
+* You have access to the [VMWare Cloud Services Portal (CSP)](https://console.cloud.vmware.com/) and your organization has Tanzu Mission Control available in the "My Services" section in CSP. If not, [talk with an expert to request access](https://k8s.vmware.com/tanzu-mission-control/?utm_source=google&utm_medium=cpc&gclid=EAIaIQobChMIweX-iom46AIVm4FaBR1yJAWIEAAYASAAEgKYgfD_Bw).
+* You have an AWS cloud account connected to Tanzu Mission Control to provision a new cluster on Amazon EC2. [Learn how to connect Tanzu Mission Control with an AWS cloud account](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-getstart/GUID-34E91A36-4D85-4AEF-9FDC-05D92E09BFFA.html).
+* You have the *kubectl* CLI and the Helm v3.x package manager installed. Learn how to install [*kubectl* and Helm v3.x](/<%= platform_path %>/kubernetes/get-started-kubernetes/#step-3-install-kubectl-command-line).
+
+This tutorial uses the [Bitnami MariaDB Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) as an example of deploying an application in a cluster created from TMC. The steps are similar for other [Bitnami Helm charts](https://github.com/bitnami/charts/).
+
+### Step 1: Create a new cluster group
+
+> TIP: This step creates a new cluster group in TMC. If you or your organization have already created a cluster group, you can go straight to [Step 2](#step-2-create-a-new-cluster).
+
+<%= partial 'platforms/kubernetes/create_cluster_group_tmc_tkg.md.erb' %>
+
+### Step 2: Provision a new TKG cluster
+
+Tanzu Mission Control allows you to directly provision a TKG cluster from your AWS account. Once the cluster is deployed, you will be able to add new node pools, monitor its workloads, and manage access, image registry and network policies directly from TMC.
+
+<%= partial 'platforms/kubernetes/create_cluster_tmc_tkg.md.erb' %>
+
+### Step 3: Connect to the new TKG cluster
+
+<%= partial 'platforms/kubernetes/connect_cluster_tmc_tkg.md.erb' %>
+
+### Step 4: Deploy the Bitnami MariaDB Helm chart on the TKG cluster
+
+<%= partial 'platforms/kubernetes/deploy_chart_tmc_tkg.md.erb' %>
+
+### Step 5: Upgrade the TKG cluster
+
+> IMPORTANT: This section only applies to clusters that have been provisioned using Tanzu Mission Control.
+
+<%= partial 'platforms/kubernetes/upgrade_cluster_tmc_tkg.md.erb' %>
+
+### Useful links
+
+* [Bitnami Helm charts](https://bitnami.com/stacks/helm)
+* [Bitnami Ghost Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/ghost)
+* [Get Started with Bitnami and Kubernetes](https://docs.bitnami.com/kubernetes/)
+* [VMware Tanzu Kubernetes Grid](https://tanzu.vmware.com/kubernetes-grid)
+* [VMware Tanzu Kubernetes Grid Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/index.html)
+* [VMware Tanzu Mission Control](https://tanzu.vmware.com/mission-control)
+* [VMware Tanzu Mission Control Documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/)
+* [VMware Tanzu Mission Control Hands-On Lab](https://labs.hol.vmware.com/HOL/catalogs/lab/6965)

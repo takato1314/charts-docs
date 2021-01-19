@@ -1,0 +1,18 @@
+Now that your Docker image is built and contains your application code, you can upload it into a public registry. This tutorial uses [Docker Hub](https://hub.docker.com/), but you can select one of your own choice such as:
+
+* [Google Container Registry](https://cloud.google.com/container-registry/)
+* [Amazon EC2 Container Registry](https://aws.amazon.com/ecr/)
+* [Azure container Registry](https://azure.microsoft.com/en-us/services/container-registry/)
+* [Quay](https://quay.io/)
+
+To upload the image to Docker Hub, follow the steps below:
+
+* Log in to Docker Hub:
+
+        $ docker login
+
+* Push the image to your Docker Hub account. Replace the DOCKER_USERNAME placeholder with the username of your Docker Hub account and *my-custom-app:latest* with the name and the version of your Docker image:
+
+        $ docker push DOCKER_USERNAME/my-custom-app:latest
+
+* Confirm that you see the image in your Docker Hub repositories dashboard.

@@ -1,0 +1,29 @@
+<%
+=begin
+apps: kafka
+platforms: kubernetes
+id: enable_metrics
+title: Enable metrics
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+The chart optionally can start two metrics exporters:
+
+* Kafka exporter, to expose Kafka metrics. By default, it uses the port *9308*.
+* JMX exporter, to expose JMX metrics. By default, it uses the port *5556*.
+
+* Whether or not to create a separate Kafka exporter:
+
+    - metrics.kafka.enabled: false
+    + metrics.kafka.enabled: true
+
+* Whether or not to expose JMX metrics to Prometheus:
+
+    - metrics.jmx.enabled: false
+    + metrics.jmx.enabled: true
+
+* Zookeeper chart metrics configuration:
+
+    + zookeeper.metrics.enabled: true

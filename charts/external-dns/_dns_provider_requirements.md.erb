@@ -1,0 +1,31 @@
+<%
+=begin
+apps: external-dns
+platforms: kubernetes
+id: dns_provider_requirements
+title: DNS provider requirements
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+Find information about the requirements for each DNS provider on the link below:
+
+* [ExternalDNS Tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
+
+For instance, to install ExternalDNS on AWS, you need to:
+
+* Provide the K8s worker node which runs the cluster autoscaler with a minimum IAM policy (check [IAM permissions documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions) for more information).
+* Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [this documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
+* Install ExternalDNS chart using the command below:
+
+> Note: Replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
+
+~~~
+$ helm install my-release \
+  --set provider=aws \
+  --set aws.zoneType=public \
+  --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
+  --set domainFilters[0]=HOSTED_ZONE_NAME \
+  bitnami/external-dns
+~~~

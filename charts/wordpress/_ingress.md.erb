@@ -1,0 +1,29 @@
+<%
+=begin
+apps: wordpress
+platforms: kubernetes
+id: ingress
+title: Support for Ingress
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://hub.kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://hub.kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your WordPress application.
+
+To enable ingress integration, please set ingress.enabled to *true*.
+
+### Ingress-terminated HTTPS
+
+In cases where HTTPS/TLS is terminated on the ingress, you may run into an issue where non-https liveness and readiness probes result in a 302 (redirect from HTTP to HTTPS) and are interpreted by Kubernetes as not-live/not-ready. ([See Kubernetes issue #47893 on GitHub for further details about 302 not being interpreted as "successful"](https://github.com/kubernetes/kubernetes/issues/47893).) To work around this problem, use livenessProbeHeaders and readinessProbeHeaders to pass the same headers that your ingress would pass in order to get an HTTP 200 status result. For example (where the following is in a *--values-referenced* file):
+
+~~~
+livenessProbeHeaders:
+  - name: X-Forwarded-Proto
+    value: https
+readinessProbeHeaders:
+  - name: X-Forwarded-Proto
+    value: https
+~~~
+
+Any number of name/value pairs may be specified; they are all copied into the liveness or readiness probe definition.

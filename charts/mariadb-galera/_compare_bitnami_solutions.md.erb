@@ -1,0 +1,21 @@
+<%
+=begin
+apps: mariadb-galera, mariadb
+platforms: kubernetes
+id: compare_bitnami_solutions
+title: Differences between the MariaDB Galera and MariaDB Helm charts
+category: get-started
+weight: 40
+highlight: 40
+=end %>
+
+Bitnami offers two different ways to deploy a MariaDB cluster, using the MariaDB Helm chart or the MariaDB Galera Helm chart. Both solutions provide a simply and reliable way to run MariaDB in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+
+* The MariaDB Galera Helm chart configures a cluster with three nodes by default, all of them acting as master nodes with writing / reading permissions. The MariaDB Helm chart deploys one node that you can use as a single-node application database.
+* The MariaDB Galera Helm chart provides a cluster with both read and write scalability since all nodes acts as master nodes (multi-master topology) while a cluster comprised of several MariaDB nodes will establish the master-slave topology.
+* The MariaDB Galera Helm chart deploys a cluster with synchronous replication, avoiding data loss if any node fails. 
+* The MariaDB Galera Helm chart cluster ensures high-availability thanks to automatic membership control, failed nodes are drop from the cluster.
+
+The following diagram shows you the options you have for using Bitnami's MariaDB solutions in your deployments: either as a single-node database (MariaDB) or as a multi-master cluster (MariaDB Galera). 
+
+<%= documentation_img '/images/img/platforms/kubernetes/charts/mariadb-galera/mariadb-mariadbgalera.png', 'A diagram comparing a single node MariaDB solution versus a multi-master node distributed database with MariaDB Galera' %>

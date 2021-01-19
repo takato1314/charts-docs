@@ -1,0 +1,16 @@
+<%
+=begin
+apps: cassandra
+platforms: kubernetes
+id: initialize_database
+title: Initialize database
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami Cassandra image](https://github.com/bitnami/bitnami-docker-cassandra) allows having initialization scripts mounted in */docker-entrypoint.initdb*. This is done in the chart by adding files in the *files/docker-entrypoint-initdb.d* folder (in order to do so, clone this chart) or by setting the initDBConfigMap value with a ConfigMap (named, for example, init-db) that includes the necessary *sh* or *cql* scripts:
+
+~~~
+initDBConfigMap=init-db
+~~~

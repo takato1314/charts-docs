@@ -1,0 +1,18 @@
+<%
+=begin
+apps: mariadb-galera
+platforms: kubernetes
+id: add_nodes
+title: Add a new node to the cluster
+category: administration
+weight: 30
+highlight: 30
+=end %>
+
+To add nodes, upgrade the chart and set the *replicaCount* parameter to the desired number of nodes. For example, to have 4 nodes in all, use the command below:
+
+    $ helm upgrade --timeout 600s <release> --set "password=${MARIADBGALERA_PASSWORD},replicaCount=4" bitnami/mariadb-galera
+
+Replace the MARIADBGALERA_PASSWORD placeholder with the administrator password for the MariaDB Galera cluster.
+
+> NOTE: To ensure optimal operation of the MariaDB Galera cluster, it is highly recommended to run it with at least three nodes. The cluster can work with only two nodes if needed; however, under this scenario, if a master node crashes twice, no other master node will be available for promotion and the cluster will fail. In that case, you need to bootstrap the entire cluster manually.

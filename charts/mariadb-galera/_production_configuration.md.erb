@@ -1,0 +1,21 @@
+<%
+=begin
+apps: mariadb-galera
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Force users to specify a password:
+
+    - rootUser.forcePassword: false
+    + rootUser.forcePassword: true
+    - db.forcePassword: false
+    + db.forcePassword: true
+    - galera.mariabackup.forcePassword: false
+    + galera.mariabackup..forcePassword: true

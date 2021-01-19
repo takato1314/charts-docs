@@ -1,0 +1,21 @@
+<%
+=begin
+apps: rabbitmq
+platforms: kubernetes
+id: scale_down
+title: Scale down the cluster
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To scale down the RabbitMQ cluster just perform a normal upgrade setting the *replicaCount* value to the desired number of nodes. For example, reduce the cluster to one replica (default number):
+
+~~~
+$ helm upgrade bitnami/rabbitmq \
+--set password=RABBITMQ_PASSWORD \
+--set replicaCount=1 \
+--set auth.erlangCookie=RABBITMQ_ERLANG_COOKIE
+~~~
+
+> NOTE: You need to replace the RABBITMQ_PASSWORD and RABBITMQ_ERLANG_COOKIE placeholders with the values obtained in the installation notes.

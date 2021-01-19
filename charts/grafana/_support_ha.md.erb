@@ -1,0 +1,12 @@
+<%
+=begin
+apps: grafana
+platforms: kubernetes
+id: support_ha 
+title: Support HA (High Availability)
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+To support High Availability (HA) Grafana just need an external database where store dashboards, users and other persistent data. To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/grafana/latest/installation/configuration/#database) of Grafana official documentation. For more information on Grafana High Availability, check out the following [documentation](https://grafana.com/docs/grafana/latest/tutorials/ha_setup/).

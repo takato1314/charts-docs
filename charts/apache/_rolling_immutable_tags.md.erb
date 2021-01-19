@@ -1,0 +1,32 @@
+<%
+=begin
+apps: apache
+platforms: kubernetes
+id: rolling_immutable_tags
+title: Rolling versus immutable tags
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+<%= partial 'platforms/kubernetes/immutable_tags_intro.md.erb' %>
+
+### Deploy your custom web application
+
+The Apache chart allows you to deploy a custom web application using one of the following methods:
+
+* Cloning from a GitHub repository: Set cloneHtdocsFromGit.enabled to true and set the repository and branch using the cloneHtdocsFromGit.repository and cloneHtdocsFromGit.branch parameters. A sidecar will also pull the latest changes in an interval set by cloneHtdocsFromGit.interval.
+* Providing a ConfigMap: Set the htdocsConfigMap value to mount a ConfigMap in the Apache *htdocs* folder.
+* Using an existing PVC: Set the htdocsPVC value to mount an PersistentVolumeClaim with the web application content.
+
+You can deploy a example web application using git deploying the chart with the following parameters:
+
+~~~
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
+~~~
+
+To use your own *httpd.conf* file you can mount it using the httpdConfConfigMap parameter, which is the name of a Config Map with the contents of your *httpd.conf*. Additionally, you can copy your *httpd.conf* file to */files/httpd.conf* in your current working directory to mount it to the container.
+
+You may also want to mount different virtual host configurations. This can be done using the vhostsConfigMap value. This is a pointer to a ConfigMap with the desired Apache virtual host configurations. You can also copy your virtual host configurations under the *files/vhosts/* directory in your current working directory to mount them as a Config Map to the container.

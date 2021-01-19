@@ -1,0 +1,33 @@
+<%
+=begin
+apps: mongodb-sharded
+platforms: kubernetes
+id: sidecars_init_containers
+title: Sidecars and Init Containers
+category: administration
+weight: 80
+=end %>
+
+If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter (available in the mongos, shardsvr.dataNode, shardsvr.arbiter, configsvr and common sections). Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~
+
+Similarly, you can add extra init containers using the initContainers parameter.
+
+~~~
+initContainers:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~

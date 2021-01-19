@@ -1,0 +1,13 @@
+<%
+=begin
+apps: apache-airflow
+platforms: kubernetes
+id: generate_fernet_key
+title: Generate fernet key
+category: configuration
+weight: 50
+=end %>
+
+A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
+
+Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key).

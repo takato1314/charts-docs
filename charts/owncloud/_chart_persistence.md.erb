@@ -1,0 +1,16 @@
+<%
+=begin
+apps: owncloud
+platforms: kubernetes
+id: chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami ownCloud image](https://github.com/bitnami/bitnami-docker-owncloud) stores the ownCloud data and configurations at the */bitnami/owncloud* path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+
+See the [Parameters](https://github.com/bitnami/charts/tree/master/bitnami/owncloud#parameters) section to configure the PVC or to disable persistence.

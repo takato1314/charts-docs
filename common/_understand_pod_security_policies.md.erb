@@ -1,0 +1,60 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: understand_pod_security_policies
+title: Understand pod security policies
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+In Kubernetes, a pod security policy is represented by a PodSecurityPolicy resource. This resource lists the conditions a pod must meet in order to run in the cluster. Here's an example of a pod security policy, expressed in YAML:
+
+~~~
+apiVersion: extensions/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: example
+spec:
+  privileged: false
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - 'nfs'
+  hostPorts:
+  - min: 100
+    max: 100
+~~~
+
+Briefly, this pod security policy implements the following security rules:
+
+* [Disallow containers running in privileged mode](/<%= platform_path %>/faq/configuration/use-non-root)
+* Disallow containers that require root privileges
+* Disallow containers that access volumes apart from NFS volumes
+* Disallow containers that access host ports apart from port 100
+
+Let's look at the broad structure of a pod security policy.
+
+* The *metadata* section of the policy specifies its name.
+* The *spec* section of the policy outlines the key criteria a pod must fulfil in order to be allowed to run.
+
+Here is a brief description of the main options available (you can find more details in the official Kubernetes documentation):
+
+* The *privileged* field indicates whether to allow containers that use privileged mode. [Learn more about privileged mode](https://kubernetes.io/docs/concepts/workloads/pods/pod/#privileged-mode-for-pod-containers).
+
+  * The *runAsUser* field defines which users a container can run as. Most commonly, it is used to prevent pods from running as the root user.
+  * The *seLinux* field defines the Security-Enhanced Linux (SELinux) security context for containers and only allows containers that match that context. [Learn more about SELinux](https://en.wikipedia.org/wiki/Security-Enhanced_Linux).
+  * The *supplementalGroups* and *fsGroup* fields define the user groups or fsGroup-owned volumes that a container may access. [Learn more about fsGroups and supplemental groups](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
+  * The *volumes* field defines the type(s) of volumes a container may access. [Learn more about volumes](https://kubernetes.io/docs/concepts/storage/volumes/).
+  * The *hostPorts* field, together with related fields like *hostNetwork*, *hostPID* and *hostIPC*, restrict the ports (and other networking capabilities) that a container may access on the host system.
+
+### Next steps: Create pod security policies for your cluster
+
+Learn more about how to create pod security policies by applying any of the [use cases shown in the following guide](https://docs.bitnami.com/tutorials/secure-kubernetes-cluster-psp/).

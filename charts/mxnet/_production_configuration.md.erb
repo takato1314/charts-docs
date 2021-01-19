@@ -1,0 +1,33 @@
+<%
+=begin
+apps: mxnet
+platforms: kubernetes
+id: production_configuration
+title: Production configuration and horizontal scaling
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*. You can use this file instead of the default one.
+
+* Run Apache MXNet (Incubating) in distributed mode:
+
+~~~
+- mode: standalone
++ mode: distributed
+~~~
+
+* Number of server nodes that will execute your code:
+
+~~~
+- serverCount: 1
++ serverCount: 2
+~~~
+
+* Number of worker nodes that will execute your code:
+
+~~~
+- workerCount: 1
++ workerCount: 4
+~~~

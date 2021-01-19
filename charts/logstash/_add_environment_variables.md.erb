@@ -1,0 +1,17 @@
+<%
+=begin
+apps: logstash
+platforms: kubernetes
+id: add_environment_variables
+title: Add extra environment variables
+category: configuration
+weight: 50
+=end %>
+
+In case you want to add extra environment variables, you can use the *logstash.extraEnvVars* property.
+
+~~~
+extraEnvVars:
+  - name: ELASTICSEARCH_HOST
+    value: "x.y.z"
+~~~

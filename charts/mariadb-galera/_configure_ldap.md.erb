@@ -1,0 +1,46 @@
+<%
+=begin
+apps: mariadb-galera
+platforms: kubernetes
+id: configure_ldap
+title: LDAP configuration
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+LDAP support can be enabled in the chart by specifying the ldap. parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+
+* *ldap.enabled*: Enable LDAP support. Defaults to *false*.
+* *ldap.uri*: LDAP URL beginning in the form *ldap[s]://<hostname>:<port>*. No defaults.
+* *ldap.base*: LDAP base DN. No defaults.
+* *ldap.binddn*: LDAP bind DN. No defaults.
+* *ldap.bindpw*: LDAP bind password. No defaults.
+* *ldap.bslookup*: LDAP base lookup. No defaults.
+* *ldap.nss_initgroups_ignoreusers*: LDAP ignored users. *root,nslcd*.
+* *ldap.scope*: LDAP search scope. No defaults.
+* *ldap.tls_reqcert*: LDAP TLS check on server certificates. No defaults.
+
+For example:
+
+~~~
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example,dc=org"
+ldap.binddn="cn=admin,dc=example,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok,dc=example,dc=org"
+ldap.nss_initgroups_ignoreusers="root,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
+~~~
+
+Next, login to the MariaDB server using the MySQL client and add the PAM authenticated LDAP users.
+
+For example,
+
+~~~
+CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
+~~~
+
+With the above example, when the *bitnami* user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.

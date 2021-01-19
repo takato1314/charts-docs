@@ -1,0 +1,31 @@
+<%
+=begin
+apps: none 
+platforms: kubernetes
+id: troubleshooting_dns
+title: Troubleshoot Kubernetes service names using DNS
+category: troubleshooting
+weight: 40
+highlight: 40
+=end %>
+
+### Detect issues
+
+When the Service is using a different namespace or it is simply not available, it can be caused because the Service has not been properly registered. 
+
+### Solve issues
+
+* The first step is to check if the Service name you are using is correct. To do so, run these commands to check if the Service is registered and the pods selected:
+
+        $ kubectl get svc
+        $ kubectl get endpoints
+
+* If the service is registered, run the *kubectl get pods* command to get the UID for your pod. Then run the command below, this will give you an indication if the DNS resolution is working or not. (Remember to replace the POD-UID placeholder with the pod UID and the SVC-NAME placeholder with the DNS name of the service).
+
+        $ kubectl exec -ti POD-UID nslookup SVC-NAME
+
+If the error persists, then [confirm that DNS is enabled for your Kubernetes cluster](https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/). Check out the Kubernetes official documentation to learn how to [debug DNS resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/).
+
+> TIP: For Minikube users, the command *minikube addons list* will give you a list of all enabled features. If it is disabled, enable it and try again.
+
+[Check out this section to learn more about how to troubleshoot Service issues](../../troubleshooting/troubleshooting-services).

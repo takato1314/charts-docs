@@ -1,0 +1,32 @@
+<%
+=begin
+apps: wordpress
+platforms: kubernetes
+id: sidecars_init_containers
+title: Sidecars
+category: administration
+weight: 80
+=end %>
+
+If you have a need for additional containers to run within the same pod as WordPress (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~
+
+If these sidecars export extra ports, you can add extra port definitions using the service.extraPorts value:
+
+~~~
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+~~~

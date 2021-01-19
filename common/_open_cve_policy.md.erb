@@ -1,0 +1,44 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: open_cve_policy
+=end %>
+
+### What does an Open CVE mean?
+
+Open CVEs are the ones that have not been fixed by the Linux Distribution maintainers because they did not work on that yet or they do not consider a critical issue. Bitnami is not able to fix those CVEs since those fixes depend directly on the distribution maintainers.
+
+Bitnami's images are based on Debian and Oracle Linux - at the moment of writing this article. These CVEs exist in these distributions as well as other distributions depend on or use them.
+
+#### How can I check if a container or chart includes an open CVE?
+
+* To check if there is any open CVE in a container or chart, navigate to its README file, and in the "Why use Bitnami images" section click the "CVE scan report" link. You will be redirected to the Bitnami Quay repository for the selected image. [Check out this example for the Bitnami WordPress Docker image](https://quay.io/repository/bitnami/wordpress?tab=tags). Follow these steps:
+
+* Find the "latest" tag and click the vulnerability report link under the "Security scan" section.
+
+    <%= documentation_img '/images/img/platforms/common/vulnerability-report.png', 'Check container vulnerability report' %>
+
+* In the resulting screen, activate the "Only show fixable" checkbox.
+
+    <%= documentation_img '/images/img/platforms/common/show-fixable.png', 'Only show fixable' %>
+
+#### Is Bitnami releasing charts or containers that include CVEs? 
+
+All Bitnami containers and Helm charts do not include fixable CVEs.
+
+#### How does Bitnami ensure that its containers and Helm charts do not include fixable CVEs?
+
+To ensure that all Bitnami images include the latest security fixes, Bitnami implements the following policies:
+
+* Bitnami triggers a release of a new Helm chart when a new version of the main server or application is detected. 
+ 
+    For example, if the system automatically detects a new version of MariaDB, Bitnami's pipeline automatically releases a new container with that version and also releases the corresponding Helm chart if it passes all tests. That way, Bitnami ensures that the application version released is always the latest stable one and has the latest security fixes.
+
+* Bitnami triggers a release of a new chart when a package that includes a fix for a CVE from the distribution in any of the containers that it includes is detected. 
+  
+    The system scans all our containers and releases new images daily with the latest available system packages. Once the pipeline detects there is a new package that fixes a CVE, our team triggers the release of a new Helm chart to point to the latest container images.
+
+* The Bitnami team monitors different CVE feeds - such as Heartbleed or Shellshock - to fix the most critical issues as soon as possible. 
+
+    Once a critical issue is detected in any of the charts included in the Bitnami catalog (or any of the assets that Bitnami distributes amongst its different cloud providers) a new solution is released. Bitnami provide updates in less than 48 business hours.

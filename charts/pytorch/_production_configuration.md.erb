@@ -1,0 +1,22 @@
+<%
+=begin
+apps: pytorch
+platforms: kubernetes
+id: production_configuration
+title: Production configuration
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This chart includes a *values-production.yaml* file where you can find some parameters oriented to production configuration in comparison to the regular *values.yaml*.
+
+* Run PyTorch in distributed mode:
+
+    - mode: standalone
+    + mode: distributed
+
+* Number of nodes that will run the code:
+
+    - #worldSize:
+    + worldSize: 4

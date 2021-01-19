@@ -1,0 +1,15 @@
+<%
+=begin
+apps: redis
+platforms: kubernetes
+id: scale_down
+title: Scale down the cluster
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To scale down the Redis cluster just perform a normal upgrade setting the *cluster.nodes* value to the desired number of nodes. Also it is needed to provide the password using the password. For example, having more than 3 nodes, to scale down the cluster to 3 nodes:
+
+    $ helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=3" .
+

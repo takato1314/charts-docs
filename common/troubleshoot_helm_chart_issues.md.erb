@@ -1,0 +1,229 @@
+Bitnami Helm charts provide an easy way to install and manage applications on Kubernetes, while following best practices in terms of security, efficiency and performance.
+
+This guide explains how to deal with common errors related to Bitnami's Helm charts. It provides information about how Bitnami configures certain aspects of its Helm charts, the reasons behind such configuration, and troubleshooting advice.
+
+### Common issues
+
+The following are the most common issues that Bitnami users face when dealing with Bitnami charts:
+
+* Credential errors while upgrading chart releases
+* Issues with existing Persistence Volumes (PVs) from previous releases
+* Permission errors when enabling persistence
+
+### Troubleshooting checklist
+
+The following checklist covers the majority of cases described above. Use this checklist to identify and debug Bitnami Helm chart deployments.
+
+#### Credential errors while upgrading chart releases
+
+Bitnami charts support different alternatives for managing credentials such as passwords, keys or tokens:
+
+* Setting the available parameters in the charts to specify any desired value.
+* Using existing Secrets (manually created before the chart installation) that contains the required credentials.
+* Generating random alphanumeric credentials when none of the previous methods are not chosen (not recommended for production environments).
+
+Relying on Helm to generate random credentials is the root of many issues when dealing with chart upgrades on stateful apps. However, this option is offered in Bitnami charts to improve the UX for developers.
+
+##### Reproduce issue
+
+Here is an example illustrating the issue:
+
+* Install a chart that uses a stateful application, such as the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql):
+
+        $ helm install my-release bitnami/postgresql
+
+* Since no credentials were specified and no existing Secrets are being reused, a random alphanumeric password is generated for the *postgres* (admin) user of the database. This password is also used by readiness and liveness probes on PostgreSQL pods. Obtain the generated password using the commands below:
+
+        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ echo $POSTGRES_PASSWORD
+        8aQdvrEhr5
+
+* Verify the password by logging in to the PostgreSQL server using this password:
+
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        ...
+        postgres=#
+
+* Upgrade the chart release:
+
+        $ helm upgrade my-release bitnami/postgresql
+
+* Obtain the password again. You will find that a new password has been generated, as shown in the example below:
+
+        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ echo $POSTGRES_PASSWORD
+        7C91EMpVDH
+
+* Try to log in to PostgreSQL using the new password:
+
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        psql: FATAL:  password authentication failed for user "postgres"
+
+As can be seen above, the credentials available in the Secret are no longer valid to access PostgreSQL after upgrading.
+
+The reason for this behaviour lies in how Bitnami containers/charts work:
+
+* Bitnami containers configure/initialize applications the first time they are deployed. However, they skip this configuration/initialization step and reuse persisted data if detected on subsequent deployments or upgrades.
+* Bitnami charts packaging stateful apps enable persistence by default using Persistent Volume Claims (PVCs).
+
+Therefore, even the containers are forcecully restarted after upgrading the chart, they will continue to reuse the persistent data that was created when the chart was first deployed. As a result, the persistent data and the Secret go out-of-sync with each other.
+
+> NOTE: Some validations have been recently added to some charts to warn users when trying to upgrade without specifying credentials.
+
+##### Solve issue
+
+This issue is resolved by rolling back the chart release. Continuing with the previous example:
+
+* Obtain the history of the release:
+
+        $ helm history my-release
+        REVISION    UPDATED                    STATUS       CHART               APP VERSION DESCRIPTION
+        1           Thu Oct 22 16:12:34 2020   superseded   postgresql-9.8.5    11.9.0      Install complete
+        2           Thu Oct 22 16:16:42 2020   deployed     postgresql-9.8.5    11.9.0      Upgrade complete
+
+* Rollback to the first revision:
+
+        $ helm rollback my-release 1
+        Rollback was a success! Happy Helming!
+
+* Obtain the original credentials and upgrade the release by passing the original credentials to the upgrade process:
+
+        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ helm upgrade my-release bitnami/postgresql --set postgresqlPassword=$POSTGRESQL_PASSWORD
+
+* Check the history again:
+
+        $ helm history my-release-2
+        REVISION    UPDATED                    STATUS       CHART               APP VERSION DESCRIPTION
+        1           Thu Oct 22 16:12:34 2020   superseded   postgresql-9.8.5    11.9.0      Install complete
+        2           Thu Oct 22 16:16:42 2020   deployed     postgresql-9.8.5    11.9.0      Upgrade complete
+        3           Thu Oct 22 16:37:22 2020   superseded   postgresql-9.8.5    11.9.0      Rollback to 1
+        4           Thu Oct 22 16:45:07 2020   deployed     postgresql-9.8.5    11.9.0      Upgrade complete
+
+* Log in to PostgreSQL using the original credentials:
+
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        ...
+        postgres=#
+
+Login should now succeed.
+
+#### Persistence Volumes (PVs) retained from previous releases
+
+If a Helm Chart includes a Statefulset which uses VolumeClaimTemplates to generate new Persistent Volume Claims (PVCs) for each replica created, Helm does not track those PVCs. Therefore, when uninstalling a chart release with these characteristics, the PVCs (and associated Persistent Volumes) are not removed from the cluster. This a [known limitation with Helm](https://github.com/helm/helm/issues/5156).
+
+##### Reproduce issue
+
+Reproduce the issue by following the steps below:
+
+* Install a chart that uses a Statefulset such as the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and wait for the release to be marked as successful:
+
+        $ helm install my-release bitnami/mariadb --wait
+
+* Uninstall the release:
+
+        $ helm uninstall my-release
+
+* List the available PVC(s) to confirm they were not removed:
+
+        $ kubectl get pvc
+        NAME                        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+        data-my-release-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       1m52s
+
+This can cause issues when reinstalling charts that reuse the release name. For instance, following the example shown above:
+
+* Install the Bitnami MariaDB chart again using the same release name:
+
+        $ helm install my-release bitnami/mariadb
+
+* Helm does not complain since the previous release was uninstalled and therefore no name conflict is detected. However, if the PVCs are listed again, it can be seen that the previous PVCs are being reused:
+
+        $ kubectl get pvc
+        NAME                        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+        data-my-release-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       4m32s
+
+This is problematic for the same reasons as those listed in [the section related to credentials](#are-you-setting-the-required-credentials-parameters-while-upgrading-a-chart-release).
+
+##### Solve issue
+
+This issue appears when installing a new release. In other words, it happens before any data is added to the application. Therefore, it can be solved by simply uninstalling the chart, removing the existing PVCs and installing the chart again:
+
+    $ helm uninstall my-release bitnami/mariadb
+    $ kubectl delete pvc data-my-release-mariadb-0
+
+#### Permission errors when enabling persistence
+
+The great majority of Bitnami containers are, by default, non-root. This means they are executed with a non-privileged user to add an extra layer of security. However, because they run as a non-root user, privileged tasks are typically off-limits and there are a few considerations to keep in mind when using them.
+
+Our [guide on container hardening best practices](https://docs.bitnami.com/tutorials/bitnami-best-practices-hardening-containers/#disadvantages-of-non-root-containers) explains the key considerations when using non-root containers. As explained there, one of the main drawbacks of using non-root containers relates to mounting volumes in these containers, as they do not have the necessary privileges to modify the ownership of the filesystem as needed.
+
+##### Reproduce issue
+
+The example below analyzes a common issue faced by Bitnami users in this context:
+
+* Install a chart that uses a non-root container, such as the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mongodb):
+
+        $ helm install my-release bitnami/mongodb
+
+* A CrashLoopBackOff error may occur:
+
+        $ kubectl get pods
+        NAME                                  READY   STATUS             RESTARTS   AGE
+        my-release-mongodb-58f6f48f87-vvc7m   0/1     CrashLoopBackOff   1          48s
+
+* Inspect the logs of the container:
+
+        $ kubectl logs my-release-mongodb-58f6f48f87-vvc7m
+        mongodb 08:56:27.10
+        mongodb 08:56:27.11 Welcome to the Bitnami mongodb container
+        mongodb 08:56:27.11 Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-mongodb
+        mongodb 08:56:27.12 Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-mongodb/issues
+        mongodb 08:56:27.12
+        mongodb 08:56:27.12 INFO  ==> ** Starting MongoDB setup **
+        mongodb 08:56:27.14 INFO  ==> Validating settings in MONGODB_* env vars...
+        mkdir: cannot create directory '/bitnami/mongodb/data': Permission denied
+
+* As the log displays a "Permission denied" error, inspect the pod:
+
+        $ kubectl describe pod my-release-mongodb-58f6f48f87-vvc7m
+        ...
+        Containers:
+          mongodb:
+            ...
+            Mounts:
+              /bitnami/mongodb from datadir (rw)
+              ...
+        Volumes:
+          datadir:
+            Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+            ClaimName:  my-release-mongodb
+            ReadOnly:   false
+        ...
+
+The container is seen to be exiting with an error code, since it cannot create a directory under the directoy where a Persistent Volume has been mounted. This is caused due to inadequate filesystem permissions.
+
+##### Solve issue
+
+Bitnami charts are configured to use, by default, a Kubernetes SecurityContext to automatically modify the ownership of the attached volumes. However, this feature does not work if:
+
+* Your Kubernetes distribution has no support for SecurityContexts.
+* The [Storage Class](https://kubernetes.io/docs/concepts/storage/storage-classes/) used to provision the Persistent Volumes has no support to modify the volumes' filesystem.
+
+To address this challenge, Bitnami charts also support, as an alternative mechanism, using an *initContainer* to change the ownership of the volume before mounting it. Continuing the example above, resolve the issue using the commands below:
+
+* Upgrade the chart release enabling the *initContainer* that adapts the permissions:
+
+        $ helm upgrade my-release bitnami/mongodb --set volumePermissions.enabled=true
+
+* List the pods again to confirm that the CrashLoopBackOff error no longer occurs:
+
+        $ kubectl get pods
+        NAME                                  READY   STATUS    RESTARTS   AGE
+        my-release-mongodb-6d78bdc996-tdj2d   1/1     Running   0          1m31s
+
+### Useful links
+
+The following resources may be of interest to you:
+
+* [Frequently Asked Questions For Kubernetes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/)
+* [Bitnami's Best Practices for Securing and Hardening Helm Charts](https://docs.bitnami.com/tutorials/bitnami-best-practices-hardening-charts/)
