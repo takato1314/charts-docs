@@ -12,7 +12,7 @@ Use the following format for contributing to this document:
   <Reasoning and explanation, putting any related issues and PRs (if any)>
 ```
 
-## 2021-01-19: Creation of the design decisions document
+## 2021-01-20: Creation of the design decisions document
 
 **TL;DR:** In order to improve the transparency as well as making the onboarding easier for contributors, we decided to create this document.
 
