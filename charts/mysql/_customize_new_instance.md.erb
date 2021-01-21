@@ -1,0 +1,32 @@
+<%
+=begin
+apps: mysql
+platforms: kubernetes
+id: customize_new_instance
+title: Customize a new MySQL instance
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image supports the use of custom scripts to initialize a fresh instance.
+
+In order to execute the scripts, they must be located inside the chart folder *files/docker-entrypoint-initdb.d* so that they may be consumed as a Kubernetes ConfigMap. The allowed extensions are:
+
+* *.sh*
+* *.sql*
+* *.sql.gz*
+
+These scripts are treated differently depending on their extension. While *.sh* scripts are executed on all the nodes, *.sql* and *.sql.gz* scripts are only executed on the primary nodes. This is because *.sh* scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in *.sql* or *sql.gz* files.
+
+When using a *.sh* script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the *.sh* script to ensure that it is executed only on one node, as shown in the example below:
+
+    initdbScripts:
+      my_init_script.sh: |
+        #!/bin/sh
+        if [[ $(hostname) == *master* ]]; then
+          echo "Master node"
+          mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+        else
+          echo "No master node"
+        fi
