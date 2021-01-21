@@ -1,0 +1,33 @@
+<%
+=begin
+apps: all
+platforms: kubernetes
+id: upgrade_helm3
+title: Use Helm v3 with the chart
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+### Changes introduced
+
+* Previous versions of this Helm chart used *apiVersion: v1* (installable by both Helm v2 and v3). This Helm chart was updated to *apiVersion: v2* (installable by Helm v3 only). [Learn more about the *apiVersion* field](https://helm.sh/docs/topics/charts/#the-apiversion-field).
+* The different fields present in the *Chart.yaml* file were reordered alphabetically in a homogeneous way.
+* Dependency information was transferred from the *requirements.yaml* to the *Chart.yaml* file.
+* After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock* file.
+
+### Upgrade considerations
+
+* No issues should be encountered when upgrading to this version of the chart from a previous one installed with Helm v3.
+* Upgrading to this version of the chart using Helm v2 is not supported any longer.
+* For chart versions installed with Helm v2 and subsequently requiring upgrade with Helm v3,  refer to the [official Helm documentation about migrating from Helm v2 to v3](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases).
+
+### Useful links
+
+If you encounter difficulties when upgrading the chart due to the different versions of Helm, refer to the following links for possible explanations and solutions:
+
+* [https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/)
+* [https://helm.sh/docs/topics/v2_v3_migration/](https://helm.sh/docs/topics/v2_v3_migration/)
+* [https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)

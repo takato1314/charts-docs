@@ -9,12 +9,10 @@ weight: 40
 highlight: 40
 =end %>
 
-To scale down the MySQL cluster just perform a normal upgrade setting the *slave.replicas* value to the desired number of nodes. For example, reduce the cluster to the default one replica:
+To scale down the MySQL cluster, perform a normal upgrade and set the *slave.replicas* value to the desired number of nodes. For example, reduce the cluster to a single replica using the command below. Replace the  ROOT_PASSWORD placeholder with the MySQL *root* password.
 
 ~~~
 $ helm upgrade bitnami/mysql \
-set rootUser.password=ROOT_PASSWORD \
---set slave.replicas=1 \
+  --set rootUser.password=ROOT_PASSWORD \
+  --set slave.replicas=1 \
 ~~~
-
-> NOTE: You need to substitute the placeholder ROOT_PASSWORD with the value obtained from instructions in the installation notes. Also replace NUMBER_OF_REPLICAS with the total number of nodes you want to set for the existing cluster.
