@@ -2,7 +2,7 @@
 =begin
 apps: none
 platforms: kubernetes
-id: understand_chart_release_process
+id: understand_charts_release_process
 title: Learn about Bitnami's Helm chart release process
 category: get-started
 weight: 10
