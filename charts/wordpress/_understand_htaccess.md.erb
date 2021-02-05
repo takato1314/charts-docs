@@ -1,0 +1,25 @@
+<%
+=begin
+apps: wordpress
+platforms: kubernetes
+id: understand_htaccess
+title: Work with .htaccess files
+category: administration
+weight: 70
+=end %>
+
+For performance and security reasons, it is a good practice to configure Apache with the *AllowOverride None* directive. Instead of using *.htaccess* files, Apache will load the same directives at boot time. These directives are located in */opt/bitnami/wordpress/wordpress-htaccess.conf*.
+
+By default, the container image includes all the default *.htaccess* files in WordPress (together with the default plugins). To enable this feature, install the chart with the following value:
+
+    allowOverrideNone=yes
+
+However, some plugins may include *.htaccess* directives that will not be loaded when *AllowOverride* is set to *None*. To make them work, create a custom *wordpress-htaccess.conf* file with all the required directives. After creating it, create a Kubernetes ConfigMap with it (for example, named *custom-htaccess*) and install the chart with the correct parameters as shown below:
+
+    allowOverrideNone=true
+    customHTAccessCM=custom-htaccess
+
+Some plugins permit editing the *.htaccess* file and it may be necessary to persist it in order to keep those edits. To make these plugins work, set the *htaccessPersistenceEnabled* parameter as shown below:
+
+    allowOverrideNone=false
+    htaccessPersistenceEnabled=true
