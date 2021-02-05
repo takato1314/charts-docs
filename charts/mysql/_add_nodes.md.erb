@@ -11,10 +11,10 @@ highlight: 30
 
 To add a new node to your MySQL cluster, upgrade the installation by providing some parameters to the *helm upgrade* command:
 
-* Pass as *auth.rootPassword* the password used in the installation time. If you did not provide a password, follow the instructions shown in the chart deployment output to get the auto-generated password.
+* Set the *auth.rootPassword* parameter to the *root* account password defined at deployment time. For auto-generated passwords, follow the intructions in the deployment notes to get the auto-generated password.
 * Set the desired number of nodes using the *secondary.replicaCount* parameter.
 
-Here is an example command to add more nodes. Replace the ROOT_PASSWORD placeholder with the root password and the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+The command below is an example of adding more nodes. Replace the ROOT_PASSWORD placeholder with the *root* account password, and the NUMBER_OF_REPLICAS placeholder with the number of secondary nodes needed.
 
 ~~~
 $ helm upgrade my-release bitnami/mysql \
