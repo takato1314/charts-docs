@@ -21,12 +21,14 @@ These scripts are treated differently depending on their extension. While *.sh* 
 
 When using a *.sh* script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the *.sh* script to ensure that it is executed only on one node, as shown in the example below:
 
-    initdbScripts:
-      my_init_script.sh: |
-        #!/bin/sh
-        if [[ $(hostname) == *master* ]]; then
-          echo "Master node"
-          mysql -P 3306 -uroot -prandompassword -e "create database new_database";
-        else
-          echo "No master node"
-        fi
+~~~
+initdbScripts:
+  my_init_script.sh: |
+    #!/bin/sh
+    if [[ $(hostname) == *master* ]]; then
+      echo "Master node"
+      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+    else
+      echo "No master node"
+    fi
+~~~
