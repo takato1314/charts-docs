@@ -1,0 +1,21 @@
+<%
+=begin
+apps: mariadb
+platforms: kubernetes
+id: configure_use_init_containers
+title: Configure and use init containers
+category: administration
+weight: 80
+=end %>
+
+Additional containers can be added to MariaDB pods using the *initContainers* parameter. Here is an example:
+
+~~~
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+~~~

@@ -1,6 +1,6 @@
 <%
 =begin
-apps: mysql
+apps: mariadb
 platforms: kubernetes
 id: understand_chart_persistence
 title: Understand chart persistence
@@ -9,7 +9,7 @@ weight: 40
 highlight: 40
 =end %>
 
-The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configuration at the */bitnami/mysql* path of the container.
+The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configuration at the */bitnami/mariadb* path of the container.
 
 The Bitnami MySQL chart mounts a PersistentVolume (PV) at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
