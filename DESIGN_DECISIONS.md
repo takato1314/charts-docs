@@ -14,7 +14,7 @@ Use the following format for contributing to this document:
 
 ## 2021-02-25: Replace `bitnami/minideb` by `bitnami/bitnami-shell`
 
-**TL;DR:** [`bitnami/minideb`](https://github.com/bitnami/minideb) is not used in initContainers anymore. [`bitnami/bitnami-shell`](https://github.com/bitnami/bitnami-docker-bitnami-shell) will be used from now on, instead.
+**TL;DR:** [`bitnami/minideb`](https://github.com/bitnami/minideb) is not used on auxiliar containers (such as init containers or sidecar containers) anymore. [`bitnami/bitnami-shell`](https://github.com/bitnami/bitnami-docker-bitnami-shell) will be used from now on, instead.
 
 The [`bitnami/minideb`](https://github.com/bitnami/minideb) image started being a good fit for initContainers (see [why use minideb](https://github.com/bitnami/minideb#why-use-minideb) section).
 However, several initContainers required non trivial packages to be present (e.g. `sysctl`). We can argue that many of these requirements would be a good-to-have. Nevertheless, we aim to keep [`bitnami/minideb`](https://github.com/bitnami/minideb) very light-weight and, more important, with a very small vulnerability surface. The more packages you add, the more vulnerabilities the image can have.
