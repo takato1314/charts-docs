@@ -9,11 +9,22 @@ weight: 30
 highlight: 30
 =end %>
 
-To add a new node to your etcd cluster, you need to upgrade your installation by providing the number of nodes you want to add to the *helm upgrade* command as follows:
+To add new members to your etcd cluster, you have two alternatives:
 
-~~~
-$ helm upgrade my-release bitnami/etcd \
-  --set statefulset.replicaCount=NUMBER_OF_REPLICAS 
-~~~
+- Scale the statefulset using the *kubectl scale* command. For instance, to add a new member:
 
-> NOTE: Remember to replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes you want to add to the existing cluster.
+  ~~~
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
+  $ kubectl scale --replicas=$((CURRENT_REPLICAS+1)) statefulset/my-release-etcd
+  ~~~
+
+- Upgrade your installation by providing the total number of etcd members you want in the etcd cluster to the *helm upgrade* command. For instance, to add 2 new members:
+
+  ~~~
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
+  $ helm upgrade my-release bitnami/etcd \
+    --set auth.rbac.rootPassword=ETCD_ROOT_PASSWORD \
+    --set replicaCount=$((CURRENT_REPLICAS+2))
+  ~~~
+
+  > NOTE: You need to substitute the placeholder ETCD_ROOT_PASSWORD with the value obtained from instructions in the installation notes.

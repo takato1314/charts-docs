@@ -9,9 +9,9 @@ weight: 20
 highlight: 20
 =end %>
 
-TLS support can be enabled in the chart by specifying the *tls.* parameters while creating a release. The following parameters should be configured in the *values.yaml* file to properly enable the TLS support in the chart:
+TLS support can be enabled in the chart by specifying the *auth.client.* (to encrypt client-to-server communications) or *auth.peer.* (to encrypt server-to-server communications) parameters while creating a release. Find some examples below:
 
-* Switch to encrypt client communication using TLS certificates:
+* Switch to encrypt client-to-server communication using TLS certificates:
 
 ~~~
 - auth.client.secureTransport: false
@@ -25,14 +25,20 @@ TLS support can be enabled in the chart by specifying the *tls.* parameters whil
 + auth.client.enableAuthentication: true
 ~~~
 
-* Switch to encrypt peer communication using TLS certificates:
+* Create a secret containing the cert and key files and the CA used to sign those client certificates. Then, set the parameter below:
+
+~~~
+auth.client.existingSecret=SECRET_NAME
+~~~
+
+* Switch to encrypt server-to-server communication using TLS certificates:
 
 ~~~
 - auth.peer.secureTransport: false
 + auth.peer.secureTransport: true
 ~~~
 
-* Switch to automatically create the TLS certificates:
+* Switch to automatically create self-signed TLS certificates:
 
 ~~~
 - auth.peer.useAutoTLS: false
