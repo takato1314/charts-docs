@@ -9,16 +9,17 @@ weight: 20
 highlight: 20
 =end %>
 
-The chart optionally expose metrics for [Prometheus](https://prometheus.io/). The metrics are exposed in the port 2379 in the */metrics* endpoint of every etcd container.
-Metrics can be scraped from within the cluster using something similar as the described in the example [Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). The required annotations for the metrics endpoints to be discovered are automatically added by the chart.
+The chart optionally exposes metrics for [Prometheus](https://prometheus.io/). The metrics are exposed at port 2379 and the */metrics* endpoint of every etcd container.
 
-To expose the metrics, deploy the helm chart with this option:
+Metrics can be scraped from within the cluster using something similar to the example [Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). The required annotations for the metrics endpoints to be discovered are automatically added by the chart.
+
+To expose the metrics, deploy the chart with this option:
 
 ~~~
 metrics.enabled: true
 ~~~
 
-If Prometheus Operator is installed in your cluster, you can also set the option below to create a PodMonitor entry:
+If the Prometheus Operator is installed in the cluster, the option below can also be set to create a PodMonitor entry:
 
 ~~~
 metrics.podMonitor.enabled: true

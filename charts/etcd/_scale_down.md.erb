@@ -9,16 +9,16 @@ weight: 40
 highlight: 40
 =end %>
 
-To scale down the etcd cluster, you have two alternatives:
+To scale down the etcd cluster, two options are available:
 
-- Scale the statefulset using the *kubectl scale* command. For instance, to remove a etcd member:
+- Scale the StatefulSet using the *kubectl scale* command. For instance, to remove a member, use the commands below:
 
   ~~~
   $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
   $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/my-release-etcd
   ~~~
 
-- Upgrade your installation by providing the total number of etcd members you want in the etcd cluster to the *helm upgrade* command. For instance, to remove 2 members:
+* Upgrade the deployment by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command.. For instance, to remove two members, use the commands below:
 
   ~~~
   $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
@@ -27,4 +27,4 @@ To scale down the etcd cluster, you have two alternatives:
     --set replicaCount=$((CURRENT_REPLICAS-2))
   ~~~
 
-  > NOTE: You need to substitute the placeholder ETCD_ROOT_PASSWORD with the value obtained from instructions in the installation notes.
+  > NOTE: Replace the placeholder ETCD_ROOT_PASSWORD with the correct password for the etcd administrator account. If the password was generated automatically, obtain the auto-generated paassword from the post-deployment instructions.
