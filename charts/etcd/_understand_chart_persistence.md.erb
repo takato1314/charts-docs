@@ -9,9 +9,9 @@ weight: 40
 highlight: 40
 =end %>
 
-The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the */bitnami/etcd* path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
+The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the */bitnami/etcd* path of the container.
 
-The Bitnami etcd chart mounts a PersistentVolume (PV) at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
+Persistent Volume Claims are used to keep the data across statefulsets. By default, the chart mounts a [PersistentVolume](https://github.com/bitnami/charts/tree/master/bitnami/etcd#parameters) at this location. The volume is created using dynamic volume provisioning. See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/etcd#parameters) to configure the PVC.
 
 In some cases, the following error may be seen during deployment:
 

@@ -75,18 +75,11 @@ If, for whatever reason, *(N-1)/2* members are down and the "pre-stop" hooks fai
 
 > Important: all members should restore using the same snapshot.
 
-The Bitnami etcd chart solves this problem optionally offering a K8s cronjob that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last taken snapshot. To enable this feature, deploy the helm chart with these options:
+The Bitnami etcd chart solves this problem optionally offering a K8s cronjob that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last taken snapshot.
 
-~~~
-persistence.enable=true
-disasterRecovery.enabled=true
-disasterRecovery.pvc.size=2Gi
-disasterRecovery.pvc.storageClassName=nfs
-~~~
+Find detailed instructions to enable this feature [on this section](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/enable-disaster-recovery).
 
-> NOTE: Disaster recovery feature requires using volumes with RWX access mode. For instance, you can use the [stable/nfs-server-provisioner](https://github.com/helm/charts/tree/master/stable/nfs-server-provisioner) chart to provide NFS PVC(s).
-
-The current chart also sets by default a "soft" Pod AntiAffinity to reduce the risks for the cluster to disastrously fail.
+The chart also sets by default a "soft" Pod AntiAffinity to reduce the risks for the cluster to disastrously fail.
 
 > Ref: [etcd recovery](https://etcd.io/docs/current/op-guide/recovery)
 > Ref: [K8s Cronjobs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/)
