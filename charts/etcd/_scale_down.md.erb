@@ -18,7 +18,7 @@ To scale down the etcd cluster, two options are available:
   $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/my-release-etcd
   ~~~
 
-* Upgrade the deployment by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command.. For instance, to remove two members, use the commands below:
+* Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command.. For instance, to remove two members, use the commands below:
 
   ~~~
   $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
