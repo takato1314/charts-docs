@@ -1,0 +1,21 @@
+<%
+=begin
+apps: all
+platforms: kubernetes
+id: backup_restore
+title: Backup and restore the deployment
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To back up and restore Bitnami Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your cluster data:
+
+* Install Velero on the source and destination clusters.
+* Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+* Use Velero to restore the backed-up PVs on the destination cluster.
+* Create a new deployment on the destination cluster with the same deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring Bitnami deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-bitnami-deployments-velero) for more information. This guide uses a Bitnami WordPress Helm chart deployment as an example, but its steps apply to any other Bitnami Helm chart.
