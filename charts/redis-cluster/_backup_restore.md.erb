@@ -10,7 +10,7 @@ weight: 50
 
 To back up and restore Bitnami Redis Cluster Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
 
-These are the steps you will usually follow to back up and restore your Apache Cassandra database cluster data: 
+These are the steps you will usually follow to back up and restore your Redis Cluster database cluster data: 
 
 * Install Velero on the source and destination clusters.
 * Use Velero to back up  the PersistentVolumes (PVs) used by the Redis Cluster deployment on the source cluster.

@@ -3,13 +3,13 @@
 apps: postgresql
 platforms: kubernetes
 id: backup_restore
-title: Backup and restore the deployment
+title: Backup and restore PostgreSQL deployments
 category: administration
 weight: 40
 highlight: 40
 =end %>
 
-To back up and restore Bitnami PostgreSQL Cassandra Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+To back up and restore Bitnami PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
 
 These are the steps you will usually follow to back up and restore your PostgreSQL cluster data: 
 
