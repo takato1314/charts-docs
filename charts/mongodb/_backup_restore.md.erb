@@ -11,7 +11,6 @@ weight: 50
 Two different approaches are available to back up and restore Bitnami MongoDB Helm chart deployments on Kubernetes:
 
 * Back up the data from the source deployment and restore it in a new deployment using MongoDB built-in backup/restore tools.
-
 * Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
 
 ### Method 1: Backup and restore data using MongoDB built-in tools
@@ -20,7 +19,7 @@ This method involves the following steps:
 
 * Use the *mongodump* tool to create a snapshot of the data in the source cluster.
 * Create a new MongoDB Cluster deployment and forward the MongoDB Cluster service port for the new deployment.
-* Restore the data using the *mongostore* tool to import the backup to the new cluster.
+* Restore the data using the *mongorestore* tool to import the backup to the new cluster.
 
 > NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
 
