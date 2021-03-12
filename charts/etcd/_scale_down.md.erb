@@ -9,9 +9,22 @@ weight: 40
 highlight: 40
 =end %>
 
-To scale down the etcd cluster just perform a normal upgrade setting the *statefulset.replicaCount* value to the desired number of nodes. For example, reduce the cluster to the default one replica:
+To scale down the etcd cluster, two options are available:
 
-~~~
-$ helm upgrade bitnami/etcd \
---set statefulset.replicaCount=1
-~~~
+- Scale the StatefulSet using the *kubectl scale* command. For instance, to remove a member, use the commands below:
+
+  ~~~
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
+  $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/my-release-etcd
+  ~~~
+
+* Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command.. For instance, to remove two members, use the commands below:
+
+  ~~~
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
+  $ helm upgrade my-release bitnami/etcd \
+    --set auth.rbac.rootPassword=ETCD_ROOT_PASSWORD \
+    --set replicaCount=$((CURRENT_REPLICAS-2))
+  ~~~
+
+  > NOTE: Replace the placeholder ETCD_ROOT_PASSWORD with the correct password for the etcd administrator account. If the password was generated automatically, obtain the auto-generated paassword from the post-deployment instructions.

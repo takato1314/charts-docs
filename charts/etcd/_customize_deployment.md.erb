@@ -1,0 +1,24 @@
+<%
+=begin
+apps: etcd
+platforms: kubernetes
+id: customize_deployment
+title: Customize the deployment
+category: configuration
+weight: 10
+highlight: 10
+=end %>
+
+In order to use custom configuration parameters, two options are available:
+
+* Environment variables: etcd allows setting environment variables that map to configuration settings. In order to set extra environment variables, use the *extraEnvVars* property (shown in the example below). Alternatively, use a Kubernetes ConfigMap or a Secret with the environment variables using the *extraEnvVarsCM* or the *extraEnvVarsSecret* properties.
+
+~~~
+extraEnvVars:
+  - name: ETCD_AUTO_COMPACTION_RETENTION
+    value: "0"
+  - name: ETCD_HEARTBEAT_INTERVAL
+    value: "150"
+~~~
+
+* Custom *etcd.conf.yml*: The etcd chart supports mounting a custom *etcd.conf.yml* file as a ConfigMap using the *configuration* property. Alternatively, use an existing ConfigMap with the *existingConfigmap* parameter.
