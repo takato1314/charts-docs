@@ -1,0 +1,38 @@
+<%
+=begin
+apps: mongodb
+platforms: kubernetes
+id: backup_restore
+title: Backup and restore MongoDB deployments
+category: administration
+weight: 50
+=end %>
+
+Two different approaches are available to back up and restore Bitnami MongoDB Helm chart deployments on Kubernetes:
+
+* Back up the data from the source deployment and restore it in a new deployment using MongoDB built-in backup/restore tools.
+* Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
+
+### Method 1: Backup and restore data using MongoDB built-in tools
+
+This method involves the following steps:
+
+* Use the *mongodump* tool to create a snapshot of the data in the source cluster.
+* Create a new MongoDB Cluster deployment and forward the MongoDB Cluster service port for the new deployment.
+* Restore the data using the *mongorestore* tool to import the backup to the new cluster.
+
+> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
+
+### Method 2: Back up and restore persistent data volumes
+
+This method involves copying the persistent data volumes for the MongoDB nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
+
+* The Kubernetes provider is [supported by Velero](https://velero.io/docs/master/supported-providers/).
+* Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/v1.5/migration-case/).
+* The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+
+This method involves the following steps:
+
+<%= partial 'platforms/kubernetes/charts/backup_restore_pv_velero.md.erb' %>
+
+Refer to our detailed [tutorial on backing up and restoring Bitnami MongoDB chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mongodb-kubernetes/), which covers both these approaches, for more information.
