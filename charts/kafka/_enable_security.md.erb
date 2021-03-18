@@ -8,7 +8,7 @@ category: administration
 weight: 60
 =end %>
 
-You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use *sasl_tls* authentication for client communications, while using *tls* for inter-broker communications. This table shows the available protocols and the security they provide:
+It is possible to configure different authentication protocols for each listener configured in Kafka. For instance, you can use *sasl_tls* authentication for client communications, while using *tls* for inter-broker communications. This table shows the available protocols and the security they provide:
 
 | Method    | Authentication               | Encryption via TLS |
 |-----------|------------------------------|--------------------|
@@ -18,19 +18,19 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Configure the authentication protocols for client and inter-broker communications setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 ### Enable TLS Authentication
 
-Detailed instructions to configure TLS authentication are covered on [this section](/<%= platform_path %>/infrastructure/kafka/administration/enable-tls/).
+Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/kafka/administration/enable-tls/).
 
 ### Enable SASL Authentication
 
-If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
+If SASL authentication is enabled on any listener, set the SASL credentials using the parameters below:
 
-* *auth.sasl.jaas.clientUser* / *auth.sasl.jaas.clientPassword*: when enabling SASL authentication for communications with clients.
-* *auth.sasl.jaas.interBrokerUser* / *auth.sasl.jaas.interBrokerPassword*: when enabling SASL authentication for inter-broker communications.
-* *auth.sasl.jaas.zookeeperUser* / *auth.sasl.jaas.zookeeperPassword*: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+* *auth.sasl.jaas.clientUser* / *auth.sasl.jaas.clientPassword*: Use these when enabling SASL authentication for communications with clients.
+* *auth.sasl.jaas.interBrokerUser* / *auth.sasl.jaas.interBrokerPassword*: Use these when enabling SASL authentication for inter-broker communications.
+* *auth.sasl.jaas.zookeeperUser* / *auth.sasl.jaas.zookeeperPassword*: Use these when the Zookeeper chart is deployed with SASL authentication enabled.
 
 To limit the allowed SASL mechanisms, use the parameters below:
 
