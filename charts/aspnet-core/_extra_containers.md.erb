@@ -1,0 +1,65 @@
+<%
+=begin
+apps: aspnet-core
+platforms: kubernetes
+id: extra_containers
+title: Extra Containers
+category: administration
+weight: 80
+=end %>
+
+If you have a need for additional containers to run within the same pod as the ASP.NET Core app (e.g. an additional metrics or logging exporter), you can do so via the *sidecars* configuration parameter. Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+~~~
+
+Similarly, you can add extra init containers using the initContainers parameter.
+
+~~~
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+~~~
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the *extraDeploy* parameter. The following example would create a *ConfigMap* including some app's configuration, and it will mount it in the ASP.NET Core app's container:
+
+~~~
+extraDeploy: |-
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: aspnet-core-configuration
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
+        {{- end }}
+      {{- if .Values.commonAnnotations }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
+    data:
+      appsettings.json: |-
+        {
+          "AllowedHosts": "*"
+        }
+extraVolumeMounts:
+  - name: configuration
+    mountPath: /app/config/
+    readOnly: true
+extraVolumes:
+  - name: configuration
+    configMap:
+      name: aspnet-core-configuration
+~~~
