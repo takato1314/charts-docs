@@ -20,7 +20,7 @@ This tutorial assumes that:
 * You have an IBM Cloud account. If you don't, [register for an IBM Cloud account](https://cloud.ibm.com/registration).
 * You have provisioned an IBM Cloud Kubernetes Service cluster. If you haven't, [follow the instructions to create a new cluster](https://cloud.ibm.com/docs/containers?topic=containers-getting-started).
 * You have installed the IBM Cloud Block Storage plugin for your Kubernetes cluster. If you haven't, [follow the installation steps for the IBM Cloud Block Storage plugin](https://cloud.ibm.com/docs/containers?topic=containers-block_storage#install_block).
-* You have the [*kubectl* command line (*kubectl* CLI)](/kubernetes/get-started-kubernetes#step-3-install-kubectl-command-line) installed and configured to work with your cluster.
+* You have the [*kubectl* command line (*kubectl* CLI)](/kubernetes/get-started-kubernetes/#step-3-install-kubectl-command-line) installed and configured to work with your cluster.
 
 For illustrative purposes, this guide will show you the steps to deploy the [Bitnami WordPress Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) on your IBM Cloud Kubernetes cluster. But WordPress is just an example: there are many other Helm charts available to choose from, and they're all equally easy to deploy by following the same steps.
 
@@ -61,8 +61,8 @@ In the resulting screen, click "View log" to see the deployment notes. Run the c
 
 To provide an external host for your application, follow these instructions:
 
-* Navigate to "Kubernetes -> Clusters" and click the cluster where you deployed the application. 
-* In the resulting screen, click the "Web terminal" button. It will open a terminal in the current tab. Click the maximize screen icon to start the terminal in a different tab. 
+* Navigate to "Kubernetes -> Clusters" and click the cluster where you deployed the application.
+* In the resulting screen, click the "Web terminal" button. It will open a terminal in the current tab. Click the maximize screen icon to start the terminal in a different tab.
 
     <%= documentation_img '/images/img/platforms/kubernetes/iks-cluster.png', 'Open the web terminal' %>
 
@@ -73,7 +73,7 @@ To provide an external host for your application, follow these instructions:
         $ USE_SUDO=false HELM_INSTALL_DIR=. ./get_helm.sh
         $ export PATH=`pwd`:$PATH
 
-  > TIP: Check out the Helm official documentation to learn more about [how to install Helm 3 locally in your cluster](https://helm.sh/docs/intro/install/#from-script).  
+  > TIP: Check out the Helm official documentation to learn more about [how to install Helm 3 locally in your cluster](https://helm.sh/docs/intro/install/#from-script).
 
 * Return to the IBM Cloud console and navigate to the "Schematics" section:
 
@@ -83,13 +83,13 @@ To provide an external host for your application, follow these instructions:
 
     <%= documentation_img '/images/img/platforms/kubernetes/iks-recent-activity.png', 'View logs' %>
 
-* In the deployment notes you will see an error message similar to this: 
+* In the deployment notes you will see an error message similar to this:
 
         ###############################################################################
         ### ERROR: You did not provide an external host in your 'helm install' call ###
         ###############################################################################
 
-* You will also find some commands to configure both the endpoint, the administration and the database password (if randomly generated). You should see a message similar to the following. Copy and execute the commands in the web console. 
+* You will also find some commands to configure both the endpoint, the administration and the database password (if randomly generated). You should see a message similar to the following. Copy and execute the commands in the web console.
 
         This deployment will be incomplete until you configure ownCloud with a resolvable
         host. To configure ownCloud with the URL of your service:
@@ -102,7 +102,7 @@ To provide an external host for your application, follow these instructions:
 
         2. Complete your ownCloud deployment by running:
         helm upgrade owncloud bitnami/owncloud \
-        --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD 
+        --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD
 
 Enter the obtained URL in a web browser to access your application. Log in using the default username *user* and the password obtained in the step above.
 
