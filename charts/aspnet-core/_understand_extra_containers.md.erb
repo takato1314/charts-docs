@@ -2,13 +2,13 @@
 =begin
 apps: aspnet-core
 platforms: kubernetes
-id: extra_containers
-title: Extra Containers
+id: understand_extra_containers
+title: Understand extra Containers
 category: administration
 weight: 80
 =end %>
 
-If you have a need for additional containers to run within the same pod as the ASP.NET Core app (e.g. an additional metrics or logging exporter), you can do so via the *sidecars* configuration parameter. Simply define your container according to the Kubernetes container spec.
+To run additional containers within the same pod as the ASP.NET Core application (e.g. an additional metrics or logging exporter), use the *sidecars* configuration parameter. Simply define your container according to the Kubernetes container spec.
 
 ~~~
 sidecars:
@@ -20,7 +20,7 @@ sidecars:
        containerPort: 1234
 ~~~
 
-Similarly, you can add extra init containers using the initContainers parameter.
+Similarly, you add extra init containers using the *initContainers parameter*.
 
 ~~~
 initContainers:
@@ -34,7 +34,7 @@ initContainers:
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the *extraDeploy* parameter. The following example would create a *ConfigMap* including some app's configuration, and it will mount it in the ASP.NET Core app's container:
+There are cases where you may want to deploy extra objects, such a *ConfigMap* containing your application configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the *extraDeploy* parameter. The following example would create a *ConfigMap* including some application configuration. The application will be mounted in the ASP.NET Core application container:
 
 ~~~
 extraDeploy: |-

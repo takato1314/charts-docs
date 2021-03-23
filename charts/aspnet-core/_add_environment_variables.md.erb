@@ -8,7 +8,7 @@ category: configuration
 weight: 50
 =end %>
 
-In case you want to add extra environment variables, you can use the *extraEnvVars* property.
+In case you want to add extra environment variables, use the *extraEnvVars* property.
 ~~~
 kong:
   extraEnvVars:
@@ -16,4 +16,4 @@ kong:
       value: error
 ~~~
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the *extraEnvVarsCM* or the *extraEnvVarsSecret* values.
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the *extraEnvVarsCM* or the *extraEnvVarsSecret* values.
