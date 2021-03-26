@@ -1,0 +1,58 @@
+<%
+=begin
+apps: aspnet-core
+platforms: kubernetes
+id: deploy_custom_app
+title: Deploy your custom web application
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The ASP.NET Core chart allows you to deploy a custom application using one of the following methods:
+
+* Using a Docker image containing your ASP.NET Core application ready to be executed.
+* Cloning your ASP.NET Core application code from a Git repository.
+* Mounting your ASP.NET Core application from an existing PVC.
+
+### Using a Docker image containing your ASP.NET Core application ready to be executed.
+
+You can build your own Docker image containing your ASP.NET Core application ready to be executed. To do so, overwrite the default image setting the *image* parameters, and set your custom command and arguments setting the *command* and *args* parameters:
+
+    appFromExternalRepo.enabled=false
+    image.registry=docker.io
+    image.repository=your-image
+    image.tag=your-tag
+    command=[command]
+    args=[arguments]
+
+Find more information about the process to create your own image in the [Develop and Publish an ASP.NET Web Application using Bitnami Containers](https://docs.bitnami.com/tutorials/develop-aspnet-application-bitnami-containers) guide.
+
+### Cloning your ASP.NET Core application code from a Git repository
+
+This is done using two different init containers:
+
+* *clone-repository*: uses the [Bitnami Git image](https://github.com/bitnami/bitnami-docker-git) to download the repository.
+* *dotnet-publish*: uses the [Bitnami .Net SDK image](https://github.com/bitnami/bitnami-docker-dotnet-sdk) to build/publish the ASP.NET Core application.
+
+  To use this feature, set the *appFromExternalRepo.enabled* to *true* and set the repository and branch to use setting the *appFromExternalRepo.clone.repository* and *appFromExternalRepo.clone.revision* parameters. Then, specify the subfolder under the Git repository containing the ASP.NET Core application setting the *appFromExternalRepo.publish.subFolder* parameter. Finally, provide the start command to use setting the *appFromExternalRepo.startCommand*.
+
+> NOTE: You can append any custom flag for the "dotnet publish" command setting the *appFromExternalRepo.publish.extraFlags* parameter.
+
+For example, you can deploy a sample Kestrel server using the parameters below:
+
+    appFromExternalRepo.enabled=true
+    appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
+    appFromExternalRepo.clone.revision=main
+    appFromExternalRepo.publish.aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
+    appFromExternalRepo.startCommand[0]=dotnet
+    appFromExternalRepo.startCommand[1]=KestrelSample.dll
+
+### Mounting your ASP.NET Core application from an existing PVC
+
+If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the *appFromExistingPVC.enabled* parameter to *true*. Then, specify the name of your existing PVC setting the *appFromExistingPVC.existingClaim* parameter.
+
+For example, if you created a PVC named *my-custom-apsnet-core-app* containing your application, use the parameters below:
+
+    appFromExistingPVC.enabled=true
+    appFromExistingPVC.existingClaim=my-custom-apsnet-core-app

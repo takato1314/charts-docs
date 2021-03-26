@@ -1,0 +1,24 @@
+<%
+=begin
+apps: aspnet-core
+platforms: kubernetes
+id: understand_chart_persistence
+title: Persistence volumes
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core#parameters) to configure the PVC or to disable persistence.
+
+To mount an existing PVC to persist the application code is necessary to edit the *values.yaml* file to set some parameters as shown below. Remember to replace the APP_EXISTING_PVC placeholder with the name of an existing PVC that contains the ASP.NET Core application.
+
+~~~
+appFromExistingPVC:
+  enabled: true
+  ## A manually managed Persistent Volume and Claim
+  ## PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  appFromExistingPVC.existingClaim=APP_EXISTING_PVC
+~~~
