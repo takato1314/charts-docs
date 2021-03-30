@@ -1,0 +1,70 @@
+<%
+=begin
+apps: mongodb
+platforms: kubernetes
+id: understand_architecture
+title: Understand architecture options
+category: get-started
+weight: 40
+highlight: 40
+=end %>
+
+This chart allows installing MongoDB&reg; using two different architecture setups: *standalone* or *replicaset*. Use the *architecture* parameter to choose the one to use, as *architecture="standalone"* or *architecture="replicaset"*.
+
+### Standalone architecture
+
+The *standalone* architecture installs a deployment (or StatefulSet) with one MongoDB&reg; server (it cannot be scaled):
+
+    ┌────────────────┐
+    │   MongoDB&reg; │
+    |      svc       │
+    └───────┬────────┘
+            │
+            ▼
+      ┌────────────┐
+      │MongoDB&reg;│
+      │   Server   │
+      │    Pod     │
+      └────────────┘
+
+### Replicaset architecture
+
+The chart also supports the *replicaset* architecture with and without a MongoDB&reg; Arbiter:
+
+When the MongoDB&reg; Arbiter is enabled, the chart installs two StatefulSets: A StatefulSet with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes), and a StatefulSet with one MongoDB&reg; arbiter node (it cannot be scaled).
+
+    ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌─────────────┐
+    │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │   Arbiter   │
+    |  external svc  │ |  external svc  │ |  external svc  │    |     svc     │
+    └───────┬────────┘ └───────┬────────┘ └───────┬────────┘    └──────┬──────┘
+            │                  │                  │                    │
+            ▼                  ▼                  ▼                    ▼
+    ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌──────────────┐
+    │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │ MongoDB&reg; │
+    │    Server      │ │     Server     │ │     Server     │    │    Arbiter   │
+    │     Pod        │ │      Pod       │ │      Pod       │    │     Pod      │
+    └────────────────┘ └────────────────┘ └────────────────┘    └──────────────┘
+          primary           secondary         secondary
+
+The PSA model is useful when the third Availability Zone cannot hold a full MongoDB® instance. The MongoDB® Arbiter as decision maker is lightweight and can run alongside other workloads.
+
+> NOTE: An update takes your MongoDB&reg; replicaset offline if the Arbiter is enabled and the number of MongoDB&reg; replicas is two. Helm applies updates to the StatefulSets for the MongoDB&reg; instance and the Arbiter at the same time so you lose two out of three quorum votes.
+
+Without the Arbiter, the chart deploys a single statefulset with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes)
+
+    ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+    │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
+    |  external svc  │ |  external svc  │ |  external svc  │
+    └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
+            │                  │                  │
+            ▼                  ▼                  ▼
+    ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+    │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
+    │    Server      │ │     Server     │ │     Server     │
+    │     Pod        │ │      Pod       │ │      Pod       │
+    └────────────────┘ └────────────────┘ └────────────────┘
+          primary           secondary         secondary
+
+There are no services load balancing requests between MongoDB&reg; nodes; instead, each node has an associated service to access them individually.
+
+>NOTE: Although the first replica is initially assigned the primary role, any of the secondary nodes can become the primary if it is down, or during upgrades. Do not make any assumption about what replica has the primary role. Instead, configure your MongoDB&reg; client with the list of MongoDB&reg; hostnames so it can dynamically choose the node to send requests.

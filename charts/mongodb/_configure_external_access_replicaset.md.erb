@@ -1,0 +1,58 @@
+<%
+=begin
+apps: mongodb
+platforms: kubernetes
+id: configure_external_access_replicaset
+title: Configure external access for replicaset deployments
+category: configuration
+weight: 20
+=end %>
+
+In order to access MongoDB&reg; nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB&reg; pod will be created. There are two ways of configuring external access:
+
+* Use *LoadBalancer* services
+* Use *NodePort* services.
+
+### Use LoadBalancer services
+
+Two alternatives are available to use *LoadBalancer* services:
+
+* Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
+
+        architecture=replicaset
+        replicaCount=2
+        externalAccess.enabled=true
+        externalAccess.service.type=LoadBalancer
+        externalAccess.service.port=27017
+        externalAccess.autoDiscovery.enabled=true
+        serviceAccount.create=true
+        rbac.create=true
+
+    > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+* Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
+
+        architecture=replicaset
+        replicaCount=2
+        externalAccess.enabled=true
+        externalAccess.service.type=LoadBalancer
+        externalAccess.service.port=27017
+        externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
+        externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+
+    > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
+
+### Use NodePort services
+
+Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
+
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=NodePort
+    externalAccess.service.nodePorts[0]='NODE-PORT-1'
+    externalAccess.service.nodePorts[1]='NODE-PORT-2'
+
+> NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
+
+The pod will try to get the external IP address of the node using the command *curl -s https://ipinfo.io/IP-ADDRESS* unless the *externalAccess.service.domain* parameter is set.
