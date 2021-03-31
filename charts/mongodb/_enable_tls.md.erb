@@ -1,0 +1,36 @@
+<%
+=begin
+apps: mongodb
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB&reg; clients and nodes, by setting the *MONGODB_EXTRA_FLAGS* and *MONGODB_CLIENT_EXTRA_FLAGS* environment variables, together with the correct *MONGODB_ADVERTISED_HOSTNAME*. To enable full TLS encryption set *tls.enabled* to *true*.
+
+### Generate the self-signed certificates via pre-install Helm hooks
+
+The *secrets-ca.yaml* file utilizes the Helm "pre-install" hook to ensure that the certificates will only be generated on chart install.
+
+The *genCA()* function will create a new self-signed x509 certificate authority. The *genSignedCert()* function creates an object with the certificate and key, which are base64-encoded and used in a YAML-like object. The *genSignedCert()* function is passed the CN, an empty IP list (the nil part), the validity and the CA created previously.
+
+A Kubernetes Secret is used to hold the signed certificate created above, and the *initContainer* sets up the rest. Using Helm's hook annotations ensures that the certificates will only be generated on chart install. This will prevent overriding the certificates if the chart is upgraded.
+
+### Use your own CA
+
+To use your own CA, set *tls.caCert* and *tls.caKey* with appropriate base64 encoded data. The *secrets-ca.yaml* file will utilize this data to create the Secret.
+
+> NOTE: Currently, only RSA private keys are supported.
+
+### Access the cluster
+
+To access the cluster, enable the init container which generates the MongoDB&reg; server/client PEM key needed to access the cluster. Please be sure to include the *$my_hostname* section with your actual hostname, and the alternative hostnames section should contain the hostnames that should be allowed access to the MongoDB&reg; replicaset. Additionally, if external access is enabled, the load balancer IP addresses are added to the alternative names list.
+
+> NOTE: You will be generating self-signed certificates for the MongoDB&reg; deployment. The init container generates a new MongoDB&reg; private key which will be used to create a Certificate Authority (CA) and the public certificate for the CA. The Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally, the PEM bundle will be created using the private key and public certificate. This process will be repeated for each node in the cluster.
+
+### Start the cluster
+
+After the certificates have been generated and made available to the containers at the correct mount points, the MongoDB&reg; server will be started with TLS enabled. The options for the TLS mode will be one of *disabled*, *allowTLS*, *preferTLS*, or *requireTLS*. This value can be changed via the *MONGODB_EXTRA_FLAGS* field using the *tlsMode* parameter. The client should now be able to connect to the TLS-enabled cluster with the provided certificates.

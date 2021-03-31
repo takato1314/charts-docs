@@ -1,0 +1,27 @@
+<%
+=begin
+apps: mongodb
+platforms: kubernetes
+id: use_prometheus_rules
+title: Use custom Prometheus rules
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+Custom Prometheus rules can be defined for the Prometheus Operator by using the *prometheusRule* parameter. A basic configuration example is shown below:
+
+    metrics:
+      enabled: true
+      prometheusRule:
+        enabled: true
+        rules:
+        - name: rule1
+          rules:
+          - alert: HighRequestLatency
+            expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+            for: 10m
+            labels:
+              severity: page
+            annotations:
+              summary: High request latency
