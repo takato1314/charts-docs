@@ -20,7 +20,7 @@ This method involves the following steps:
 
 * Use the *mysqldump* tool to create a snapshot of the data in the source cluster.
 * Create a new MariaDB Galera Cluster deployment and forward the MariaDB Galera Cluster service port for the new deployment.
-* Create and start a MariaDB Galera container image to mount a directory containing the backup file as a volume. 
+* Create and start a MariaDB Galera container image to mount a directory containing the backup file as a volume.
 * Restore the data using the *mysql* client tool to import the backup to the new cluster.
 
 > NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
@@ -35,7 +35,7 @@ This method involves copying the persistent data volumes for the MariaDB Galera 
 
 This method involves the following steps:
 
-<%= partial 'platforms/kubernetes/charts/backup_restore_pv_velero.md.erb' %>
+<%= partial 'platforms/kubernetes/common/backup_restore_pv_velero.md.erb' %>
 
 Refer to our detailed [tutorial on backing up and restoring Bitnami MariaDB Galera chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mariadb-galera-kubernetes/), which covers both these approaches, for more information.
 
