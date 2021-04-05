@@ -1,0 +1,25 @@
+<%
+=begin
+apps: cassandra
+platforms: kubernetes
+id: customize_new_instance
+title: Customize a new Apache Cassandra instance
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The [Bitnami Apache Cassandra image](https://github.com/bitnami/bitnami-docker-cassandra)image supports the use of custom scripts to initialize a fresh instance.
+
+Custom scripts may be specified in two ways:
+
+* Clone the chart and add files in the *files/docker-entrypoint-initdb.d* directory.
+* Create a Kubernetes ConfigMap that includes the necessary *sh* or *cql* scripts and pass this ConfigMap to the chart via the *initDBConfigMap* parameter.
+
+> TIP: If the scripts contain sensitive information, use the *initDBSecret* parameter as well to protect them.
+
+This chart also supports mounting custom configuration file(s) for Apache Cassandra. This is achieved by setting the *existingConfiguration* parameter with the name of a ConfigMap (for example, cassandra-configuration) that includes the custom configuration file(s). Here is an example of deploying the chart with a custom configuration file stored in a ConfigMap named *cassandra-configuration*:
+
+existingConfiguration=cassandra-configuration
+
+> NOTE: Using the *existingConfiguration* parameter will override any other Apache Cassandra configuration variable set or passed to the chart.
