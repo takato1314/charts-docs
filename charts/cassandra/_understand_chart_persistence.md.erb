@@ -11,7 +11,6 @@ highlight: 40
 
 The [Bitnami Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the Cassandra data at the */bitnami/cassandra* path of the container.
 
-
 Persistent Volume Claims are used to keep the data across statefulsets. By default, the chart mounts a [PersistentVolume](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#parameters) at this location. The volume is created using dynamic volume provisioning. See the [Parameters section](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#parameters) to configure the PVC.
 
 In some cases, the following error may be seen during deployment:
