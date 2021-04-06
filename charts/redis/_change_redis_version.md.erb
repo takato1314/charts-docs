@@ -8,6 +8,21 @@ category: configuration
 weight: 50
 =end %>
 
-To modify the Redis(TM) version used in this chart you can specify a valid image tag using the *image.tag* parameter. For example, *image.tag=X.Y.Z*. This approach is also applicable to other images like exporters.
+To modify the Redis(TM) version used in this chart - for example, to use a different Redis(TM) version - specify a different container [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the *image.tag* parameter. This approach is also applicable to other images like exporters.
 
+If you want to use the version 6.2.1 instead of the 6.0.12, change the *image.tag* parameter in the [*values.yaml* file](https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml) as follows:
+
+~~~
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  ## Bitnami Redis(TM) image tag
+  ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
+  ##
+  tag: 6.2.1-debian-10-r33
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+~~~
 
