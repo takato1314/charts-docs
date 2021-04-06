@@ -9,11 +9,11 @@ weight: 20
 highlight: 20
 =end %>
 
-The layer 2 mode is commonly used to make MetalLB behaves as a load-balancer. When configuring MetalLB in layer 2 mode, all traffic for a service IP goes to one node. From there, *kube-proxy* spreads the traffic to all the service's pods.
+The layer 2 mode is commonly used to make MetalLB behave as a load-balancer. When configuring MetalLB in layer 2 mode, all traffic for a service IP goes to one node. From there, *kube-proxy* spreads the traffic to all the service's pods.
 
-This mode doesn't implement a load-balancer, it is most likely a failover mechanism: when one node is down, is automatically detected and the rest of the nodes will take over the ownership of the failed node IP addresses. 
+This mode doesn't implement a load-balancer, it is most likely a failover mechanism: when one node is down, is automatically detected and the rest of the nodes will take over the ownership of the failed node IP addresses.
 
-Find below an example of how to enable the layer 2 mode:
+Find below an example of how to enable the layer 2 mode. Note that the IP addresses shown in the "addresses" section are part of a subset of the cluster available service IPs.  
 
 ~~~
 configInline:
