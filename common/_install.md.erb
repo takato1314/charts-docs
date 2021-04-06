@@ -25,7 +25,7 @@ To start using any Bitnami Helm chart, it is necessary to first add the Bitnami 
 
 * Deploy the chart with the following command:
 
-<% if File.exist?("#{__dir__}/#{current.app}/install.md.erb") %>
+<% if File.exist?("#{__dir__}/../charts/#{current.app}/install.md.erb") %>
     > NOTE: Remember that MY-RELEASE is a placeholder. Replace it with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name.
 
 <%= partial "platforms/kubernetes/charts/#{current.app}/install.md.erb" %>
