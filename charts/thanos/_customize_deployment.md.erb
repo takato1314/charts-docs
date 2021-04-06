@@ -1,0 +1,45 @@
+<%
+=begin
+apps: thanos
+platforms: kubernetes
+id: customize_deployment
+title: Customize the deployment
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+### Adding extra flags
+
+In case you want to add extra flags to any Thanos component, you can use XXX.extraFlags parameter(s), where XXX is placeholder you need to replace with the actual component(s). For instance, to add extra flags to Thanos Store Gateway, use:
+
+~~~
+storegateway:
+  extraFlags:
+    sync-block-duration: 3m
+    chunk-pool-size: 2GB
+~~~
+
+### Using custom Objstore configuration
+
+This Helm chart supports using custom Objstore configuration.
+
+You can specify the Objstore configuration using the objstoreConfig parameter.
+
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the existingObjstoreConfigmap parameter. Note that this will override the previous option.
+
+### Using custom Querier Service Discovery configuration
+
+This Helm chart supports using custom Service Discovery configuration for Querier.
+
+You can specify the Service Discovery configuration using the querier.sdConfig parameter.
+
+In addition, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the querier.existingSDConfigmap parameter. Note that this will override the previous option.
+
+### Using custom Ruler configuration
+
+This Helm chart supports using custom Ruler configuration.
+
+You can specify the Ruler configuration using the ruler.config parameter.
+
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the ruler.existingConfigmap parameter. Note that this will override the previous option.
