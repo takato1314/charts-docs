@@ -1,0 +1,32 @@
+<%
+=begin
+apps: discourse
+platforms: kubernetes
+id: configure_use_sidecars
+title: Configure and use sidecar containers
+category: administration
+weight: 80
+=end %>
+
+If you have a need for additional containers to run within the same pod as Discourse (e.g. metrics or logging exporter), you can do so via the *sidecars* configuration parameter. Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~
+
+If these sidecars export extra ports, you can add extra port definitions using the *service.extraPorts* value:
+
+~~~
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+~~
