@@ -1,0 +1,12 @@
+<%
+=begin
+apps: zookeeper
+platforms: kubernetes
+id: configure_log_level
+title: Configure the log level
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+You can configure the ZooKeeper log level using the ZOO_LOG_LEVEL environment variable. By default, it is set to ERROR because of each readiness probe produce an INFO message on connection and a WARN message on disconnection.

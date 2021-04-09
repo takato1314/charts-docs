@@ -1,0 +1,18 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: understand_chart_prerequisites
+title: Understand the prerequisites for installing Bitnami Helm charts
+category: get-started
+weight: 5
+highlight: 5
+=end %>
+
+Most Bitnami Helm charts require the following:
+
+* A Kubernetes v1.12+ cluster running. Check out these [Get Started guides](/<%= platform_path %>) to setup a Kubernetes environment with ease.
+* The [*kubectl command line (kubectl CLI)*](/<%= platform_path %>/faq/get-started/install-kubectl) installed.
+* The [Helm v3.x](/<%= platform_path %>/faq/get-started/install-configure-helm) CLI installed.
+
+Some Helm charts also require a PersistentVolume storage provider and one or more ReadWriteMany volumes.

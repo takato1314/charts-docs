@@ -11,8 +11,8 @@ highlight: 40
 
 To back up and restore Bitnami Apache Cassandra Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
 
-These are the steps you will usually follow to back up and restore your Apache Cassandra database cluster data: 
+These are the steps you will usually follow to back up and restore your Apache Cassandra database cluster data:
 
-<%= partial 'platforms/kubernetes/charts/backup_restore_pv_velero.md.erb' %>
+<%= partial 'platforms/kubernetes/common/backup_restore_pv_velero.md.erb' %>
 
 Refer to our detailed [tutorial on backing up and restoring Bitnami Apache Cassandra deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-cassandra-kubernetes/) for more information.

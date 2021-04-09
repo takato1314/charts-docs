@@ -1,0 +1,28 @@
+<%
+=begin
+apps: drupal
+platforms: kubernetes
+id: configure_image_registry
+title: Use a custom image or private registry
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+### Image
+
+The image parameter allows specifying which image will be pulled for the chart.
+
+#### Private registry
+
+If you configure the image value to one in a private registry, you will need to specify an image pull secret.
+
+* Manually create image pull secret(s) in the namespace. See this YAML example reference. Consult your image registry's documentation about getting the appropriate secret.
+* Note that the imagePullSecrets configuration value cannot currently be passed to helm using the --set parameter, so you must supply these using a values.yaml file, such as:
+
+~~~
+imagePullSecrets:
+  - name: SECRET_NAME
+~~~
+
+* Install the chart.
