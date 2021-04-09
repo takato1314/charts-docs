@@ -18,11 +18,15 @@ TLS support can be enabled in the chart by specifying the *tls.* parameters whil
 
 For example:
 
-First, create the secret with the cetificates files:
+### Step 1: Create a TLS secret
+
+First, create the secret with the certificates files. Remember to replace the certificate paths shown below with the paths where those certificates are located in your system
 
     $ kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
 
-Then, use the following parameters:
+### Step 2: Deploy the chart with parameters
+
+Once you create the secret, deploy the chart using the following parameters:
 
 ~~~
 volumePermissions.enabled=true
