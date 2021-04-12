@@ -20,7 +20,7 @@ For example:
 
 ### Step 1: Create a TLS secret
 
-First, create the secret with the certificates files. Remember to replace the certificate paths shown below with the paths where those certificates are located in your system
+First, create the secret with the certificate files. Remember to replace the certificate paths shown below with the paths where those certificates are located in your system.
 
     $ kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
 
