@@ -16,12 +16,11 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 * Create a conventional release, that will be scaled later:
 
     $ helm install my-release bitnami/discourse
-    ...
-    export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
-    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-    ...
 
 * Wait for the release to complete and Discourse to be running successfully.
+
+    $ export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+    $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
     $ kubectl get pods
     NAME                               READY   STATUS    RESTARTS   AGE
@@ -34,8 +33,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
     $ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true bitnami/discourse
 
 > NOTE: You need to provide *ReadWriteMany* PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as *persistence.enabled=true* and *persistence.size=10Gi*) and map it to a RWO volume.
-
-Then you can deploy Discourse chart using the proper parameters:
-
-    persistence.storageClass=nfs
-    postgresql.persistence.storageClass=nfs
+> Then you can deploy Discourse chart using the proper parameters:
+>
+>    persistence.storageClass=nfs
+>    postgresql.persistence.storageClass=nfs

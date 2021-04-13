@@ -26,9 +26,9 @@ externalDatabase.port=5432
 
 > NOTE: If you disable PostgreSQL per above you must supply values for the *externalDatabase* connection.
 
-In case the database already contains data from a previous Discourse installation, you need to set the *discourse.skipInstall* parameter to *true*. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
+In case the database already contains data from a previous Discourse installation, you need to set the *discourse.skipInstall* parameter to *true*. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter forces the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis(TM) instance rather than installing one inside your cluster. First, you may disable the Redis(TM) installation with the *redis.enabled* option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis(TM) instance rather than installing one inside your cluster. First, you may disable the Redis(TM) installation with the *redis.enabled* option. As described previously, use the parameters below to provide data about your instance:
 
 ~~~
 redis.enabled=false
