@@ -1,0 +1,37 @@
+<%
+=begin
+apps: postgresql
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+TLS support can be enabled in the chart by specifying the *tls.** parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+* *tls.enabled*: Enable TLS support. Defaults to false
+* *tls.certificatesSecret*: Name of the secret that contains the certificates. No defaults.
+* *tls.certFilename*: Certificate filename. No defaults.
+* *tls.certKeyFilename*: Certificate key filename. No defaults.
+
+For example:
+
+### Step 1: Create a TLS secret
+
+First, create the secret with the certificate files. Remember to replace the certificate paths shown below with the paths where those certificates are located in your system.
+
+    $ kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+
+### Step 2: Deploy the chart with parameters
+
+Once you create the secret, deploy the chart using the following parameters:
+
+    volumePermissions.enabled=true
+    tls.enabled=true
+    tls.certificatesSecret="certificates-tls-secret"
+    tls.certFilename="cert.crt"
+    tls.certKeyFilename="cert.key"
+
+> IMPORTANT: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going issue regarding Kubernetes permissions and the use of containerSecurityContext.runAsUser, you must enable *volumePermissions* to ensure everything works as expected.
