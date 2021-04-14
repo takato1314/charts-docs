@@ -1,0 +1,50 @@
+<%
+=begin
+apps: all
+platforms: kubernetes
+id: configure_sidecar_init_containers
+title: Configure sidecar and init containers
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the *sidecars* parameter. Here is an example:
+
+~~~
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+~~~
+
+If these sidecars export extra ports, extra port definitions can be added using the *service.extraPorts* parameter (where available), as shown in the example below:
+
+~~~
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+~~~
+
+> NOTE: Bitnami Helm charts already include sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the *--enable-metrics=true* parameter at deployment time. The *sidecars* parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the *initContainers* parameter. Here is an example:
+
+~~~
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+~~~
+
+Learn more about [sidecar containers] and [init containers].
+
