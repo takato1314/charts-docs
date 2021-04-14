@@ -2,9 +2,9 @@
 =begin
 apps: redis-cluster
 platforms: kubernetes
-id: kernel_settings
-title: Default Kernel settings
-category: configuration
+id: configure_kernel_settings
+title: Configure Host Kernel settings
+category: administration
 weight: 20
 highlight: 20
 =end %>
@@ -24,7 +24,7 @@ sysctlImage:
       echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
 ~~~
 
-Alternatively, for Kubernetes 1.12+ you can set *podSecurityContext.sysctls* which will configure sysctls for master and slave pods. Example:
+Alternatively, for Kubernetes 1.12+ you can set *podSecurityContext.sysctls* which will configure *sysctls* for master and slave pods. Example:
 
 ~~~
 podSecurityContext:
