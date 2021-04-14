@@ -10,10 +10,3 @@ highlight: 20
 =end %>
 
 The chart optionally can start a metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint (port 9419) is not exposed and it is expected that the metrics are collected from inside the Kubernetes cluster.
-
-* Start a Prometheus exporter:
-
-    - metrics.enabled: false
-    + metrics.enabled: true
-
-Check out the list of [metrics parameters](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq#metrics-parameters) for and advanced configuration. 

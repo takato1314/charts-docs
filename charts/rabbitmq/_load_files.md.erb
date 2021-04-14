@@ -3,12 +3,16 @@
 apps: rabbitmq
 platforms: kubernetes
 id: load_files
-title: Load Definitions
-category: administration
+title: Load custom definitions
+category: configuration
 weight: 20
 =end %>
 
-It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](https://www.rabbitmq.com/management.html#load-definitions). Because definitions may contain RabbitMQ credentials, [store the JSON as a Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod). Within the secret's data, choose a key name that corresponds with the desired load definitions filename (i.e. *load_definition.json*) and use the JSON object as the value. For example:
+It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](https://www.rabbitmq.com/management.html#load-definitions). Follow the steps below:
+
+* Store the JSON as a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod), because definitions may contain RabbitMQ credentials. Within the secret's data, choose a key name that corresponds with the desired load definitions filename (such as *load_definition.json*) and use the JSON object as the value.
+
+  Here is an example of one such secret:
 
 ~~~
 apiVersion: v1
@@ -19,6 +23,13 @@ type: Opaque
 stringData:
   load_definition.json: |-
     {
+      "users": [
+        {
+          "name": "user",
+          "password": "CHANGEME",
+          "tags": "administrator"
+        }
+      ],
       "vhosts": [
         {
           "name": "/"
@@ -27,29 +38,37 @@ stringData:
     }
 ~~~
 
-Then, specify the management.load_definitions property as an extraConfiguration pointing to the load definition file path within the container (i.e. */app/load_definition.json*) and set loadDefinition.enable to *true*.
+ * Specify the *management.load_definitions* property as an *extraConfiguration* pointing to the load definition file path within the container (for example, */app/load_definition.json*) and set the *loadDefinition.enable* chart parameter to *true*.
 
-Any load definitions specified will be available within in the container at */app*.
+Any load definitions specified become available within the container at */app*.
 
 > NOTE: Loading a definition will take precedence over any configuration done through [Helm values](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq#parameters).
 
-If needed, you can use extraSecrets to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. For example :
+If needed, use *extraSecrets* to let the chart create the secret. With this approach, there is no need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. Here is an example:
 
 ~~~
+auth:
+  password: CHANGEME
 extraSecrets:
   load-definition:
     load_definition.json: |
       {
+        "users": [
+          {
+            "name": "{{ .Values.auth.username }}",
+            "password": "{{ .Values.auth.password }}",
+            "tags": "administrator"
+          }
+        ],
         "vhosts": [
           {
             "name": "/"
           }
         ]
       }
-rabbitmq:
-  loadDefinition:
-    enabled: true
-    secretName: load-definition
-  extraConfiguration: |
-    management.load_definitions = /app/load_definition.json
+loadDefinition:
+  enabled: true
+  existingSecret: load-definition
+extraConfiguration: |
+  load_definitions = /app/load_definition.json
 ~~~

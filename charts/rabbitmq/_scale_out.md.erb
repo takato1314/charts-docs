@@ -1,0 +1,29 @@
+<%
+=begin
+apps: rabbitmq
+platforms: kubernetes
+id: scale_out
+title: Scale the cluster horizontally
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To horizontally scale this chart once it has been deployed, two options are available:
+
+* Use the *kubectl scale* command.
+* Upgrade the chart modifying the *replicaCount* parameter, as shown below:
+
+    replicaCount=3
+    auth.password="$RABBITMQ_PASSWORD"
+    auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
+
+> NOTE: It is mandatory to specify the password and Erlang cookie that was set the first time the chart was installed when upgrading the chart. Otherwise, new pods won't be able to join the cluster.
+
+When scaling down the solution, unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. These nodes must be manually removed via the *rabbitmqctl forget_cluster_node* command.
+
+For instance, if RabbitMQ was initially installed with three replicas and then scaled down to two replicas, run the commands below (assuming that the release name is *rabbitmq* and the clustering type is *hostname*):
+
+    $ kubectl exec rabbitmq-0 --container rabbitmq -- rabbitmqctl forget_cluster_node rabbit@rabbitmq-2.rabbitmq-headless.default.svc.cluster.local
+    $ kubectl delete pvc data-rabbitmq-2
+

@@ -3,36 +3,49 @@
 apps: rabbitmq
 platforms: kubernetes
 id: enable_tls
-title: Enable TLS for RabbitMQ
+title: Enable TLS
 category: administration
 weight: 20
 highlight: 20
 =end %>
 
-To enable TLS support you must generate the certificates using [RabbitMQ documentation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation).
+To enable TLS support, first generate the certificates as described in the [RabbitMQ documentation for SSL certificate generation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation).
 
-You must include in your *values.yaml* the caCertificate, serverCertificate and serverKey files.
+Once the certificates are generated, you have two alternatives:
 
-~~~
-  caCertificate: |-
-    -----BEGIN CERTIFICATE-----
-    MIIDRTCCAi2gAwIBAgIJAJPh+paO6a3cMA0GCSqGSIb3DQEBCwUAMDExIDAeBgNV
-    ...
-    -----END CERTIFICATE-----
-  serverCertificate: |-
-    -----BEGIN CERTIFICATE-----
-    MIIDqjCCApKgAwIBAgIBATANBgkqhkiG9w0BAQsFADAxMSAwHgYDVQQDDBdUTFNH
-    ...
-    -----END CERTIFICATE-----
-  serverKey: |-
-    -----BEGIN RSA PRIVATE KEY-----
-    MIIEpAIBAAKCAQEA2iX3M4d3LHrRAoVUbeFZN3EaGzKhyBsz7GWwTgETiNj+AL7p
-    ....
-    -----END RSA PRIVATE KEY-----
-~~~
+* Create a secret with the certificates and associate the secret when deploying the chart
+* Include the certificates in the *values.yaml* file when deploying the chart
 
-This will be generate a secret with the certs, but is possible specify an existing secret using existingSecret: *name-of-existing-secret-to-rabbitmq*. The secret is of type *kubernetes.io/tls*.
+To create and use a secret with the certificates, follow these steps:
 
-Disabling [failIfNoPeerCert](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) allows a TLS connection if client fails to provide a certificate.
+* Execute the following command to create the secret, replacing the example paths shown with the correct paths to your certificates:
 
-[sslOptionsVerify](https://www.rabbitmq.com/ssl.html#peer-verification-configuration): When the sslOptionsVerify option is set to verify_peer, the client does send us a certificate, the node must perform peer verification. When set to verify_none, peer verification will be disabled and certificate exchange won't be performed.
+        $ kubectl create secret generic rabbitmq-certificates --from-file=./ca.crt --from-file=./tls.crt --from-file=./tls.key
+
+* Deploy the RabbitMQ chart setting the parameters below:
+
+        tls.enabled=true
+        tls.existingSecret=rabbitmq-certificates
+
+Alternatively, include the certificates in the *values.yaml* file when deploying the chart, as shown in the example YAML configuration below:
+
+    auth:
+      enabled: true
+      caCertificate: |-
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+      serverCertificate: |-
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+      serverKey: |-
+        -----BEGIN RSA PRIVATE KEY-----
+        ....
+        -----END RSA PRIVATE KEY-----
+
+Set the *auth.tls.failIfNoPeerCert* parameter to *false* to allow a TLS connection if the client fails to provide a certificate.
+
+Set the *auth.tls.sslOptionsVerify* to *verify_peer* to force a node to perform peer verification. When set to *verify_none*, peer verification will be disabled and certificate exchange won't be performed.
+
+If using Cert-manager to provision Let's Encrypt certificates, the *tls.crt* key in the generated TLS secret will contain the full certificate chain. Depending on the version of Cert-manager in use, this could either be an empty *ca.crt* key, or none at all. In order to instruct RabbitMQ to look for the CA certificate within the primary certificate, the *auth.tls.existingSecretFullChain* parameter can be set to *true*.

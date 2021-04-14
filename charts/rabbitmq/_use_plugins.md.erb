@@ -1,0 +1,19 @@
+<%
+=begin
+apps: rabbitmq
+platforms: kubernetes
+id: use_plugins
+title: Use plugins
+category: configuration
+=end %>
+
+The Bitnami Docker RabbitMQ image ships a set of plugins by default. You can use the command below to obtain the whole list.
+
+    $ docker run --rm -it bitnami/rabbitmq -- ls /opt/bitnami/rabbitmq/plugins/
+
+By default, this chart enables *rabbitmq_management* and *rabbitmq_peer_discovery_k8s*, since they are required for RabbitMQ to work on Kubernetes. To enable extra plugins, set the *extraPlugins* parameter with the list of plugins you want to enable.
+
+In addition to this, the *communityPlugins* parameter can be used to specify a list of URLs (separated by spaces) for custom plugins for RabbitMQ. For instance, use the example below to download and enable a custom plugin during the container initialization process. Replace the URL-TO-PLUGIN placeholder with the download URL for the custom plugin.
+
+    communityPlugins="http://URL-TO-PLUGIN/"
+    extraPlugins="my-custom-plugin"
