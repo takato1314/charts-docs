@@ -1,0 +1,24 @@
+<%
+=begin
+apps: rabbitmq
+platforms: kubernetes
+id: configure_memory
+title: Configure memory
+category: configuration
+weight: 50
+=end %>
+
+It is possible to configure a memory high watermark on RabbitMQ to define memory thresholds using the *memoryHighWatermark.\** parameters. This can be done in any of the following way:
+
+* Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
+
+        memoryHighWatermark.enabled="true"
+        memoryHighWatermark.type="absolute"
+        memoryHighWatermark.value="512MB"
+
+* Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
+
+        memoryHighWatermark.enabled="true"
+        memoryHighWatermark.type="relative"
+        memoryHighWatermark.value="0.4"
+        resources.limits.memory="2Gi"
