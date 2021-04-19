@@ -14,16 +14,16 @@ To backup and restore Redis deployments on Kubernetes, you will need to create a
 
 * Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
 
-    $ kubectl exec -it my-redis-master-0 bash
-    $ redis-cli
-    127.0.0.1:6379> auth your_current_redis_password
-    OK
-    127.0.0.1:6379> save
-    OK
+        $ kubectl exec -it my-redis-master-0 bash
+        $ redis-cli
+        127.0.0.1:6379> auth your_current_redis_password
+        OK
+        127.0.0.1:6379> save
+        OK
 
 * Copy the dump file from the Redis node:
 
-    $ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
+        $ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
 
 ### Step 2: Restore the data on the destination cluster
 
@@ -33,56 +33,54 @@ Follow the following steps:
 
 * In the *values.yaml* file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
 
-~~~
-configmap: |-
-  # Enable AOF https://redis.io/topics/persistence#append-only-file
-  appendonly no
-  # Disable RDB persistence, AOF persistence already enabled.
-  save ""
-~~~
+        configmap: |-
+           # Enable AOF https://redis.io/topics/persistence#append-only-file
+           appendonly no
+           # Disable RDB persistence, AOF persistence already enabled.
+           save ""
 
 * Start the new cluster to create the PVCs. Use the command below as an example:
 
-    $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
-
+        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+ 
 * Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
 
-    $ helm delete new-redis
+        $ helm delete new-redis
 
-    $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
-    {
-        "apiVersion": "v1",
-        "kind": "Pod",
-        "metadata": {
-            "name": "redisvolpod"
-        },
-        "spec": {
-            "containers": [{
-               "command": [
-                    "tail",
-                    "-f",
-                    "/dev/null"
-                ],
-                "image": "bitnami/minideb",
-                "name": "mycontainer",
-                "volumeMounts": [{
-                    "mountPath": "/mnt",
-                    "name": "redisdata"
+        $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "name": "redisvolpod"
+            },
+            "spec": {
+                "containers": [{
+                   "command": [
+                        "tail",
+                        "-f",
+                        "/dev/null"
+                   ],
+                   "image": "bitnami/minideb",
+                   "name": "mycontainer",
+                   "volumeMounts": [{
+                       "mountPath": "/mnt",
+                       "name": "redisdata"
+                    }]
+                }],
+                "restartPolicy": "Never",
+                "volumes": [{
+                    "name": "redisdata",
+                    "persistentVolumeClaim": {
+                        "claimName": "redis-data-new-redis-master-0"
+                    }
                 }]
-            }],
-            "restartPolicy": "Never",
-            "volumes": [{
-                "name": "redisdata",
-                "persistentVolumeClaim": {
-                    "claimName": "redis-data-new-redis-master-0"
-                }
-            }]
-        }
-     }' --image="bitnami/minideb"
+            }
+        }' --image="bitnami/minideb"
 
-    $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
-    $ kubectl delete pod volpod
+        $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+        $ kubectl delete pod volpod
 
 * Restart the cluster:
 
-     $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
