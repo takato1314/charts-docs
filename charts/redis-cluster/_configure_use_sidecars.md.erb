@@ -1,0 +1,33 @@
+<%
+=begin
+apps: redis-cluster
+platforms: kubernetes
+id: configure_use_sidecars
+title: Configure and use sidecar containers
+category: administration
+weight: 70
+=end %>
+
+If you have a need for additional containers to run within the same pod as Redis (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+~~~
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+~~~
+
+Similarly, you can add extra init containers using the *initContainers* parameter.
+
+~~~
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+~~~

@@ -1,0 +1,17 @@
+<%
+=begin
+apps: elasticsearch
+platforms: kubernetes
+id: configure_kernel_settings
+title: Configure Host Kernel settings
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+
+* [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
+* [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
+This chart uses a privileged initContainer to change those settings in the Kernel by running: sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536. You can disable the initContainer using the sysctlImage.enabled=false parameter.

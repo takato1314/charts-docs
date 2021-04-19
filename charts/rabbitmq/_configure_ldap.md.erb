@@ -3,18 +3,18 @@
 apps: rabbitmq
 platforms: kubernetes
 id: configure_ldap
-title: LDAP configuration
+title: Configure LDAP support
 category: configuration
 weight: 50
 =end %>
 
-LDAP support can be enabled in the chart by specifying the ldap. parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+LDAP support can be enabled in the chart by specifying the *ldap.\** parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
 
-* *ldap.enabled*: Enable LDAP support. Defaults to false.
+* *ldap.enabled*: Enable LDAP support. Defaults to *false*.
 * *ldap.server*: LDAP server host. No defaults.
-* *ldap.port*: LDAP server port. 389.
-* *ldap.user_dn_pattern*: DN used to bind to LDAP. cn=${username},dc=example,dc=org.
-* *ldap.tls.enabled*: Enable TLS for LDAP connections. Defaults to false.
+* *ldap.port*: LDAP server port. Defaults to port 389.
+* *ldap.user_dn_pattern*: DN used to bind to LDAP. Defaults to *cn=${username},dc=example,dc=org*.
+* *ldap.tls.enabled*: Enable TLS for LDAP connections. Defaults to *false*.
 
 For example:
 
@@ -25,8 +25,4 @@ ldap.port="389"
 ldap.user_dn_pattern="cn=${username},dc=example,dc=org"
 ~~~
 
-If *ldap.tls.enabled* is set to true, consider using *ldap.port=636* and checking the settings in the *advancedConfiguration*.
-
-### Common issues
-
-Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
+If *ldap.tls.enabled* is set to true, consider using *ldap.port=636* and checking the settings in the *advancedConfiguration* chart parameters.
