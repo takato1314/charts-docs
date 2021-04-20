@@ -1,0 +1,14 @@
+<%
+=begin
+apps: zookeeper
+platforms: kubernetes
+id: configure_log_directory
+title: Configure the transaction log directory
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+A dedicated device can be assigned for logs (instead of using the data directory) to help avoid competition between logging and snaphots. To do so, set the *dataLogDir* chart parameter with the path to be used for writing transaction logs. Alternatively, set this parameter to an empty string and it will result in the log being written to the data directory (Zookeeper's default behavior).
+
+When using a dedicated device for logs, you can use a PersistentVolumeClaim to persist the logs. To do so, set the *persistence.enabled* chart parameter to *true*.
