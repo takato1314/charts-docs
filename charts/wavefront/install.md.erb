@@ -1,0 +1,11 @@
+* If not already done, create a *wavefront* namespace:
+
+        $ kubectl create namespace wavefront
+        $ helm install my-release bitnami/wavefront --namespace wavefront \
+        --set clusterName=<K8s-CLUSTER-NAME> \
+        --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+        --set wavefront.token=<YOUR_API_TOKEN>
+
+   The command deploys Wavefront on the Kubernetes cluster in the *wavefront* namespace using the configuration. The [Parameters](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#parameters) section lists the parameters that can be configured during installation.
+
+   The required parameters are *clusterName*, *wavefront.url* and *wavefront.token*. You will need to provide values for those options for a successful installation of the chart.
