@@ -1,0 +1,21 @@
+<%
+=begin
+apps: contour
+platforms: kubernetes
+id: deploy_contour_aws_nlb
+title: Deploy Contour with an AWS Network Load Balancer (NLB)
+category: configuration
+weight: 10
+highlight: 10
+=end %>
+
+By default, Contour is launched with a AWS Classic Elastic Load Balancer (ELB). To launch contour backed by a NLB, please set [these settings](https://github.com/projectcontour/contour/tree/master/examples/contour#deploying-with-host-networking-enabled-for-envoy):
+
+~~~
+envoy:
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+~~~
