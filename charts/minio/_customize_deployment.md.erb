@@ -13,6 +13,6 @@ You can add extra environment variables (this is useful for advanced operations 
 
     extraEnv:
       - name: MINIO_HTTP_TRACE 
-        value: DEBUG
+        value: /opt/bitnami/minio/log/minio.log
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the *extraEnvVarsCM* or the *extraEnvVarsSecret* values.
