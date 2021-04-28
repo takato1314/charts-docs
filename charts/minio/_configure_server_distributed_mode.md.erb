@@ -1,0 +1,28 @@
+<%
+=begin
+apps: minio
+platforms: kubernetes
+id: configure_server_distributed_mode
+title: Configure the server in distributed mode
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+By default, this chart provisions a MinIO(R) server in standalone mode. You can start MinIO(R) server in [distributed mode](https://docs.minio.io/docs/distributed-minio-quickstart-guide) with the following parameter: *mode=distributed*.
+
+This chart bootstrap MinIO(R) server in distributed mode with 4 nodes by default. You can change the number of nodes using the *statefulset.replicaCount* parameter. For instance, you can deploy the chart with 8 nodes using the following parameters:
+
+    mode=distributed
+    statefulset.replicaCount=8
+
+You can also bootstrap MinIO(R) server in distributed mode in several zones, and using multiple drives per node. For instance, you can deploy the chart with 2 nodes per zone on 2 zones, using 2 drives per node:
+
+    mode=distributed
+    statefulset.replicaCount=2
+    statefulset.zones=2
+    statefulset.drivesPerNode=2
+
+> NOTE: The total number of drives should be multiple of 4 to guarantee erasure coding. Please set a combination of nodes, and drives per node that match this condition.
+
+
