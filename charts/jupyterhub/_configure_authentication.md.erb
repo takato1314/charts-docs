@@ -1,0 +1,33 @@
+<%
+=begin
+apps: jupyterhub
+platforms: kubernetes
+id: configure_authentication
+title: Configure authentication
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/dummyauthenticator) by default, with the password set in the *hub.password* chart parameter (auto-generated if not set) and *user* as the administrator user. In order to change the authentication mechanism, change the *hub.config.JupyterHub* section inside the *hub.configuration* value.
+
+The following example sets the [NativeAuthenticator](https://github.com/jupyterhub/nativeauthenticator) authenticator, and configures an admin user called *test*.
+
+~~~
+hub:
+  configuration: |
+    ...
+    hub:
+      config:
+        JupyterHub:
+          admin_access: true
+          authenticator_class: nativeauthenticator.NativeAuthenticator
+          Authenticator:
+            admin_users:
+              - test
+    ...
+~~~
+
+When deploying, you will need to sign up to set the password for the *test* user.
+
+For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
