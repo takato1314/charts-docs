@@ -1,0 +1,25 @@
+<%
+=begin
+apps: jupyterhub
+platforms: kubernetes
+id: install_modules
+title: Add support for other Python libraries
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+Follow the steps below to add support for other Python libraries in the JupyterHub deployment:
+
+* Browse to the service IP address and log in using the credentials set or generated at deployment time.
+* Select the "New -> Terminal" menu item. This opens a new web terminal.
+* Enter and execute the command below:
+
+        $ export PATH=/opt/bitnami/miniconda/bin:$PATH
+
+* Enter and execute the commands to install the Python libraries required. For example, to install the *matplotlib* library, run the commands below:
+
+        $ pip install matplotlib
+        $ exit
+
+The required libraries are downloaded and installed, and become available for use.
