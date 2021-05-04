@@ -11,7 +11,6 @@ highlight: 20
 
 The chart optionally can start a metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint (port 9104) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the example [Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 
-To start a side-car Prometheus exporter, use the *values-production.yaml* file to deploy the chart by enabling the following parameter:
+To start a side-car Prometheus exporter, use the following parameter:
 
-    - metrics.enabled: false
-    + metrics.enabled: true
+    metrics.enabled: true
