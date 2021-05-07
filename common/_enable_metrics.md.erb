@@ -1,0 +1,28 @@
+<%
+=begin
+apps: all
+platforms: kubernetes
+id: enable_metrics
+title: Enable metrics
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+The chart can optionally start a sidecar metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint is exposed in the service.
+
+To start the sidecar Prometheus exporter, set the *metrics.enabled* parameter to *true* when deploying the chart. Refer to the chart parameters for the default port number.
+
+Metrics can be scraped from within the cluster using any of the following approaches:
+
+* Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
+
+        podAnnotations:
+          prometheus.io/scrape: ""true""
+          prometheus.io/path: ""/minio/v2/metrics/cluster""
+          prometheus.io/port: ""9000""
+
+* Creating a PodMonitor entry (when the Prometheus Operator is available in the cluster)
+* Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
+
+If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
