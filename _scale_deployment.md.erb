@@ -1,0 +1,42 @@
+<%
+=begin
+apps: none
+platforms: kubernetes
+id: scale_deployment
+title: Scale a deployment horizontally
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To scale a deployment, two options are available:
+
+* Use the *kubectl scale* command to scale the StatefulSet, if available.
+* Upgrade the chart configuring a different number of nodes.
+
+### Scaling with kubectl
+
+Use the *kubectl scale* command to scale the StatefulSet, if available. Here is an example of using the *kubectl scale* command to scale an etcd deployment:
+
+    $ kubectl scale --replicas=4 statefulset/my-release-etcd
+
+### Scaling via chart upgrade
+
+Scale the deployment via a normal chart upgrade, following the steps below:.
+
+* Set the password used at installation time via the *\*.password* chart parameter. If the password was generated automatically, obtain the auto-generated paassword from the post-deployment instructions.
+* Set the desired number of nodes via the *\*.replicaCount* or *\*.replicas* chart parameter.
+
+> NOTE: These parameters differ per chart, depending on the chart architecture. Refer to the chart documentation for the correct parameter names for your chart.
+
+Here is an example of scaling out an Apache deployment. Substitute the PASSWORD placeholder with the original password and replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+
+    $ helm upgrade my-release bitnami/apache \
+        --set rootUser.password=PASSWORD \
+        --set replicaCount=NUMBER_OF_REPLICAS
+
+Here is another example of scaling out an Elasticsearch deployment. Replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+
+    $ helm upgrade my-release bitnami/elasticsearch \
+        --set master.replicas=NUMBER_OF_REPLICAS
+
