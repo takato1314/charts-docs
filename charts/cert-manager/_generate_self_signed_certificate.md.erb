@@ -1,0 +1,61 @@
+<%
+=begin
+apps: cert-manager
+platforms: kubernetes
+id: generate_self_signed_certificate
+title: Generate self signed certificate
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+To create a self signed certificate using Cert Manager, you need to use three different elements:
+
+- An issuer and a clusterissuer: those are kubernetes resources that represent certificate authorities (CAs) that will generate a signed certificates.
+- An certificate: this resource defines the desired X.509 certificate which will be renewed and kept up to date.
+
+Including those elements, Cert Manager will create a secret including the certificates generated. Here you can find one example:
+
+- ClusterIssuer
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  selfSigned: {}
+~~~
+
+- Issuer
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  ca:
+    secretName: letsencrypt-ca
+~~~
+
+- Certificate
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  isCA: true
+  commonName: osm-system
+  secretName: letsencrypt-ca
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+~~~
+
+In this case, Cert Manager will create a tls secret with the certificate. To use this Cert Manager configuration inside an ingress, take a look the section "Create or configure an ingress using Cert Manager").
