@@ -3,7 +3,7 @@
 apps: none
 platforms: kubernetes
 id: scale_deployment
-title: Scale a deployment horizontally
+title: Scale a cluster horizontally
 category: administration
 weight: 40
 highlight: 40
@@ -12,17 +12,19 @@ highlight: 40
 To scale a deployment, two options are available:
 
 * Use the *kubectl scale* command to scale the StatefulSet, if available.
-* Upgrade the chart configuring a different number of nodes.
+* Upgrade the deployment or StatefulSet configuring a different number of nodes.
+
+> NOTE: When scaling Web applications, it is necessary to use ReadWriteMany volumes if persistence is enabled.
 
 ### Scaling with kubectl
 
-Use the *kubectl scale* command to scale the StatefulSet, if available. Here is an example of using the *kubectl scale* command to scale an etcd deployment:
+Use the *kubectl scale* command to scale the StatefulSet, if available. Here is an example of using the *kubectl scale* command to scale an etcd StatefulSet:
 
     $ kubectl scale --replicas=4 statefulset/my-release-etcd
 
 ### Scaling via chart upgrade
 
-Scale the deployment via a normal chart upgrade, following the steps below:.
+Scale the deployment or StatefulSet via a normal chart upgrade, following the steps below:.
 
 * Set the password used at installation time via the *\*.password* chart parameter. If the password was generated automatically, obtain the auto-generated paassword from the post-deployment instructions.
 * Set the desired number of nodes via the *\*.replicaCount* or *\*.replicas* chart parameter.
@@ -35,7 +37,7 @@ Here is an example of scaling out an Apache deployment. Substitute the PASSWORD 
         --set rootUser.password=PASSWORD \
         --set replicaCount=NUMBER_OF_REPLICAS
 
-Here is another example of scaling out an Elasticsearch deployment. Replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+Here is another example of scaling out an Elasticsearch StatefulSet. Replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
 
     $ helm upgrade my-release bitnami/elasticsearch \
         --set master.replicas=NUMBER_OF_REPLICAS

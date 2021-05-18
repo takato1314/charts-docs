@@ -13,7 +13,7 @@ The chart optionally exposes metrics for [Prometheus](https://prometheus.io/). T
 
 Metrics can be scraped from within the cluster using something similar to the example [Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). The required annotations for the metrics endpoints to be discovered are automatically added by the chart.
 
-To start the sidecar Prometheus exporter, set the *\*.metrics.enabled* parameter to *true* when deploying the chart.
+To expose Prometheus metrics, set the *\*.metrics.enabled* parameter to *true* when deploying the chart.
 
 If the Prometheus Operator is installed in the cluster, set the *\*.metrics.podMonitor.enabled* to *true* to create a PodMonitor entry.
 

@@ -3,7 +3,7 @@
 apps: discourse
 platforms: kubernetes
 id: scale_deployment
-title: Scale the deployment horizontally
+title: Scale the cluster horizontally
 category: administration
 weight: 30
 highlight: 30
@@ -34,8 +34,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
         $ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true bitnami/discourse
 
-> NOTE: You need to provide *ReadWriteMany* PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as *persistence.enabled=true* and *persistence.size=10Gi*) and map it to a RWO volume.
-> Then you can deploy Discourse chart using the proper parameters:
+> NOTE: You need to provide *ReadWriteMany* PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as *persistence.enabled=true* and *persistence.size=10Gi*) and map it to a RWO volume. Then, deploy the Discourse chart using the proper parameters:
 >
 >    persistence.storageClass=nfs
 >    postgresql.persistence.storageClass=nfs
