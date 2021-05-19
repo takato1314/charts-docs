@@ -1,0 +1,72 @@
+<%
+=begin
+apps: cert-manager
+platforms: kubernetes
+id: generate_self_signed_certificates
+title: Generate TLS certificates using Self Signed Issuer
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+Cert Manager has support to issue certificates using different Issuers. For instance, you can use a Self Signed to issue the certificates.
+
+The SelfSigned issuer doesn’t represent a certificate authority as such, but instead denotes that certificates will “sign themselves” using a given private key.
+
+> Note: find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager you need to create an Issuer object, which structure defers depending on the Issuer type. Self Signed issuer are really easy to configure.
+
+To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate:
+
+- ClusterIssuer
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  selfSigned: {}
+~~~
+
+- Issuer
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  ca:
+    secretName: letsencrypt-ca
+~~~
+
+- Certificate
+
+~~~
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  isCA: true
+  commonName: osm-system
+  secretName: letsencrypt-ca
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+~~~
+
+Now, you can use the ClusterIssuer to generate certificates for the applications you want to expose in your K8s cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
+
+With our application already exposed using an Ingress resource. Cert Manager will create a secret which the content is the TLS certificate generated.
+
+~~~
+$ k get secret --namespace=sandbox
+NAME                  TYPE                                  DATA   AGE
+letsencrypt-ca        kubernetes.io/tls                     3      Xs
+~~~

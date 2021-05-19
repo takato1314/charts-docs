@@ -1,0 +1,51 @@
+<%
+=begin
+apps: cert-manager
+platforms: kubernetes
+id: secure_ingress_resources
+title: Secure Ingress resources with Cert Manager
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+Once the issuer is already configured. Cert Manager using this issuer will create a secret that the content is a TLS certificate. To create this TLS certificate, Cert Manager must detect that your deployment is already exposed. The way to do it is using an Ingress Resource including Cert Manager in the Ingress configuration.
+
+You have two different options to expose your application including Cert Manager:
+
+- Deploy another Helm chart with support to expose the application through an Ingress controller. For instance, using the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) you can expose WordPress as explained in [this section](<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
+
+~~~
+# Set up your ingress.class below (in this example, we are using nginx ingress controller)
+kubernetes.io/ingress.class: nginx
+cert-manager.io/cluster-issuer: letsencrypt-prod
+~~~
+
+- Create your own ingress resource as shown in the example below:
+
+~~~
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bitnami-ingress-test
+  annotations:
+    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - bitnami.com
+    secretName: letencrypt-ca
+  rules:
+  - host: bitnami.com
+    http:
+      paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: bitnami-ingress-test
+            port:
+              number: 80
+~~~

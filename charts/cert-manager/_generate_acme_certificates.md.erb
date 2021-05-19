@@ -1,0 +1,70 @@
+<%
+=begin
+apps: cert-manager
+platforms: kubernetes
+id: generate_acme_certificates
+title: Generate TLS certificates using ACME Issuer
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+Cert Manager has support to issue certificates using different Issuers. For instance, you can use a public ACME (Automated Certificate Management Environment) server to issue the certificates.
+
+> Note: find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager you need to create an Issuer object, which structure defers depending on the Issuer type. To use ACME, we should include the information of a single account registered in the ACME Certificate Authority server.
+
+Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains you're trying to generate certificates for. This can be done in two ways: using HTTP01 or DNS01 challenges.
+
+> Note: learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
+
+In order to verify that a client owns the domain, Cert Manager uses challenges. This is a secure way to verify that the domain that you are setting up
+in your Issuer is yours. Cert Manager have two different challenges to verify that you are the proprietary of your domain HTTP01 or DNS01, more information [here](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
+
+To create a ACME issuer to generate the certificate using Let's Encrypt, declare an Issuer:
+
+- Issuer
+
+~~~
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: user@example.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # Add a single challenge solver, HTTP01 using nginx
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+~~~
+
+Now, you can use the ClusterIssuer to generate certificates for the applications you want to expose in your K8s cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
+
+After your Ingress resource is ready. Cert Manager begins to verify using HTTP01/DNS01 challenges that you are the proprietary of your own domain. During this verification, you can log the controller to see the process and the status. Moreover, if you list the certificates:
+
+~~~
+$ k get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            False   letencrypt-ca             X
+~~~
+
+You will see that the ready status is False. This status will change to True when the HTTP01 verification is succesfully and over.
+
+~~~
+$ k get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            True    letencrypt-ca             X
+
+$ k get secrets
+NAME                                  TYPE                                  DATA   AGE
+letencrypt-ca                      kubernetes.io/tls                        3      Xm
+~~~
