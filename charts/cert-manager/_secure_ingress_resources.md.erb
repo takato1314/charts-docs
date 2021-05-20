@@ -9,9 +9,9 @@ weight: 40
 highlight: 40
 =end %>
 
-Once the issuer is already configured. Cert Manager using this issuer will create a secret that the content is a TLS certificate. To create this TLS certificate, Cert Manager must detect that your deployment is already exposed. The way to do it is using an Ingress Resource including Cert Manager in the Ingress configuration.
+Once you configure an Issuer for Cert Manager (refer to one these two guides to so: [Using a Self-Signed Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [Using a ACME Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. To create this secret, Cert Manager must previously detect that your application is already exposed. One way to do it is using an Ingress Resource to expose the application including the corresponding annotations for Cert Manager.
 
-You have two different options to expose your application including Cert Manager:
+You have two different options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
 
 - Deploy another Helm chart with support to expose the application through an Ingress controller. For instance, using the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) you can expose WordPress as explained in [this section](<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
 

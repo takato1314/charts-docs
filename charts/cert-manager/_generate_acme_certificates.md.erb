@@ -15,12 +15,9 @@ Cert Manager has support to issue certificates using different Issuers. For inst
 
 To configure Cert Manager you need to create an Issuer object, which structure defers depending on the Issuer type. To use ACME, we should include the information of a single account registered in the ACME Certificate Authority server.
 
-Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains you're trying to generate certificates for. This can be done in two ways: using HTTP01 or DNS01 challenges.
+Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains you're trying to generate certificates for. Cert Manager have two different challenges to verify that you are the proprietary of your domain HTTP01 or DNS01, more information [here](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
 
 > Note: learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
-
-In order to verify that a client owns the domain, Cert Manager uses challenges. This is a secure way to verify that the domain that you are setting up
-in your Issuer is yours. Cert Manager have two different challenges to verify that you are the proprietary of your domain HTTP01 or DNS01, more information [here](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
 
 To create a ACME issuer to generate the certificate using Let's Encrypt, declare an Issuer:
 
