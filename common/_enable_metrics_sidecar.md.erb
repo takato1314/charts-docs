@@ -1,6 +1,6 @@
 <%
 =begin
-apps: influxdb, zookeeper, spark, etcd, keycloak, kong, grafana, rabbitmq, cert-manager, fluentd, external-dns, spring-cloud-dataflow, nginx-ingress-controller
+apps: airflow, apache, cassandra, consul, dataplatform-bp1, dataplatform-bp2, dokuwiki, drupal, elasticsearch, jenkins, joomla, kiam, kibana, logstash, magento, mariadb, mariadb-galera, mediawiki, memcached, mongodb, mongodb-sharded, moodle, mysql, nats, nginx, opencart, orangehrm, osclass, owncloud, phabricator, phpbb, phpmyadmin, postgresql, postgresql-ha, prestashop, redis, redis-cluster, suitecrm, tensorflow-resnet, testlink, wavefront, wordpress
 platforms: kubernetes
 id: enable_metrics
 title: Enable metrics
@@ -9,7 +9,9 @@ weight: 40
 highlight: 40
 =end %>
 
-To export Prometheus metrics, set the *metrics.enabled* parameter to *true* when deploying the chart. Refer to the chart parameters for the default port number.
+The chart can optionally start a sidecar metrics exporter for [Prometheus](https://prometheus.io/). The metrics endpoint is exposed in the service.
+
+To start the sidecar Prometheus exporter, set the *metrics.enabled* parameter to *true* when deploying the chart. Refer to the chart parameters for the default port number.
 
 Metrics can be scraped from within the cluster using any of the following approaches:
 

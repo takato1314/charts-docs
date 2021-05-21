@@ -9,9 +9,9 @@ weight: 40
 highlight: 40
 =end %>
 
-To scale a deployment, two options are available:
+To scale a deployment or StatefulSet, two options are available:
 
-* Use the *kubectl scale* command to scale the StatefulSet, if available.
+* Use the *kubectl scale* command to scale the deployment or StatefulSet, if available.
 * Upgrade the deployment or StatefulSet configuring a different number of nodes.
 
 > NOTE: When scaling Web applications, it is necessary to use ReadWriteMany volumes if persistence is enabled.

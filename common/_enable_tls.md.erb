@@ -1,6 +1,6 @@
 <%
 =begin
-apps: apache, dokuwiki, drupal, ghost, jenkins, kong, magento, mediawiki, nginx, nginx-ingress-controller, odoo, opencart, orangehrm, osclass, owncloud, phabricator, prestashop, redmine, suitecrm, tomcat, wildfly, wordpress, mariadb-galera, postgresql
+apps: postgresql, fluentd, redis, redis-cluster, minio, solr, mariadb-galera
 platforms: kubernetes
 id: enable_tls
 title: Enable TLS
@@ -44,3 +44,7 @@ In the first two cases, a certificate and a key are needed. Files are expected i
 * If managing TLS secrets separately, it is necessary to create a TLS secret with name *INGRESS_HOSTNAME-tls* (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the *ingress.hostname* parameter).
 * If using self-signed certificates created by Helm, set *ingress.tls* to *true*, and *ingress.certManager* to *false*.
 * If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set *ingress.certManager* boolean to true to enable the corresponding annotations for cert-manager.
+
+<% if current.app == 'redis-cluster' %>
+> NOTE: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod may not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.
+<% end %>
