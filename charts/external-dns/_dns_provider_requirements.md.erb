@@ -1,7 +1,7 @@
 <%
 =begin
 apps: external-dns
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: dns_provider_requirements
 title: DNS provider requirements
 category: configuration
@@ -27,5 +27,5 @@ $ helm install my-release \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
-  bitnami/external-dns
+  <%= variable :repository_name, :platform %>/external-dns
 ~~~

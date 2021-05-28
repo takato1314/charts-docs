@@ -1,14 +1,14 @@
 <%
 =begin
 apps: redis-cluster
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: enable_external_acess
 title: Enable external access to the cluster
 category: administration
 weight: 50
 =end %>
 
-The topology of the Redis Cluster Helm chart allows users to access the cluster both externally and internally and you can both scale up and scale down the cluster in both accesses. To access the Redis Cluster services externally, it is necessary to enable the external access mode at the time of deployment. 
+The topology of the Redis Cluster Helm chart allows users to access the cluster both externally and internally and you can both scale up and scale down the cluster in both accesses. To access the Redis Cluster services externally, it is necessary to enable the external access mode at the time of deployment.
 
 Check out the following sections of the [Deploy a Scalable Redis Cluster on VMware Tanzu Mission Control with Bitnami and Helm](https://docs.bitnami.com/tutorials/deploy-redis-cluster-tmc-helm-chart/) guide to learn how to a) enable the external access mode and b) access the Redis Cluster from a different machine:
 

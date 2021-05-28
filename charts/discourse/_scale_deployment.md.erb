@@ -1,7 +1,7 @@
 <%
 =begin
 apps: discourse
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: scale_deployment
 title: Scale the cluster horizontally
 category: administration
@@ -15,7 +15,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
 * Create a conventional release, that will be scaled later:
 
-        $ helm install my-release bitnami/discourse
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/discourse
 
 * Wait for the release to complete and execute the following:
 
@@ -32,7 +32,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
 * Perform an upgrade specifying the number of replicas and the credentials used.
 
-        $ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true bitnami/discourse
+        $ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true <%= variable :repository_name, :platform %>/discourse
 
 > NOTE: You need to provide *ReadWriteMany* PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as *persistence.enabled=true* and *persistence.size=10Gi*) and map it to a RWO volume. Then, deploy the Discourse chart using the proper parameters:
 >

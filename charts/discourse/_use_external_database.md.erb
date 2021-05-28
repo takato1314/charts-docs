@@ -1,7 +1,7 @@
 <%
 =begin
 apps: discourse
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: use_external_database
 title: Use an external database for Discourse
 category: configuration
@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-Sometimes you may want to have Discourse connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. 
+Sometimes you may want to have Discourse connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications.
 
 To do this, the chart allows you to specify credentials for an external database under the [*externalDatabase* parameter](https://github.com/bitnami/charts/tree/master/bitnami/discourse#parameters). You should also disable the PostgreSQL installation with the *postgresql.enabled* option. For example with the following parameters:
 

@@ -1,14 +1,14 @@
 <%
 =begin
 apps: redis-cluster
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: cluster_topology
 title: Redis Cluster topology
 category: get-started
 weight: 70
 =end %>
 
-The Redis Cluster Helm Chart will deploy by default three Redis masters and three replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to access the Redis Cluster from outside you have to set *cluster.externalAccess.enabled=true* at deployment time as described in [this how to deploy the Redis Cluster guide](https://docs.bitnami.com/tutorials/deploy-redis-cluster-tmc-helm-chart/#step-6-access-redis-cluster-from-a-different-machine). 
+The Redis Cluster Helm Chart will deploy by default three Redis masters and three replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to access the Redis Cluster from outside you have to set *cluster.externalAccess.enabled=true* at deployment time as described in [this how to deploy the Redis Cluster guide](https://docs.bitnami.com/tutorials/deploy-redis-cluster-tmc-helm-chart/#step-6-access-redis-cluster-from-a-different-machine).
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using *redis-cli* you will need to provide the *-c* flag for *redis-cli* to follow the redirection automatically.
 

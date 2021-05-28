@@ -32,5 +32,5 @@ To start using any Bitnami Helm chart, it is necessary to first add the Bitnami 
 <% else %>
     > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name.
 
-      $ helm install MY-RELEASE bitnami/CHART
+      $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/CHART
 <% end %>

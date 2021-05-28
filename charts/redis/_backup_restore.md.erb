@@ -1,7 +1,7 @@
 <%
 =begin
 apps: redis
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: backup_restore
 title: Backup and restore Redis deployments
 category: administration
@@ -42,7 +42,7 @@ Follow the following steps:
 * Start the new cluster to create the PVCs. Use the command below as an example:
 
         $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
- 
+
 * Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
 
         $ helm delete new-redis

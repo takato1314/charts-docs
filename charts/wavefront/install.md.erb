@@ -1,7 +1,7 @@
 <%
 =begin
 apps: wavefront
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: install
 title: Install the chart
 category: get-started
@@ -31,7 +31,7 @@ To start using any Bitnami Helm chart, it is necessary to first add the Bitnami 
 
   The required parameters are *clusterName*, *wavefront.url* and *wavefront.token*. You will need to provide values for those options for a successful installation of the chart.
 
-        $ helm install MY-RELEASE bitnami/wavefront --namespace wavefront \
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/wavefront --namespace wavefront \
         --set clusterName=K8s-CLUSTER-NAME \
         --set wavefront.url=https://YOUR_CLUSTER.wavefront.com \
         --set wavefront.token=YOUR_API_TOKEN

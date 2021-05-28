@@ -1,7 +1,7 @@
 <%
 =begin
 apps: moodle
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: enable_tls
 title: Enable TLS for Moodle
 category: administration
@@ -22,7 +22,7 @@ moodlePassword=password
 mariadb.mariadbRootPassword=secretpassword
 ~~~
 
-These are the three mandatory parameters when Ingress is desired: 
+These are the three mandatory parameters when Ingress is desired:
 
 * ingress.enabled=True
 * ingress.hosts[0]=moodle.domain.com

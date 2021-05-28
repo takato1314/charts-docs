@@ -1,7 +1,7 @@
 <%
 =begin
 apps: etcd
-platforms: kubernetes
+platforms: kubernetes , tanzu-application-catalog
 id: scale_deployment
 title: Scale the cluster
 category: administration
@@ -22,7 +22,7 @@ To scale the etcd cluster, two options are available:
 
   ~~~
   $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
-  $ helm upgrade my-release bitnami/etcd \
+  $ helm upgrade MY-RELEASE <%= variable :repository_name, :platform %>/etcd \
     --set auth.rbac.rootPassword=ETCD_ROOT_PASSWORD \
     --set replicaCount=$((CURRENT_REPLICAS-2))
   ~~~

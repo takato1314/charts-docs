@@ -1,7 +1,7 @@
 <%
 =begin
 apps: rabbitmq
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: use_plugins
 title: Use plugins
 category: configuration
@@ -9,7 +9,7 @@ category: configuration
 
 The Bitnami Docker RabbitMQ image ships a set of plugins by default. You can use the command below to obtain the whole list.
 
-    $ docker run --rm -it bitnami/rabbitmq -- ls /opt/bitnami/rabbitmq/plugins/
+    $ docker run --rm -it <%= variable :repository_name, :platform %>/rabbitmq -- ls /opt/bitnami/rabbitmq/plugins/
 
 By default, this chart enables *rabbitmq_management* and *rabbitmq_peer_discovery_k8s*, since they are required for RabbitMQ to work on Kubernetes. To enable extra plugins, set the *extraPlugins* parameter with the list of plugins you want to enable.
 

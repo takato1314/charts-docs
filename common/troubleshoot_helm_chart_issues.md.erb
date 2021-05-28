@@ -30,33 +30,33 @@ Here is an example illustrating the issue:
 
 * Install a chart that uses a stateful application, such as the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql):
 
-        $ helm install my-release bitnami/postgresql
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/postgresql
 
 * Since no credentials were specified and no existing Secrets are being reused, a random alphanumeric password is generated for the *postgres* (admin) user of the database. This password is also used by readiness and liveness probes on PostgreSQL pods. Obtain the generated password using the commands below:
 
-        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default MY-RELEASE-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
         $ echo $POSTGRES_PASSWORD
         8aQdvrEhr5
 
 * Verify the password by logging in to the PostgreSQL server using this password:
 
-        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image <%= variable :repository_name, :platform %>/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host MY-RELEASE-postgresql -U postgres -d postgres -p 5432
         ...
         postgres=#
 
 * Upgrade the chart release:
 
-        $ helm upgrade my-release bitnami/postgresql
+        $ helm upgrade MY-RELEASE <%= variable :repository_name, :platform %>/postgresql
 
 * Obtain the password again. You will find that a new password has been generated, as shown in the example below:
 
-        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default MY-RELEASE-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
         $ echo $POSTGRES_PASSWORD
         7C91EMpVDH
 
 * Try to log in to PostgreSQL using the new password:
 
-        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image <%= variable :repository_name, :platform %>/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host MY-RELEASE-postgresql -U postgres -d postgres -p 5432
         psql: FATAL:  password authentication failed for user "postgres"
 
 As can be seen above, the credentials available in the Secret are no longer valid to access PostgreSQL after upgrading.
@@ -76,24 +76,24 @@ This issue is resolved by rolling back the chart release. Continuing with the pr
 
 * Obtain the history of the release:
 
-        $ helm history my-release
+        $ helm history MY-RELEASE
         REVISION    UPDATED                    STATUS       CHART               APP VERSION DESCRIPTION
         1           Thu Oct 22 16:12:34 2020   superseded   postgresql-9.8.5    11.9.0      Install complete
         2           Thu Oct 22 16:16:42 2020   deployed     postgresql-9.8.5    11.9.0      Upgrade complete
 
 * Rollback to the first revision:
 
-        $ helm rollback my-release 1
+        $ helm rollback MY-RELEASE 1
         Rollback was a success! Happy Helming!
 
 * Obtain the original credentials and upgrade the release by passing the original credentials to the upgrade process:
 
-        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        $ helm upgrade my-release bitnami/postgresql --set postgresqlPassword=$POSTGRESQL_PASSWORD
+        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default MY-RELEASE-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ helm upgrade MY-RELEASE <%= variable :repository_name, :platform %>/postgresql --set postgresqlPassword=$POSTGRESQL_PASSWORD
 
 * Check the history again:
 
-        $ helm history my-release-2
+        $ helm history MY-RELEASE-2
         REVISION    UPDATED                    STATUS       CHART               APP VERSION DESCRIPTION
         1           Thu Oct 22 16:12:34 2020   superseded   postgresql-9.8.5    11.9.0      Install complete
         2           Thu Oct 22 16:16:42 2020   deployed     postgresql-9.8.5    11.9.0      Upgrade complete
@@ -102,7 +102,7 @@ This issue is resolved by rolling back the chart release. Continuing with the pr
 
 * Log in to PostgreSQL using the original credentials:
 
-        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image bitnami/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host my-release-postgresql -U postgres -d postgres -p 5432
+        $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image <%= variable :repository_name, :platform %>/postgresql:latest --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host MY-RELEASE-postgresql -U postgres -d postgres -p 5432
         ...
         postgres=#
 
@@ -118,29 +118,29 @@ Reproduce the issue by following the steps below:
 
 * Install a chart that uses a Statefulset such as the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and wait for the release to be marked as successful:
 
-        $ helm install my-release bitnami/mariadb --wait
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/mariadb --wait
 
 * Uninstall the release:
 
-        $ helm uninstall my-release
+        $ helm uninstall MY-RELEASE
 
 * List the available PVC(s) to confirm they were not removed:
 
         $ kubectl get pvc
         NAME                        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-        data-my-release-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       1m52s
+        data-MY-RELEASE-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       1m52s
 
 This can cause issues when reinstalling charts that reuse the release name. For instance, following the example shown above:
 
 * Install the Bitnami MariaDB chart again using the same release name:
 
-        $ helm install my-release bitnami/mariadb
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/mariadb
 
 * Helm does not complain since the previous release was uninstalled and therefore no name conflict is detected. However, if the PVCs are listed again, it can be seen that the previous PVCs are being reused:
 
         $ kubectl get pvc
         NAME                        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-        data-my-release-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       4m32s
+        data-MY-RELEASE-mariadb-0   Bound    pvc-ec438751-efa8-4eb2-ad91-f5d808f913ba   8Gi        RWO            standard       4m32s
 
 This is problematic for the same reasons as those listed in [the section related to credentials](#are-you-setting-the-required-credentials-parameters-while-upgrading-a-chart-release).
 
@@ -148,8 +148,8 @@ This is problematic for the same reasons as those listed in [the section related
 
 This issue appears when installing a new release. In other words, it happens before any data is added to the application. Therefore, it can be solved by simply uninstalling the chart, removing the existing PVCs and installing the chart again:
 
-    $ helm uninstall my-release bitnami/mariadb
-    $ kubectl delete pvc data-my-release-mariadb-0
+    $ helm uninstall MY-RELEASE <%= variable :repository_name, :platform %>/mariadb
+    $ kubectl delete pvc data-MY-RELEASE-mariadb-0
 
 #### Permission errors when enabling persistence
 
@@ -163,17 +163,17 @@ The example below analyzes a common issue faced by Bitnami users in this context
 
 * Install a chart that uses a non-root container, such as the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mongodb):
 
-        $ helm install my-release bitnami/mongodb
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/mongodb
 
 * A CrashLoopBackOff error may occur:
 
         $ kubectl get pods
         NAME                                  READY   STATUS             RESTARTS   AGE
-        my-release-mongodb-58f6f48f87-vvc7m   0/1     CrashLoopBackOff   1          48s
+        MY-RELEASE-mongodb-58f6f48f87-vvc7m   0/1     CrashLoopBackOff   1          48s
 
 * Inspect the logs of the container:
 
-        $ kubectl logs my-release-mongodb-58f6f48f87-vvc7m
+        $ kubectl logs MY-RELEASE-mongodb-58f6f48f87-vvc7m
         mongodb 08:56:27.10
         mongodb 08:56:27.11 Welcome to the Bitnami mongodb container
         mongodb 08:56:27.11 Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-mongodb
@@ -185,7 +185,7 @@ The example below analyzes a common issue faced by Bitnami users in this context
 
 * As the log displays a "Permission denied" error, inspect the pod:
 
-        $ kubectl describe pod my-release-mongodb-58f6f48f87-vvc7m
+        $ kubectl describe pod MY-RELEASE-mongodb-58f6f48f87-vvc7m
         ...
         Containers:
           mongodb:
@@ -196,7 +196,7 @@ The example below analyzes a common issue faced by Bitnami users in this context
         Volumes:
           datadir:
             Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
-            ClaimName:  my-release-mongodb
+            ClaimName:  MY-RELEASE-mongodb
             ReadOnly:   false
         ...
 
@@ -213,13 +213,13 @@ To address this challenge, Bitnami charts also support, as an alternative mechan
 
 * Upgrade the chart release enabling the *initContainer* that adapts the permissions:
 
-        $ helm upgrade my-release bitnami/mongodb --set volumePermissions.enabled=true
+        $ helm upgrade MY-RELEASE <%= variable :repository_name, :platform %>/mongodb --set volumePermissions.enabled=true
 
 * List the pods again to confirm that the CrashLoopBackOff error no longer occurs:
 
         $ kubectl get pods
         NAME                                  READY   STATUS    RESTARTS   AGE
-        my-release-mongodb-6d78bdc996-tdj2d   1/1     Running   0          1m31s
+        MY-RELEASE-mongodb-6d78bdc996-tdj2d   1/1     Running   0          1m31s
 
 ### Useful links
 
