@@ -1,0 +1,60 @@
+<%
+=begin
+apps: all
+platforms: tanzu-application-catalog
+id: install
+title: Install the chart
+category: get-started
+weight: 10
+highlight: 20
+=end %>
+
+> NOTE: To install a Helm chart repository, it is necessary to have [Helm previously installed and configured in your cluster](/<%=platform_path %>/faq/get-started/install-configure-helm).
+
+To start using any <%= variable :catalog_name, :platform %> Helm chart, it is necessary to first add the <%= variable :catalog_name, :platform %> Helm chart repository to Helm and then run the *helm install* command to deploy this chart. Follow these steps:
+
+* Add the <%= variable :catalog_name, :platform %> repository to Helm with the following command. Replace the USERNAME and PASSWORD placeholders with the correct username and token.
+
+        $ helm repo add tac https://charts.trials.tac.bitnami.com/demo --username "USERNAME" --password "PASSWORD"
+
+    If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, it is necessary to first  create a Kubernetes ImagePullSecret for *registry.pivotal.io/tac-for-tanzu-advanced* with the registry credentials, and then log in to the registry with the registry credentials. The commands are shown below. Replace the USERNAME and TOKEN placeholders with the correct registry credentials and the SECRET-NAME placeholder with a custom name for the secret.
+
+        $ kubectl create secret docker-registry SECRET-NAME \
+            --docker-server https://registry.pivotal.io/tac-for-tanzu-advanced \
+            --docker-username "USERNAME" \
+            --docker-password "TOKEN"
+        $ export HELM_EXPERIMENTAL_OCI=1
+        $ helm registry login registry.pivotal.io/tac-for-tanzu-advanced/charts
+
+    A Helm chart describes a specific version of a solution, also known as a "release". The "release" includes files with Kubernetes-needed resources and files that describe the installation, configuration, usage and license of a chart.
+
+* Check that your Kubernetes cluster is running by executing the following command:
+
+        $ kubectl cluster-info
+
+* Deploy the chart with the following command:
+
+<% if File.exist?("#{__dir__}/../charts/#{current.app}/install.md.erb") %>
+    > NOTE: Remember that MY-RELEASE is a placeholder. Replace it with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name.
+
+<%= partial "platforms/kubernetes/charts/#{current.app}/install.md.erb" %>
+<%
+data = File.read("#{__dir__}/../charts/#{current.app}/install.md.erb").split("/")
+chart_name = data[1].strip
+%>
+    If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, use the commands below to deploy the chart instead. Replace the SECRET-NAME placeholder with the same Kubernetes ImagePullSecret name used previously.
+
+        $ helm chart pull registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %>:latest
+        $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %>:latest
+        $ helm install MY-RELEASE <%= chart_name %>/ --set "global.imagePullSecrets[0]=SECRET-NAME"
+<% else %>
+    > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name.
+
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/CHART
+
+    If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, use the commands below to deploy the chart instead. Replace the SECRET-NAME placeholder with the same Kubernetes ImagePullSecret name used previously.
+
+        $ helm chart pull registry.pivotal.io/tac-for-tanzu-advanced/charts/CHART:latest
+        $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/CHART:latest
+        $ helm install MY-RELEASE CHART/ --set "global.imagePullSecrets[0]=SECRET-NAME"
+<% end %>

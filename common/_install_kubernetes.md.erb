@@ -1,7 +1,7 @@
 <%
 =begin
 apps: all
-platforms: kubernetes, tanzu-application-catalog
+platforms: kubernetes
 id: install
 title: Install the chart
 category: get-started
@@ -29,8 +29,9 @@ To start using any <%= variable :catalog_name, :platform %> Helm chart, it is ne
     > NOTE: Remember that MY-RELEASE is a placeholder. Replace it with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name.
 
 <%= partial "platforms/kubernetes/charts/#{current.app}/install.md.erb" %>
+
 <% else %>
     > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name.
 
-      $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/CHART
+        $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/CHART
 <% end %>
