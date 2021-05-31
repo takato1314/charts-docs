@@ -1,0 +1,26 @@
+<%
+=begin
+apps: influxdb, zookeeper, spark, etcd, keycloak, kong, grafana, rabbitmq, cert-manager, fluentd, external-dns, spring-cloud-dataflow, nginx-ingress-controller
+platforms: kubernetes
+id: enable_metrics
+title: Enable metrics
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+To export Prometheus metrics, set the *metrics.enabled* parameter to *true* when deploying the chart. Refer to the chart parameters for the default port number.
+
+Metrics can be scraped from within the cluster using any of the following approaches:
+
+* Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
+
+        podAnnotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/path: "/metrics/cluster"
+          prometheus.io/port: "9000"
+
+* Creating a ServiceMonitor or PodMonitor entry (when the Prometheus Operator is available in the cluster)
+* Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
+
+If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.

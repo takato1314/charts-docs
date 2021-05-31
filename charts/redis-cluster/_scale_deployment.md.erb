@@ -1,0 +1,33 @@
+<%
+=begin
+apps: redis-cluster
+platforms: kubernetes
+id: scale_deployment
+title: Scale the cluster horizontally
+category: administration
+weight: 40
+highlight: 40
+=end %>
+
+Scale the deployment via a normal chart upgrade. A job is executed using a post-upgrade hook that allows you to add/remove nodes to the cluster.
+
+The *helm upgrade* command requires the following parameters:
+
+* Set the password used at installation-time using the *password* parameter. If the password was not explicity provided, follow the instructions from the *NOTES.txt* file to get the generated password.
+* Set the *cluster.nodes* parameter to the desired number of nodes. It should not be less than six.
+* Set the *cluster.update.currentNumberOfNodes* parameter to the number of current nodes.
+* Set the *cluster.update.addNodes* parameter to *true*.
+
+The following command demonstrates how to add an extra node. Substitute the PASSWORD placeholder with the original password.
+
+    $ helm upgrade --timeout 600s my-release --set "password=${PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" bitnami/redis-cluster
+
+The cluster will remain up while restarting pods one by one so that the quorum is not lost.
+
+> NOTE: To avoid the creation of the Job that initializes the cluster again, you will need to provide the *cluster.init=false* parameter.
+
+The following command demonstrates another example of scaling down a cluster to 6 nodes. Substitute the PASSWORD placeholder with the original password.
+
+    $ helm upgrade --timeout 600s my-release --set "password=${PASSWORD},cluster.nodes=6"
+
+> IMPORTANT: To ensure optimal operation of the cluster, it is highly recommended to run it with at least six nodes. The cluster can work with only five nodes if needed; however, under this scenario, if a master node crashes twice, no other master node will be available for promotion and the cluster will fail.

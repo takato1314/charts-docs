@@ -2,14 +2,14 @@
 =begin
 apps: rabbitmq
 platforms: kubernetes
-id: scale_out
+id: scale_deployment
 title: Scale the cluster horizontally
 category: administration
 weight: 40
 highlight: 40
 =end %>
 
-To horizontally scale this chart once it has been deployed, two options are available:
+To horizontally scale this deployment, two options are available:
 
 * Use the *kubectl scale* command.
 * Upgrade the chart modifying the *replicaCount* parameter, as shown below:

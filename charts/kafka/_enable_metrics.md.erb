@@ -9,21 +9,19 @@ weight: 20
 highlight: 20
 =end %>
 
-The chart optionally can start two metrics exporters:
+The chart can optionally start two metrics exporters:
 
-* Kafka exporter, to expose Kafka metrics. By default, it uses the port *9308*.
-* JMX exporter, to expose JMX metrics. By default, it uses the port *5556*.
+* Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
+* JMX exporter, to expose JMX metrics. By default, it uses port 5556.
 
-* Whether or not to create a separate Kafka exporter:
+To create a separate Kafka exporter, use the parameter below:
 
-    - metrics.kafka.enabled: false
-    + metrics.kafka.enabled: true
+    metrics.kafka.enabled: true
 
-* Whether or not to expose JMX metrics to Prometheus:
+To expose JMX metrics to Prometheus, use the parameter below:
 
-    - metrics.jmx.enabled: false
-    + metrics.jmx.enabled: true
+    metrics.jmx.enabled: true
 
-* Zookeeper chart metrics configuration:
+* To enable Zookeeper chart metrics, use the parameter below:
 
-    + zookeeper.metrics.enabled: true
+    zookeeper.metrics.enabled: true

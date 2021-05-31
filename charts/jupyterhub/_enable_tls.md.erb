@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-The JupyterHub chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
 
 * Helm generates/manages certificate secrets based on the parameters.
 * User generates/manages certificates separately.
@@ -19,6 +19,6 @@ The JupyterHub chart facilitates the creation of TLS secrets for use with the In
 In the first two cases, a certificate and a key are needed. Files are expected in **.pem* format.
 
 * If using Helm to manage the certificates based on the parameters, please copy these values into the *certificate* and *key* values for a given *ingress.secrets* entry.
-* If managing TLS secrets separately, it is necessary to create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the *ingress.hostname* parameter).
+* If managing TLS secrets separately, it is necessary to create a TLS secret with name *INGRESS_HOSTNAME-tls* (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the *ingress.hostname* parameter).
 * If using self-signed certificates created by Helm, set *ingress.tls* to *true*, and *ingress.certManager* to *false*.
 * If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set *ingress.certManager* boolean to true to enable the corresponding annotations for cert-manager.

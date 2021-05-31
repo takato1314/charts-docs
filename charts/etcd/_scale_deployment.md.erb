@@ -2,14 +2,14 @@
 =begin
 apps: etcd
 platforms: kubernetes
-id: scale_down
-title: Scale down the cluster
+id: scale_deployment
+title: Scale the cluster
 category: administration
 weight: 40
 highlight: 40
 =end %>
 
-To scale down the etcd cluster, two options are available:
+To scale the etcd cluster, two options are available:
 
 - Scale the StatefulSet using the *kubectl scale* command. For instance, to remove a member, use the commands below:
 
@@ -18,7 +18,7 @@ To scale down the etcd cluster, two options are available:
   $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/my-release-etcd
   ~~~
 
-* Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command.. For instance, to remove two members, use the commands below:
+* Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command. For instance, to remove two members, use the commands below:
 
   ~~~
   $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
