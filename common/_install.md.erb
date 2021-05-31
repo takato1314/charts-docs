@@ -9,11 +9,11 @@ weight: 10
 highlight: 20
 =end %>
 
-> NOTE: To install a Helm chart repository it is necessary to have [Helm previously installed and configured in your cluster](/<%=platform_path %>/faq/get-started/install-configure-helm).
+> NOTE: To install a Helm chart repository, it is necessary to have [Helm previously installed and configured in your cluster](/<%=platform_path %>/faq/get-started/install-configure-helm).
 
-To start using any Bitnami Helm chart, it is necessary to first add the Bitnami Helm chart repository to Helm and then run the *helm install* command to deploy this chart. Follow these steps:
+To start using any <%= variable :catalog_name, :platform %> Helm chart, it is necessary to first add the <%= variable :catalog_name, :platform %> Helm chart repository to Helm and then run the *helm install* command to deploy this chart. Follow these steps:
 
-* Add the Bitnami repository to Helm with the following command:
+* Add the <%= variable :catalog_name, :platform %> repository to Helm with the following command:
 
         $ helm repo add bitnami https://charts.bitnami.com/bitnami
 

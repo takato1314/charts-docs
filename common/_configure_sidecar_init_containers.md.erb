@@ -32,7 +32,7 @@ service:
     targetPort: 11311
 ~~~
 
-> NOTE: Bitnami Helm charts already include sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the *--enable-metrics=true* parameter at deployment time. The *sidecars* parameter should therefore only be used for any extra sidecar containers.
+> NOTE: <%= variable :catalog_name, :platform %> Helm charts already include sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the *--enable-metrics=true* parameter at deployment time. The *sidecars* parameter should therefore only be used for any extra sidecar containers.
 
 If additional init containers are needed in the same pod, they can be defined using the *\*.initContainers* parameter. Here is an example:
 
