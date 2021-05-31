@@ -9,7 +9,7 @@ weight: 40
 highlight: 40
 =end %>
 
-Two different approaches are available to back up and restore Bitnami etcd Helm chart deployments on Kubernetes:
+Two different approaches are available to back up and restore <%= variable :catalog_name, :platform %> etcd Helm chart deployments on Kubernetes:
 
 * Back up the data from the source deployment and restore it in a new deployment using etcd's built-in backup/restore tools.
 * Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
@@ -20,7 +20,7 @@ This method involves the following steps:
 
 * Use the *etcdctl* tool to create a snapshot of the data in the source cluster.
 * Make the snapshot available in a Kubernetes PersistentVolumeClaim (PVC) that supports ReadWriteMany access (for example, a PVC created with the NFS storage class)
-* Restore the data snapshot in a new cluster using the Bitnami etcd Helm chart's *startFromSnapshot.existingClaim* and *startFromSnapshot.snapshotFilename* parameters to define the source PVC and source filename for the snapshot.
+* Restore the data snapshot in a new cluster using the <%= variable :catalog_name, :platform %> etcd Helm chart's *startFromSnapshot.existingClaim* and *startFromSnapshot.snapshotFilename* parameters to define the source PVC and source filename for the snapshot.
 
 > NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
 
@@ -39,4 +39,4 @@ This method involves the following steps:
 * Use Velero to restore the backed-up PVs on the destination cluster.
 * Create a new etcd deployment on the destination cluster with the same deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring Bitnami etcd chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-etcd-kubernetes/), which covers both these approaches, for more information.
+Refer to our detailed [tutorial on backing up and restoring etcd chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-etcd-kubernetes/), which covers both these approaches, for more information.

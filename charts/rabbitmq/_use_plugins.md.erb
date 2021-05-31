@@ -7,7 +7,7 @@ title: Use plugins
 category: configuration
 =end %>
 
-The Bitnami Docker RabbitMQ image ships a set of plugins by default. You can use the command below to obtain the whole list.
+The <%= variable :catalog_name, :platform %> Docker RabbitMQ image ships a set of plugins by default. You can use the command below to obtain the whole list.
 
     $ docker run --rm -it <%= variable :repository_name, :platform %>/rabbitmq -- ls /opt/bitnami/rabbitmq/plugins/
 

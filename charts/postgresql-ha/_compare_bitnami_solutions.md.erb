@@ -9,7 +9,7 @@ weight: 40
 highlight: 40
 =end %>
 
-Bitnami offers two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simply and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simply and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
 
 * Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a master-slave topology. The master node has writing permissions while replication is on the slaves nodes which have reading-only permissions.
 * The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, and one master and one slave for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one master and one slave).

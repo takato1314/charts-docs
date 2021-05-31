@@ -11,7 +11,7 @@ highlight: 20
 
 Sometimes, you may want to have WordPress use an external database rather than using the one bundled with the chart. Common use cases include using a managed database service, or using a single database server for all your applications.
 
-The Bitnami WordPress chart supports external databases through its [*externalDatabase.** parameters](https://github.com/bitnami/charts/tree/master/bitnami/wordpress#parameters). When using these parameters, it is important to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
+The <%= variable :catalog_name, :platform %> WordPress chart supports external databases through its [*externalDatabase.** parameters](https://github.com/bitnami/charts/tree/master/bitnami/wordpress#parameters). When using these parameters, it is important to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
 
 An example of the parameters set when deploying the WordPress chart with an external database are shown below:
 

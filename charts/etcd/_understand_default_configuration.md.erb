@@ -11,7 +11,7 @@ highlight: 40
 
 ### Bootstrapping and discovery
 
-The Bitnami etcd chart uses static discovery configured via environment variables to bootstrap the etcd cluster. Based on the number of initial replicas, and using the A records added to the DNS configuration by the headless service, the chart can calculate every advertised peer URL.
+The <%= variable :catalog_name, :platform %> etcd chart uses static discovery configured via environment variables to bootstrap the etcd cluster. Based on the number of initial replicas, and using the A records added to the DNS configuration by the headless service, the chart can calculate every advertised peer URL.
 
 The chart makes use of some extra elements offered by Kubernetes to ensure the bootstrapping is successful:
 
@@ -41,7 +41,7 @@ The probes (readiness & liveness) are delayed 60 seconds by default, to give the
 
 ### Scalability
 
-The Bitnami etcd chart uses etcd reconfiguration operations to add/remove members of the cluster during scaling.
+The <%= variable :catalog_name, :platform %> etcd chart uses etcd reconfiguration operations to add/remove members of the cluster during scaling.
 
 When scaling down, a "pre-stop" lifecycle hook is used to ensure that the *etcdctl member remove* command is executed. The hook stores the output of this command in the persistent volume attached to the etcd pod. This hook is also executed when the pod is manually removed using the *kubectl delete pod* command or rescheduled by Kubernetes for any reason. This implies that the cluster can be scaled up/down without human intervention.
 
@@ -76,7 +76,7 @@ If, for whatever reason, (N-1)/2 members of the cluster fail and the "pre-stop" 
 
 > IMPORTANT: All members should restore using the same snapshot.
 
-The Bitnami etcd chart solves this problem by optionally offering a Kubernetes cron job that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last avalable snapshot.
+The <%= variable :catalog_name, :platform %> etcd chart solves this problem by optionally offering a Kubernetes cron job that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last avalable snapshot.
 
 [Learn how to enable this disaster recovery feature](/<%= platform_path %>/infrastructure/etcd/administration/enable-disaster-recovery).
 

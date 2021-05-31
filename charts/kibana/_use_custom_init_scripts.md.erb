@@ -8,7 +8,7 @@ category: administration
 weight: 60
 =end %>
 
-For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in /docker-entrypoint.init-db. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the initScriptsCM and initScriptsSecret values.
+For advanced operations, the <%= variable :catalog_name, :platform %> Kibana charts allows using custom init scripts that will be mounted in /docker-entrypoint.init-db. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the initScriptsCM and initScriptsSecret values.
 
 ~~~
 elasticsearch.hosts[0]=elasticsearch-host

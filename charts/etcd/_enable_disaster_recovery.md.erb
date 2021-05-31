@@ -9,7 +9,7 @@ weight: 10
 highlight: 10
 =end %>
 
-The Bitnami etcd Helm chart supports automatic disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot.
+The <%= variable :catalog_name, :platform %> etcd Helm chart supports automatic disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot.
 
 Enable this feature with the following parameters:
 
