@@ -1,0 +1,73 @@
+<%
+=begin
+apps: postgresql-ha
+platforms: kubernetes
+id: enable_tls
+title: Enable TLS
+category: administration
+weight: 20
+=end %>
+
+The postgresql-ha chart support two levels of TLS configuration:
+
+* Encrypt traffic between clients and Pgpool
+* Encrypt traffic between Pgpool and PostgreSQL backend nodes
+
+### Encrypt traffic between clients and Pgpool
+
+TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.*` parameters when installing a release. Below you can find detailed information about these parameters:
+
+* `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`
+* `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+* `pgpool.tls.certFilename`: Certificate filename. No defaults.
+* `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+* First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic pgpool-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+* Then, install the chart using the following parameters:
+
+    ```console
+    pgpool.tls.enabled=true
+    pgpool.tls.certificatesSecret="pgpool-tls-secret"
+    pgpool.tls.certFilename="cert.crt"
+    pgpool.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+### Encrypt traffic between Pgpool and PostgreSQL backend nodes
+
+
+TLS for backend connections can be enabled in the chart by specifying the `postgresql.tls.*` parameters while creating a release. Below you can find detailed information about these parameters:
+
+* `postgresql.tls.enabled`: Enable TLS support. Defaults to `false`
+* `postgresql.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+* `postgresql.tls.certFilename`: Certificate filename. No defaults.
+* `postgresql.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+* First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic postgresql-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+* Then, install the chart using the following parameters:
+
+    ```console
+    postgresql.tls.enabled=true
+    postgresql.tls.certificatesSecret="postgresql-tls-secret"
+    postgresql.tls.certFilename="cert.crt"
+    postgresql.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+> Note: you can use the same secret for Pgpool and Postgresql TLS configuration.
