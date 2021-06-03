@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
+This chart facilitates the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
 
 * Helm generates/manages certificate secrets
 * User generates/manages certificates separately
@@ -17,7 +17,9 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 
 In the first two cases, one will need a certificate and a key. They typically look like this:
 
-* Certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+- Certificate files:
+
+    > NOTE: There may be more than one certificate if there is a certificate chain.
 
 ~~~
 -----BEGIN CERTIFICATE-----
@@ -27,7 +29,7 @@ jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
 -----END CERTIFICATE-----
 ~~~
 
-* Keys should look like:
+- Certificate keys:
 
 ~~~
 -----BEGIN RSA PRIVATE KEY-----
@@ -37,8 +39,8 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 -----END RSA PRIVATE KEY-----
 ~~~
 
-If you are going to use Helm to manage the certificates, please copy these values into the certificate and key values for a given ingress.secrets entry.
+If you are going to use Helm to manage the certificates, copy these values into the certificate and key values for a given ingress.secrets entry.
 
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named *wordpress.local-tls* for example).
+If you are going to manage TLS secrets outside of Helm, know that you can create a TLS secret (named *wordpress.local-tls* for example).
 
 Please see this [example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
