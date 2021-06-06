@@ -3,25 +3,23 @@
 apps: cert-manager
 platforms: kubernetes
 id: generate_acme_certificates
-title: Generate TLS certificates using ACME Issuer
+title: Generate TLS certificates using ACME Issuers
 category: configuration
 weight: 40
 highlight: 40
 =end %>
 
-Cert Manager has support to issue certificates using different Issuers. For instance, you can use a public ACME (Automated Certificate Management Environment) server to issue the certificates.
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a public ACME (Automated Certificate Management Environment) server to issue the certificates.
 
-> Note: find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
 
-To configure Cert Manager you need to create an Issuer object, which structure defers depending on the Issuer type. To use ACME, we should include the information of a single account registered in the ACME Certificate Authority server.
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. For ACME, it is necessary to include the information for a single account registered in the ACME Certificate Authority server.
 
-Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains you're trying to generate certificates for. Cert Manager have two different challenges to verify that you are the proprietary of your domain HTTP01 or DNS01, more information [here](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
+Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains for which certificates are being requested. Cert Manager uses two different challenges to verify that you are the owner of your domain: HTTP01 or DNS01. [Learn more about ACME challenges](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
 
-> Note: learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
+> NOTE: Learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
 
-To create a ACME issuer to generate the certificate using Let's Encrypt, declare an Issuer:
-
-- Issuer
+To create a ACME issuer for use with Let's Encrypt, declare an Issuer as shown below:
 
 ~~~
 apiVersion: cert-manager.io/v1alpha2
@@ -33,7 +31,8 @@ spec:
     # You must replace this email address with your own.
     # Let's Encrypt will use this to contact you about expiring
     # certificates, and issues related to your account.
-    email: user@example.com
+    # Replace the EMAIL-ADDRESS placeholder with the correct email account
+    email: EMAIL-ADDRESS
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod
@@ -44,9 +43,9 @@ spec:
           class: nginx
 ~~~
 
-Now, you can use the ClusterIssuer to generate certificates for the applications you want to expose in your K8s cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
 
-After your Ingress resource is ready. Cert Manager begins to verify using HTTP01/DNS01 challenges that you are the proprietary of your own domain. During this verification, you can log the controller to see the process and the status. Moreover, if you list the certificates:
+After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
 
 ~~~
 $ k get certificates
@@ -54,7 +53,7 @@ NAME                     READY   SECRET                   AGE
 letencrypt-ca            False   letencrypt-ca             X
 ~~~
 
-You will see that the ready status is False. This status will change to True when the HTTP01 verification is succesfully and over.
+The status remains False whilst verification is in progress. This status will change to True when the HTTP01 verification is completed successfully.
 
 ~~~
 $ k get certificates

@@ -9,43 +9,44 @@ weight: 40
 highlight: 40
 =end %>
 
-Once you configure an Issuer for Cert Manager (refer to one these two guides to so: [Using a Self-Signed Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [Using a ACME Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. To create this secret, Cert Manager must previously detect that your application is already exposed. One way to do it is using an Ingress Resource to expose the application including the corresponding annotations for Cert Manager.
+Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [an ACME Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. To create this secret, Cert Manager must previously detect that your application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
 
-You have two different options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
+There are two options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
 
-- Deploy another Helm chart with support to expose the application through an Ingress controller. For instance, using the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) you can expose WordPress as explained in [this section](<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
+- Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) and [configure Ingress for WordPress](<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
 
-~~~
-# Set up your ingress.class below (in this example, we are using nginx ingress controller)
-kubernetes.io/ingress.class: nginx
-cert-manager.io/cluster-issuer: letsencrypt-prod
-~~~
+	~~~
+	# Set up your ingress.class below (in this example, we are using nginx ingress controller)
+	kubernetes.io/ingress.class: nginx
+	cert-manager.io/cluster-issuer: letsencrypt-prod
+	~~~
 
-- Create your own ingress resource as shown in the example below:
+- Create your own Ingress resource as shown in the example below:
 
-~~~
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: bitnami-ingress-test
-  annotations:
-    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/issuer: "letsencrypt-prod"
-spec:
-  tls:
-  - hosts:
-    - bitnami.com
-    secretName: letencrypt-ca
-  rules:
-  - host: bitnami.com
-    http:
-      paths:
-      - path: /
-        pathType: Exact
-        backend:
-          service:
-            name: bitnami-ingress-test
-            port:
-              number: 80
-~~~
+	~~~
+	apiVersion: networking.k8s.io/v1
+	kind: Ingress
+	metadata:
+	  name: ingress-test
+	  annotations:
+	    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
+	    kubernetes.io/ingress.class: "nginx"
+	    cert-manager.io/issuer: "letsencrypt-prod"
+	spec:
+	  tls:
+	  - hosts:
+	    - bitnami.com
+	    secretName: letencrypt-ca
+	  rules:
+	  # Replace the DOMAIN placeholder with the correct domain name
+	  - host: DOMAIN
+	    http:
+	      paths:
+	      - path: /
+	        pathType: Exact
+	        backend:
+	          service:
+	            name: ingress-test
+	            port:
+	              number: 80
+	~~~

@@ -3,23 +3,21 @@
 apps: cert-manager
 platforms: kubernetes
 id: generate_self_signed_certificates
-title: Generate TLS certificates using Self Signed Issuer
+title: Generate TLS certificates using Self Signed Issuers
 category: configuration
 weight: 40
 highlight: 40
 =end %>
 
-Cert Manager has support to issue certificates using different Issuers. For instance, you can use a Self Signed to issue the certificates.
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a Self Signed Issuer to issue the certificates.
 
-The SelfSigned issuer doesn’t represent a certificate authority as such, but instead denotes that certificates will “sign themselves” using a given private key.
+The Self Signed issuer doesn’t represent a certificate authority as such, but instead denotes that certificates will "sign themselves" using a given private key.
 
-> Note: find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
 
-To configure Cert Manager you need to create an Issuer object, which structure defers depending on the Issuer type. Self Signed issuer are really easy to configure.
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. Self Signed issuer are really easy to configure.
 
-To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate:
-
-- ClusterIssuer
+To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate, as shown below:
 
 ~~~
 apiVersion: cert-manager.io/v1
@@ -28,11 +26,7 @@ metadata:
   name: letsencrypt-prod
 spec:
   selfSigned: {}
-~~~
-
-- Issuer
-
-~~~
+---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -41,11 +35,7 @@ metadata:
 spec:
   ca:
     secretName: letsencrypt-ca
-~~~
-
-- Certificate
-
-~~~
+---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -61,9 +51,9 @@ spec:
     group: cert-manager.io
 ~~~
 
-Now, you can use the ClusterIssuer to generate certificates for the applications you want to expose in your K8s cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
 
-With our application already exposed using an Ingress resource. Cert Manager will create a secret which the content is the TLS certificate generated.
+After the Ingress resource is ready, Cert Manager will create a secret whose content is the TLS certificate generated. This can be checked as shown below:
 
 ~~~
 $ k get secret --namespace=sandbox
