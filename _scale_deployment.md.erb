@@ -31,14 +31,14 @@ Scale the deployment or StatefulSet via a normal chart upgrade, following the st
 
 > NOTE: These parameters differ per chart, depending on the chart architecture. Refer to the chart documentation for the correct parameter names for your chart.
 
-Here is an example of scaling out an Apache deployment. Substitute the PASSWORD placeholder with the original password and replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+Here is an example of scaling out an Apache deployment. Substitute the PASSWORD placeholder with the original password, the MY-RELEASE placeholder with the correct release name and the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
 
-    $ helm upgrade my-release bitnami/apache \
+    $ helm upgrade MY-RELEASE bitnami/apache \
         --set rootUser.password=PASSWORD \
         --set replicaCount=NUMBER_OF_REPLICAS
 
-Here is another example of scaling out an Elasticsearch StatefulSet. Replace the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
+Here is another example of scaling out an Elasticsearch StatefulSet. Replace the MY-RELEASE placeholder with the correct release name and the NUMBER_OF_REPLICAS placeholder with the total number of nodes required.
 
-    $ helm upgrade my-release bitnami/elasticsearch \
+    $ helm upgrade MY-RELEASE bitnami/elasticsearch \
         --set master.replicas=NUMBER_OF_REPLICAS
 

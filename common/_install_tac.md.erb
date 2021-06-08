@@ -35,7 +35,7 @@ To start using any <%= variable :catalog_name, :platform %> Helm chart, it is ne
 * Deploy the chart with the following command:
 
 <% if File.exist?("#{__dir__}/../charts/#{current.app}/install.md.erb") %>
-    > NOTE: Remember that MY-RELEASE is a placeholder. Replace it with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name.
+    > NOTE: Remember that MY-RELEASE is a placeholder. Replace it with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name. The name must start and end with a lower-case alphanumeric character and can only contain alphanumeric character, '-' or '.'.
 
 <%= partial "platforms/kubernetes/charts/#{current.app}/install.md.erb" %>
 <%
@@ -48,7 +48,7 @@ chart_name = data[1].strip
         $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %>:latest
         $ helm install MY-RELEASE <%= chart_name %>/ --set "global.imagePullSecrets[0]=SECRET-NAME"
 <% else %>
-    > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name.
+    > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name. The name must start and end with a lower-case alphanumeric character and can only contain alphanumeric character, '-' or '.'.
 
         $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/CHART
 

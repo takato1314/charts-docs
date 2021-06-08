@@ -19,20 +19,20 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
 * Wait for the release to complete and execute the following:
 
-        $ export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
-        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default MY-RELEASE-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default MY-RELEASE-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
 * Check the pods to confirm that the chart was successfully deployed:
 
         $ kubectl get pods
         NAME                               READY   STATUS    RESTARTS   AGE
-        my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
-        my-release-postgresql-0                 1/1     Running   0          5m10s
-        my-release-redis-master-0               1/1     Running   0          5m11s
+        MY-RELEASE-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
+        MY-RELEASE-postgresql-0                 1/1     Running   0          5m10s
+        MY-RELEASE-redis-master-0               1/1     Running   0          5m11s
 
 * Perform an upgrade specifying the number of replicas and the credentials used.
 
-        $ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true <%= variable :repository_name, :platform %>/discourse
+        $ helm upgrade MY-RELEASE --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true <%= variable :repository_name, :platform %>/discourse
 
 > NOTE: You need to provide *ReadWriteMany* PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as *persistence.enabled=true* and *persistence.size=10Gi*) and map it to a RWO volume. Then, deploy the Discourse chart using the proper parameters:
 >

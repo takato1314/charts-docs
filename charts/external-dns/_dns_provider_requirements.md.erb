@@ -19,10 +19,10 @@ For instance, to install ExternalDNS on AWS, you need to:
 * Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [this documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
 * Install ExternalDNS chart using the command below:
 
-> Note: Replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
+> Note: Replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zone identifier and name, respectively.
 
 ~~~
-$ helm install my-release \
+$ helm install MY-RELEASE \
   --set provider=aws \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
