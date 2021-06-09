@@ -1,0 +1,42 @@
+<%
+=begin
+apps: spark
+platforms: kubernetes, tanzu-application-catalog
+id: configure_security
+title: Configure security features
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+### Configure SSL communication
+
+In order to enable secure transport between workers and master, deploy the Helm chart with the *ssl.enabled=true* chart parameter.
+
+### Create certificate and password secrets
+
+It is necessary to create two secrets for the passwords and certificates. The names of the two secrets should be configured using the *security.passwordsSecretName* and *security.certificatesSecretName* chart parameters.
+
+#### Create certificates and the certificate secret
+
+To generate the certificates secret, first generate the two certificates and rename them to *spark-keystore.jks* and *spark-truststore.jks*. Use [this script to generate certificates](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) for test purposes if required.
+
+Once the certificates are created, create a secret for them with the file names as keys. The keys must be named *spark-keystore.jks* and *spark-truststore.jks*, and the content must be text in JKS format.
+
+#### Create the password secret
+
+The secret for passwords should have four keys: *rpc-authentication-secret*, *ssl-key-password*, *ssl-keystore-password* and *ssl-truststore-password*.
+
+#### Configure the chart
+
+Once the secrets are created, configure the chart and set the various security-related parameters, including the *security.certificatesSecretName* and  *security.passwordsSecretName* parameters referencing the secrets created previously. Here is an example configuration for chart deployment:
+
+    security.certificatesSecretName=my-secret
+    security.passwordsSecretName=my-passwords-secret
+    security.rpc.authenticationEnabled=true
+    security.rpc.encryptionEnabled=true
+    security.storageEncrytionEnabled=true
+    security.ssl.enabled=true
+    security.ssl.needClientAuth=true
+
+> NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
