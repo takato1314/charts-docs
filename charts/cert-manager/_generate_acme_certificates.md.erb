@@ -48,7 +48,7 @@ Next, use the ClusterIssuer to generate certificates for the applications in you
 After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
 
 ~~~
-$ k get certificates
+$ kubectl get certificates
 NAME                     READY   SECRET                   AGE
 letencrypt-ca            False   letencrypt-ca             X
 ~~~
@@ -56,11 +56,11 @@ letencrypt-ca            False   letencrypt-ca             X
 The status remains False whilst verification is in progress. This status will change to True when the HTTP01 verification is completed successfully.
 
 ~~~
-$ k get certificates
+$ kubectl get certificates
 NAME                     READY   SECRET                   AGE
 letencrypt-ca            True    letencrypt-ca             X
 
-$ k get secrets
+$ kubectl get secrets
 NAME                                  TYPE                                  DATA   AGE
 letencrypt-ca                      kubernetes.io/tls                        3      Xm
 ~~~

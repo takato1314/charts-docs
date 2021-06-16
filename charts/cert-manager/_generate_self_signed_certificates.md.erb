@@ -56,7 +56,7 @@ Next, use the ClusterIssuer to generate certificates for the applications in you
 After the Ingress resource is ready, Cert Manager will create a secret whose content is the TLS certificate generated. This can be checked as shown below:
 
 ~~~
-$ k get secret --namespace=sandbox
+$ kubectl get secret --namespace=sandbox
 NAME                  TYPE                                  DATA   AGE
 letsencrypt-ca        kubernetes.io/tls                     3      Xs
 ~~~
