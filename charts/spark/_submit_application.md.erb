@@ -3,15 +3,17 @@
 apps: spark
 platforms: kubernetes, tanzu-application-catalog
 id: submit_application
-title: Submit an application
-category: administration
-weight: 10
+title: Submit an application to the cluster for processing
+category: get-started
+weight: 50
 =end %>
 
-To submit an application to the cluster use the spark-submit script. You can obtain the script [here](https://github.com/apache/spark/tree/master/bin). For example, to deploy one of the example applications:
+To submit an application to the Apache Spark cluster, use the *spark-submit* script, which is available at [https://github.com/apache/spark/tree/master/bin](https://github.com/apache/spark/tree/master/bin).
 
-    $ ./bin/spark-submit   --class org.apache.spark.examples.SparkPi   --master spark://<master-IP>:<master-cluster-port>   --deploy-mode cluster  ./examples/jars/spark-examples_2.11-2.4.3.jar   1000
+The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the MASTER-IP-ADDRESS and MASTER-PORT placeholders with the correct master IP address and port for your deployment.
 
-Where the master IP and port must be changed by you master IP address and port.
+    $ ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://MASTER-IP-ADDRESS:MASTER-PORT  --deploy-mode cluster  ./examples/jars/spark-examples_2.11-2.4.3.jar 1000
 
-Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).
+For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/).
+
+> NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
