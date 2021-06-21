@@ -1,14 +1,14 @@
 <%
 =begin
 apps: kibana
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: install_plugins
 title: Install plugins
 category: configuration
 weight: 70
 =end %>
 
-The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the plugins value:
+The <%= variable :catalog_name, :platform %> Kibana chart allows you to install a set of plugins at deployment time using the plugins value:
 
 ~~~
 elasticsearch.hosts[0]=elasticsearch-host

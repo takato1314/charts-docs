@@ -1,7 +1,7 @@
 <%
 =begin
 apps: mysql
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: customize_new_instance
 title: Customize a new MySQL instance
 category: configuration
@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image supports the use of custom scripts to initialize a fresh instance.
+The [<%= variable :catalog_name, :platform %> MySQL](https://github.com/bitnami/bitnami-docker-mysql) image supports the use of custom scripts to initialize a fresh instance.
 
 In order to execute the scripts, they must be located inside the chart folder *files/docker-entrypoint-initdb.d* so that they may be consumed as a Kubernetes ConfigMap. The allowed extensions are:
 

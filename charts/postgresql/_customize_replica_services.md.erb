@@ -1,13 +1,13 @@
 <%
 =begin
 apps: postgresql
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: customize_replica_services
 title: Customize replica services
 category: administration
 weight: 50
 =end %>
 
-At the top level, there is a service object which defines the services for both primary and read replicas. For deeper customization, there are service objects for both the primary and read replica types individually. 
+At the top level, there is a service object which defines the services for both primary and read replicas. For deeper customization, there are service objects for both the primary and read replica types individually.
 
 This allows you to override the values in the top level service object so that the primary and read replicas can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read replicas to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the *primary.service* or *readReplicas.service* objects will take precedence over the top level service object.

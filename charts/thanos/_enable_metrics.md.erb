@@ -1,7 +1,7 @@
 <%
 =begin
 apps: thanos
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: enable_metrics
 title: Integrate Thanos with Prometheus and Alertmanager
 category: administration
@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-You can intregrate Thanos with Prometheus & Alertmanager using this chart and the Bitnami Prometheus Operator chart following the steps below:
+You can intregrate Thanos with Prometheus & Alertmanager using this chart and the <%= variable :catalog_name, :platform %> Prometheus Operator chart following the steps below:
 
 > NOTE: In this example we will use MinIO (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -66,11 +66,11 @@ kubectl create namespace monitoring
 helm install prometheus-operator \
     --set prometheus.thanos.create=true \
     --namespace monitoring \
-    bitnami/prometheus-operator
+    <%= variable :repository_name, :platform %>/prometheus-operator
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
-    bitnami/thanos
+    <%= variable :repository_name, :platform %>/thanos
 ~~~
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.

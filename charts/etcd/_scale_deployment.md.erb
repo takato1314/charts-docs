@@ -1,7 +1,7 @@
 <%
 =begin
 apps: etcd
-platforms: kubernetes
+platforms: kubernetes , tanzu-application-catalog
 id: scale_deployment
 title: Scale the cluster
 category: administration
@@ -11,18 +11,18 @@ highlight: 40
 
 To scale the etcd cluster, two options are available:
 
-- Scale the StatefulSet using the *kubectl scale* command. For instance, to remove a member, use the commands below:
+- Scale the StatefulSet using the *kubectl scale* command. For instance, to remove a member, use the commands below. Replace the MY-RELEASE placeholder with the release name.
 
   ~~~
-  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
-  $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/my-release-etcd
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/MY-RELEASE-etcd -o=jsonpath='{.status.replicas}')
+  $ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/MY-RELEASE-etcd
   ~~~
 
 * Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the *helm upgrade* command. For instance, to remove two members, use the commands below:
 
   ~~~
-  $ CURRENT_REPLICAS=$(kubectl get statefulset/my-release-etcd -o=jsonpath='{.status.replicas}')
-  $ helm upgrade my-release bitnami/etcd \
+  $ CURRENT_REPLICAS=$(kubectl get statefulset/MY-RELEASE-etcd -o=jsonpath='{.status.replicas}')
+  $ helm upgrade MY-RELEASE <%= variable :repository_name, :platform %>/etcd \
     --set auth.rbac.rootPassword=ETCD_ROOT_PASSWORD \
     --set replicaCount=$((CURRENT_REPLICAS-2))
   ~~~

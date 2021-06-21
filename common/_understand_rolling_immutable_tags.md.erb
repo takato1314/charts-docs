@@ -1,7 +1,7 @@
 <%
 =begin
 apps: all
-platforms: kubernetes
+platforms: kubernetes, tanzu-application-catalog
 id: understand_rolling_immutable_tags
 title: Understand rolling versus immutable tags
 category: configuration
@@ -11,11 +11,11 @@ highlight: 20
 
 A Docker tag is a label used to uniquely identify a Docker image. It allows users to deploy a specific version of an image. A single image can have multiple tags associated with it.
 
-Every time Bitnami publishes a new version of an image, the associated tags are also updated to make it easier for users to get the latest version.
+Every time a new version of an image is published, the associated tags are also updated to make it easier for users to get the latest version.
 
 ### Rolling tags
 
-Bitnami uses rolling tags (a tag that may not always point to the same image) for its Docker container images. To understand how this works, let's use these container image tags as an example: *3*, *3-debian-10*, *3.4.13*, *3.4.13-debian-10-r8*, *latest*
+<%= variable :catalog_name, :platform %> uses rolling tags (a tag that may not always point to the same image) for its Docker container images. To understand how this works, let's use these container image tags as an example: *3*, *3-debian-10*, *3.4.13*, *3.4.13-debian-10-r8*, *latest*
 
 * The *latest* tag always points to the latest revision of the image.
 * The *3* tag is a rolling tag that always points to the latest v3.x revision.
@@ -24,11 +24,11 @@ Bitnami uses rolling tags (a tag that may not always point to the same image) fo
 
 > TIP: Any tags that do not explicitly specify a distribution, such as *3* or *3.4.13*, should be assumed to refer to Debian 10.
 
-When Bitnami releases container images - typically to upgrade system packages - it fixes bugs or improves the system configuration and also updates container tags to point to the latest revision of the image. Therefore, the rolling tags shown above are dynamic; they will always point to the latest revision or daily release of the corresponding image.
+When <%= variable :catalog_name, :platform %> releases container images - typically to upgrade system packages - it fixes bugs or improves the system configuration and also updates container tags to point to the latest revision of the image. Therefore, the rolling tags shown above are dynamic; they will always point to the latest revision or daily release of the corresponding image.
 
-Continuing with the example above, the *3.4.13* tag might point to v3.4.13 revision 8 today, but it will refer to v3.4.13 revision 9 when Bitnami next updates the container image.
+Continuing with the example above, the *3.4.13* tag might point to v3.4.13 revision 8 today, but it will refer to v3.4.13 revision 9 when the container image is updated next.
 
-The suffix revision number (rXX) is incremented every time that Bitnami releases an updated version of the image for the same version of the application. As explained in the next section, suffixed tags are also known as immutable tags.
+The suffix revision number (rXX) is incremented every time that an updated version of the image for the same version of the application. As explained in the next section, suffixed tags are also known as immutable tags.
 
 ### Immutable tags
 
@@ -38,5 +38,5 @@ A static, or immutable, tag always points to the same image. This is useful when
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist. [Learn more about Bitnami's policy on open CVEs](/<%= platform_path %>/open-cve-policy/).
+<%= variable :catalog_name, :platform %> will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist. [Learn more about <%= variable :catalog_name, :platform %>'s policy on open CVEs](/<%= platform_path %>/open-cve-policy/).
 
