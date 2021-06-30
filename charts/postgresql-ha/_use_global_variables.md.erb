@@ -10,7 +10,7 @@ weight: 50
 
 In more complex scenarios, we may have the following tree of dependencies:
 
-<%= documentation_img '/images/img/platforms/kubernetes/charts/postgresql-ha-global-variables.png', 'PostgreSQL HA Global variables' %>
+<%= documentation_img '/images/img/platforms/kubernetes/charts/postgresql-ha/postgresql-ha-global-variables.png', 'PostgreSQL HA Global variables' %>
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
