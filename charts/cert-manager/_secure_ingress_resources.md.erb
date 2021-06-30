@@ -9,11 +9,11 @@ weight: 40
 highlight: 40
 =end %>
 
-Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [an ACME Issuer](<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
+Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](/<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [an ACME Issuer](/<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
 
 There are two options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
 
-* Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) and [configure Ingress for WordPress](<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
+* Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) and [configure Ingress for WordPress](/<%= platform_path %>/apps/wordpress/configuration/configure-ingress/). To enable the integration with CertManager, set the *ingress.certManager* parameter to *true* and add the annotations below to the *ingress.annotations* parameter:
 
    ~~~
    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
