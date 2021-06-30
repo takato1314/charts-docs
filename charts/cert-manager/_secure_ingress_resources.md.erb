@@ -9,7 +9,7 @@ weight: 40
 highlight: 40
 =end %>
 
-Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](/<%= platform_path %>/infrastructure/cert-manager/configuration/generate-self-signed-certificates) or [an ACME Issuer](/<%= platform_path %>/infrastructure/cert-manager/configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
+Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](../../configuration/generate-self-signed-certificates) or [an ACME Issuer](../../configuration/generate-acme-certificates)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
 
 There are two options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
 
