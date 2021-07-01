@@ -43,7 +43,7 @@ spec:
           class: nginx
 ~~~
 
-Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](/<%= platform_path %>/infrastructure/cert-manager/configuration/secure-ingress-resources).
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](../../configuration/secure-ingress-resources).
 
 After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
 
