@@ -1,0 +1,66 @@
+<%
+=begin
+apps: keycloak
+platforms: kubernetes, tanzu-application-catalog
+id: upgrade_helm3
+title: Use Helm v3 with the chart
+category: administration
+weight: 20
+highlight: 20
+=end %>
+
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+### Changes introduced
+
+* Previous versions of this Helm chart used *apiVersion: v1* (installable by both Helm v2 and v3). This Helm chart was updated to *apiVersion: v2* (installable by Helm v3 only). [Learn more about the *apiVersion* field](https://helm.sh/docs/topics/charts/#the-apiversion-field).
+* The different fields present in the *Chart.yaml* file were reordered alphabetically in a homogeneous way.
+* Dependency information was transferred from the *requirements.yaml* to the *Chart.yaml* file.
+* After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock* file.
+* This chart depends on PostgreSQL 10 instead of PostgreSQL 9. Apart from the changes that are described in this section, there are also other major changes due to the "master/slave" nomenclature being replaced by the "primary/readReplica" nomenclature. [Learn more about this change](https://github.com/bitnami/charts/pull/4385).
+
+### Upgrade considerations
+
+* Upgrading to this version of the chart using Helm v2 is not supported any longer.
+* For chart versions installed with Helm v2 and subsequently requiring upgrade with Helm v3,  refer to the [official Helm documentation about migrating from Helm v2 to v3](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases).
+* Upgrading to this version from a previous one installed with Helm v3 requires reusing the PVC used to hold the PostgreSQL data in your previous release. To do so, follow the instructions below (the following example assumes that the release name is *keycloak*):
+
+  > NOTE: Please, create a backup of your database before running any of those actions.
+
+  * Export secrets and required values:
+
+        $ export KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret --namespace default keycloak-env-vars -o jsonpath="{.data.KEYCLOAK_ADMIN_PASSWORD}" | base64 --decode)
+        $ export KEYCLOAK_MANAGEMENT_PASSWORD=$(kubectl get secret --namespace default keycloak-env-vars -o jsonpath="{.data.KEYCLOAK_MANAGEMENT_PASSWORD}" | base64 --decode)
+        $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+
+  * Delete the PostgreSQL StatefulSet. Notice the usage of the option *--cascade=false*:
+
+        $ kubectl delete statefulsets.apps keycloak-postgresql --cascade=false
+
+  * Upgrade the chart release
+
+        $ helm upgrade keycloak bitnami/keycloak \
+            --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
+            --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
+            --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+            --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+
+  * Force the new StatefulSet to create a new Pod for PostgreSQL:
+
+        $ kubectl delete pod keycloak-postgresql-0
+
+  * Confirm that you see the lines below in the PostgreSQL container logs:
+
+        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+        ...
+        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+        ...
+
+### Useful links
+
+If you encounter difficulties when upgrading the chart due to the different versions of Helm, refer to the following links for possible explanations and solutions:
+
+* [https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/)
+* [https://helm.sh/docs/topics/v2_v3_migration/](https://helm.sh/docs/topics/v2_v3_migration/)
+* [https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)

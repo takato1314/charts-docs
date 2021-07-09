@@ -1,0 +1,24 @@
+<%
+=begin
+apps: keycloak
+platforms: kubernetes, tanzu-application-catalog
+id: use_external_database
+title: Use an external database
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+Sometimes, you may want to have Keycloak connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications.
+
+To do so, specify credentials for the external database using the *externalDatabase* parameter. It is also necessary to disable the default PostgreSQL installation by setting the *postgresql.enabled` option to *false*. Here is an example:
+
+    postgresql.enabled=false
+    externalDatabase.host=myexternalhost
+    externalDatabase.port=5432
+    externalDatabase.user=myuser
+    externalDatabase.password=mypassword
+    externalDatabase.database=mydatabase
+
+> NOTE: If you disable PostgreSQL per above, it is mandatory to supply values for the *externalDatabase.\** parameters.
+
