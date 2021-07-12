@@ -11,8 +11,9 @@ weight: 80
 There are cases where you may want to deploy extra objects, such a *ConfigMap* containing your application configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the *extraDeploy* parameter. The following example would create a *ConfigMap* including some application configuration. The application will be mounted in the ASP.NET Core application container:
 
 ~~~
-extraDeploy: |-
-  - apiVersion: v1
+extraDeploy:
+  - |
+    apiVersion: v1
     kind: ConfigMap
     metadata:
       name: aspnet-core-configuration
