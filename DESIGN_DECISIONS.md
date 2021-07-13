@@ -7,10 +7,16 @@ Use the following format for contributing to this document:
 ```
   ## YYYY-MM-DD: <Title for the design decision>
 
-  **TL;DR:** <brief summary> 
+  **TL;DR:** <brief summary>
 
   <Reasoning and explanation, putting any related issues and PRs (if any)>
 ```
+
+## 2021-02-25: Add diagnostic mode
+
+**TL;DR:** We added a new common value to our charts that enables a "Diagnostic mode", which will deploy all pods with an empty command and with all probes disabled. The aim of this mode is to ease debugging.
+
+Checking our support cases, we found that users found extremely difficult to debug and troubleshoot cases where deployments (especially infrastructure ones) got corrupted and ended in a infinite CrashLoopBackOff loop. In this kind of scenarios, it is mandatory to enter the containers and manually fix the installations. In order to ease that, we enabled a diagnostic mode that will deploy the installation without probes and with a "sleep infinity" command. Thanks to this, users will be able to easily access and fix their broken installations.
 
 ## 2021-02-25: Replace `bitnami/minideb` by `bitnami/bitnami-shell`
 
