@@ -2,20 +2,20 @@
 =begin
 apps: mongodb, postgresql-ha, redis, mariadb-galera
 platforms: kubernetes, tanzu-application-catalog
-id: diagnostic_mode
-title: Diagnostic mode
-category: administration
+id: enable_diagnostic_mode
+title: Enable diagnostic mode
+category: troubleshooting
 weight: 80
 =end %>
 
-Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a CrashLoopBackOff restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. In order to ease this, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and args with "sleep infinity".
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with *sleep infinity*.
 
-To activate the "Diagnostic mode" upgrade the release with the following command substituting the MY-RELEASE placeholder with the release name:
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the MY-RELEASE placeholder with the release name:
 
     $ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
 
-It is also possible to change the default "sleep infinity" command by setting the *diagnosticMode.command* and *diagnosticMode.args* values.
+It is also possible to change the default *sleep infinity* command by setting the *diagnosticMode.command* and *diagnosticMode.args* values.
 
-Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command substituting the MY-CONTAINER placeholder with the container name:
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the MY-CONTAINER placeholder with the container name:
 
      $ kubectl exec -ti MY-CONTAINER -- bash
