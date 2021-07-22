@@ -1,0 +1,101 @@
+<%
+=begin
+apps: logstash
+platforms: kubernetes, tanzu-application-catalog
+id: use_multiple_pipelines
+title: Create and use multiple pipelines
+category: configuration
+weight: 30
+=end %>
+
+The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the *enableMultiplePipelines* parameter to *true*.
+
+To do this, place the *pipelines.yml* file in the *files/conf* directory, together with the rest of the desired configuration files. If the *enableMultiplePipelines* parameter is set to *true* but the *pipelines.yml* file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
+
+The chart also supports setting an external ConfigMap with all the configuration filesvia the *existingConfiguration* parameter.
+
+Here is an example of creating multiple pipelines using a ConfigMap:
+
+* Create a ConfigMap with the configuration files:
+
+  ```bash
+  $ cat bye.conf
+  input {
+    file {
+      path => "/tmp/bye"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat hello.conf
+  input {
+    file {
+      path => "/tmp/hello"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat pipelines.yml
+  - pipeline.id: hello
+    path.config: "/opt/bitnami/logstash/config/hello.conf"
+  - pipeline.id: bye
+    path.config: "/opt/bitnami/logstash/config/bye.conf"
+
+  $ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
+  ```
+
+* Deploy the Helm chart with the *enableMultiplePipelines* parameter:
+
+  ```bash
+  $ helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
+  ```
+
+  Here is an example of the output you should see:
+
+  ```bash
+  $ kubectl logs -f logstash-0
+  logstash 12:57:43.51 INFO  ==> ** Starting Logstash setup **
+  logstash 12:57:43.54 INFO  ==> Initializing Logstash server...
+  logstash 12:57:43.56 INFO  ==> Mounted config directory detected
+  logstash 12:57:43.62 INFO  ==> User's pipelines file detected.
+  logstash 12:57:43.63 INFO  ==> ** Logstash setup finished! **
+  logstash 12:57:43.64 INFO  ==> ** Starting Logstash **
+  logstash 12:57:43.64 INFO  ==> Starting logstash using pipelines file (pipelines.yml)
+  ...
+  [2020-11-25T12:58:23,802][INFO ][logstash.javapipeline    ][bye] Pipeline started {"pipeline.id"=>"bye"}
+  [2020-11-25T12:58:23,810][INFO ][logstash.javapipeline    ][hello] Pipeline started {"pipeline.id"=>"hello"}
+  [2020-11-25T12:58:23,931][INFO ][logstash.agent           ] Pipelines running {:count=>2, :running_pipelines=>[:bye, :hello], :non_running_pipelines=>[]}
+  ```
+
+* Create dummy events in the tracked files and check the result in the Logstash output:
+
+  ```bash
+  $ kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
+  $ kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
+  ```
+
+  Confirm that the events reflect in the log output:
+
+  ```bash
+  $ kubectl logs -f logstash-0
+  ...
+  [2020-11-25T12:58:24,535][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=>9600}
+  {
+        "@version" => "1",
+      "@timestamp" => 2020-11-25T12:59:39.624Z,
+            "path" => "/tmp/hello",
+            "host" => "logstash-0",
+        "message" => "hi"
+  }
+  {
+        "@version" => "1",
+      "@timestamp" => 2020-11-25T12:59:54.351Z,
+            "path" => "/tmp/bye",
+            "host" => "logstash-0",
+        "message" => "bye"
+  }
+  ```
