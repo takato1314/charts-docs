@@ -1,0 +1,21 @@
+<%
+=begin
+apps: prometheus-operator
+platforms: kubernetes, tanzu-application-catalog
+id: customize_alert_configurations
+title: Customize alert relabel configurations
+category: configuration
+weight: 100
+=end %>
+
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting *prometheus.additionalAlertRelabelConfigsExternal.enabled* to *true*. The secret must exist in the same namespace as the deployment.
+
+Set the secret name using the parameter *prometheus.additionalAlertRelabelConfigsExternal.name*, and the key containing the additional alert relabel configuration using the *prometheus.additionalAlertRelabelConfigsExternal.key*.
+
+For instance, if you created a secret named *kube-prometheus-prometheus-alert-relabel-config* and it contains a file named *additional-alert-relabel-configs.yaml*, use the parameters below:
+
+```
+prometheus.additionalAlertRelabelConfigsExternal.enabled=true
+prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
+prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
+```
