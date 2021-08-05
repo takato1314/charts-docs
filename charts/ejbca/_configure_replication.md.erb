@@ -1,0 +1,18 @@
+<%
+=begin
+apps: ejbca
+platforms: kubernetes, tanzu-application-catalog
+id: configure_replication
+title: Configure replication
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+By default, this chart only deploys a single pod running EJBCA. To increase the number of replicas, follow the steps below:
+
+1. Create a conventional release with only one replica. This will be scaled later.
+2. Wait for the release to complete and for EJBCA to be running. Verify access to the main page of the application.
+3. Perform an upgrade specifying the number of replicas and the credentials that were previously used. Set the parameters *replicaCount*, *ejbcaAdminPassword* and *mariadb.auth.password* accordingly.
+
+For example, for a release using *secretPassword* and *dbPassword* to scale up to a total of 2 replicas, the parameters used should be *replicaCount=2*, *ejbcaAdminPassword=secretPassword*, *mariadb.auth.password=dbPassword*.
