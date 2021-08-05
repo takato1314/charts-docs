@@ -1,0 +1,65 @@
+<%
+=begin
+apps: haproxy
+platforms: kubernetes, tanzu-application-catalog
+id: configure_proxy
+title: Configure the proxy service
+category: get-started
+weight: 40
+=end %>
+
+By default, HAProxy is deployed with a sample, non-functional, configuration. Edit the following values to adapt it to your use case:
+
+* Set the configuration to be injected in the *haproxy.cfg* file by changing the *configuration* parameter. Alternatively, provide an existing ConfigMap with *haproxy.cfg* by using the *existingConfigmap* parameter.
+
+  The example below configures HAProxy to forward all requests to port 8080 to a service called *service1:8080* (it is assumed that this is accessible from inside the cluster).
+
+  ```yaml
+  configuration: |
+    global
+      log 127.0.0.1 local2
+      maxconn 4096
+
+    defaults
+      mode http
+      log global
+      option httplog
+      option dontlognull
+      option http-server-close
+      option forwardfor except 127.0.0.0/8
+      option redispatch
+      retries 3
+      timeout http-request 20s
+      timeout queue 1m
+      timeout connect 10s
+      timeout client 1m
+      timeout server 1m
+      timeout http-keep-alive 30s
+      timeout check 10s
+      maxconn 3000
+
+    frontend fe_http
+      option forwardfor except 127.0.0.1
+      option httpclose
+      bind *:8080
+      default_backend be_http
+
+    backend be_http
+      balance roundrobin
+      server nginx service:8080 check port 8080
+  ```
+
+* Based on your HAProxy configuration, edit the *containerPorts* and *service.ports* parameters. Set all the ports that the HAProxy configuration uses in the *containerPorts* parameter, and set the ports to be externally exposed in the *service.ports* parameter.
+
+  For the example above, the configuration would look like this:
+
+  ```yaml
+  service:
+    - name: http
+      port: 80 # We use port 80 in the service
+      targetPort: http
+
+  containerPorts:
+    - name: http
+      containerPort: 8080
+  ```
