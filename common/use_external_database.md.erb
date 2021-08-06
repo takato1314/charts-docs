@@ -11,6 +11,10 @@ An example of the parameters set when deploying the chart with an external datab
     externalDatabase.user=myuser
     externalDatabase.password=mypassword
     externalDatabase.database=mydatabase
+<% if current.app == 'discourse' %>
+    externalDatabase.postgresqlPostgresUser=postgres
+    externalDatabase.postgresqlPostgresPassword=rootpassword
+<% end %>
 <% else %>
 When using these parameters, it is necessary to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
 
