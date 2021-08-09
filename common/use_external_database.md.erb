@@ -1,0 +1,32 @@
+Sometimes, you may want to have the chart use an external database rather than using the one bundled with the chart. Common use cases include using a managed database service, or using a single database server for all your applications. This chart supports external databases through its *externalDatabase.\** parameters.
+
+<% if var[:db] == 'postgres' %>
+When using these parameters, it is necessary to disable installation of the bundled PostgreSQL database using the *postgresql.enabled=false* parameter.
+
+An example of the parameters set when deploying the chart with an external database are shown below:
+
+    postgresql.enabled=false
+    externalDatabase.host=myexternalhost
+    externalDatabase.port=5432
+    externalDatabase.user=myuser
+    externalDatabase.password=mypassword
+    externalDatabase.database=mydatabase
+<% if current.app == 'discourse' %>
+    externalDatabase.postgresqlPostgresUser=postgres
+    externalDatabase.postgresqlPostgresPassword=rootpassword
+<% end %>
+<% else %>
+When using these parameters, it is necessary to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
+
+An example of the parameters set when deploying the chart with an external database are shown below:
+
+  mariadb.enabled=false
+  externalDatabase.host=myexternalhost
+  externalDatabase.user=myuser
+  externalDatabase.password=mypassword
+  externalDatabase.database=mydatabase
+  externalDatabase.port=3306
+<% end %>
+
+> NOTE: If disabling the bundled database server as described above, it is mandatory to supply values for the *externalDatabase.\** parameters.
+

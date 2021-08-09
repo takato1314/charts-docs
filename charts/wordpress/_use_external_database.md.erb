@@ -3,28 +3,13 @@
 apps: wordpress
 platforms: kubernetes, tanzu-application-catalog
 id: use_external_database
-title: Use an external database for WordPress
+title: Use an external database
 category: configuration
 weight: 20
 highlight: 20
 =end %>
 
-Sometimes, you may want to have WordPress use an external database rather than using the one bundled with the chart. Common use cases include using a managed database service, or using a single database server for all your applications.
-
-The <%= variable :catalog_name, :platform %> WordPress chart supports external databases through its [*externalDatabase.** parameters](https://github.com/bitnami/charts/tree/master/bitnami/wordpress#parameters). When using these parameters, it is important to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
-
-An example of the parameters set when deploying the WordPress chart with an external database are shown below:
-
-~~~
-mariadb.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-externalDatabase.port=3306
-~~~
-
-> NOTE: If disabling the bundled MariaDB server as described above, it is mandatory to supply values for the *externalDatabase.**parameters.
+<%= partial 'platforms/kubernetes/common/use_external_database.md.erb', var: { db: 'mariadb' } %>
 
 If the database already contains data from a previous WordPress installation, set the *wordpressSkipInstall* parameter to *true*. This parameter forces the container to skip the WordPress installation wizard. Otherwise, the container will assume it is a fresh installation and execute the installation wizard, potentially modifying or resetting the data in the existing database.
 
