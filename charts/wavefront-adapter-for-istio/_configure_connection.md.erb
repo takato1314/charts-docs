@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-The Wavefront Adapter for Istio chart needs to be connected to a Wavefront instance. This can be done in three different ways:
+This chart needs to be connected to a Wavefront instance. This can be done in three different ways:
 
 * Deploying the Wavefront subchart using only the Wavefront Proxy component (default behavior): This is done by setting the *wavefront.enabled=true* and *wavefront.proxy.enabled=true* chart parameters. In this case, the *externalProxy.host* value should be left unset. Configure the Wavefront SaaS URL and token using the *wavefont.wavefront.url* and *wavefront.wavefront.token* parameters. Here is an example (remember to replace the WAVEFRONT-URL and WAVEFRONT-TOKEN placeholders with the correct URL and token):
 
@@ -32,7 +32,7 @@ The Wavefront Adapter for Istio chart needs to be connected to a Wavefront insta
         token: WAVEFRONT-TOKEN
     ```
 
-  > NOTE: Under this approach, it is recommended to disable the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter.
+  > NOTE: Under this approach, it is recommended to disable the rest of the Wavefront sub-chart resources as they would not be used.
 
 * Using an external Wavefront Proxy instance: This is done by setting the *externalProxy.host* and *externalProxy.port* values. In this case, set the *wavefront.enabled* value to *false*. Configure the Wavefront SaaS URL and token using the *wavefont.wavefront.url* and *wavefront.wavefront.token* parameters. Here is an example (remember to replace the WAVEFRONT-URL and WAVEFRONT-TOKEN placeholders with the correct URL and token):
 
@@ -47,4 +47,4 @@ The Wavefront Adapter for Istio chart needs to be connected to a Wavefront insta
         token: WAVEFRONT-TOKEN
     ```
 
-* Use direct ingestion without a Wavefront Proxy instance: This is done by not setting the *externalProxy.\** values and setting the *wavefront.enabled` value to *false*.
+* Use direct ingestion without a Wavefront Proxy instance: This is done by not setting the *externalProxy.\** values and setting the *wavefront.enabled* value to *false*.
