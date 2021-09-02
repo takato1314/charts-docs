@@ -46,7 +46,7 @@ The Grafana Operator chart deploys a Grafana Operator installation using a Kuber
             +-----------------+
 ```
 
-The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboard* and *GrafanaDataSource*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using *kubectl*:
+The Operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboard* and *GrafanaDataSource*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using *kubectl*:
 
 ```
 +--------------------+
@@ -89,3 +89,4 @@ This Grafana Operator chart allows users to easily deploy multiple Grafana insta
 
 > NOTE: As the Operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
+[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
