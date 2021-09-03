@@ -13,4 +13,4 @@ To modify the application version used in this chart, specify a different versio
 
 To obtain a list of valid image tags, refer to the corresponding container repository for the image, or refer to the [list of available container images](https://bitnami.com/stacks/containers).
 
-When configuring the *image.tag* parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the *global.imagePullSecrets* parameter in a *values.yaml* file (it cannot be passed using the *--set* parameter).
+When configuring the *image.tag* parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the *global.imagePullSecrets* parameter.
