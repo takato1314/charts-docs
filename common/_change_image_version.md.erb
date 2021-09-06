@@ -9,6 +9,8 @@ weight: 40
 highlight: 40
 =end %>
 
-To modify the application version used in this chart, specify a [different image tag](https://hub.docker.com/u/bitnami) using the *image.tag* parameter. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the *image.tag* parameter and/or a different repository using the *image.repository* parameter. This approach is also applicable to other images like exporters.
 
-To obtain a list of valid image tags, refer to the corresponding container repository for the image, or refer to [list of available container images](https://bitnami.com/stacks/containers).
+To obtain a list of valid image tags, refer to the corresponding container repository for the image, or refer to the [list of available container images](https://bitnami.com/stacks/containers).
+
+When configuring the *image.tag* parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the *global.imagePullSecrets* parameter.
