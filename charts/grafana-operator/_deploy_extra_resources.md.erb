@@ -1,0 +1,52 @@
+<%
+=begin
+apps: grafana-operator
+platforms: kubernetes, tanzu-application-catalog
+id: deploy_extra_resources
+title: Deploy extra resources
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+There are cases where it may be necessary to deploy extra objects, such a ConfigMap containing application configuration or an extra deployment with a micro-service used by an application. For these cases, this chart supports adding the full specification of other objects via the *extraDeploy* parameter.
+
+For instance, to deploy a custom Grafana definition, install the Grafana Operator chart using the values below:
+
+```yaml
+grafana:
+  enabled: false
+extraDeploy:
+  - apiVersion: integreatly.org/v1alpha1
+    baseImage: docker.io/bitnami/grafana:7
+    kind: Grafana
+    metadata:
+      name: grafana
+    spec:
+      deployment:
+        securityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+        containerSecurityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+          allowPrivilegeEscalation: false
+      service:
+        type: LoadBalancer
+      ingress:
+        enabled: false
+      config:
+        log:
+          mode: "console"
+          level: "warn"
+        security:
+          admin_user: "admin"
+          admin_password: "hello"
+        auth.anonymous:
+          enabled: true
+      dashboardLabelSelector:
+        - matchExpressions:
+            - { key: app, operator: In, values: [grafana] }
+```
+
+[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
