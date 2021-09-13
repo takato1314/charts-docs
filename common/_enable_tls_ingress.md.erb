@@ -14,7 +14,7 @@ This chart facilitates the creation of TLS secrets for use with the Ingress cont
 * Generate certificate secrets based on chart parameters.
 * Enable externally generated certificates.
 * Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
-<% if %w(jenkins kubeapps rabbitmq).include? current.app %>
+<% if %w(argo-cd jenkins ghost kubeapps odoo rabbitmq redmine sealed-secrets).include? current.app %>
 * Create self-signed certificates within the chart.
 <% end %>
 
@@ -45,6 +45,6 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 * If using Helm to manage the certificates based on the parameters, copy these values into the *certificate* and *key* values for a given *ingress.secrets* entry.
 * If managing TLS secrets separately, it is necessary to create a TLS secret with name *INGRESS_HOSTNAME-tls* (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the *ingress.hostname* parameter).
 * If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set *ingress.certManager* to true to enable the corresponding annotations for cert-manager.
-<% if %w(jenkins kubeapps rabbitmq).include? current.app %>
+<% if %w(argo-cd jenkins ghost kubeapps odoo rabbitmq redmine sealed-secrets).include? current.app %>
 * If using self-signed certificates created by Helm, set both *ingress.tls* and *ingress.selfSigned* to *true*.
 <% end %>
