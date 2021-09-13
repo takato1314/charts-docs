@@ -14,7 +14,7 @@ This chart facilitates the creation of TLS secrets for use with the Ingress cont
 * Generate certificate secrets based on chart parameters.
 * Enable externally generated certificates.
 * Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
-<% if %w(jenkins kubeapps rabbitmq).include? current.app %>
+<% if %w(argo-cd jenkins ghost kubeapps odoo rabbitmq redmine sealed-secrets).include? current.app %>
 * Create self-signed certificates within the chart.
 <% end %>
 
