@@ -3,12 +3,12 @@
 apps: kibana
 platforms: kubernetes, tanzu-application-catalog
 id: use_custom_init_scripts
-title: Use custom init scripts
+title: Use custom initialization scripts
 category: administration
 weight: 60
 =end %>
 
-For advanced operations, the <%= variable :catalog_name, :platform %> Kibana charts allows using custom init scripts that will be mounted in /docker-entrypoint.init-db. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the initScriptsCM and initScriptsSecret values.
+For advanced operations, this chart allows using custom initialization scripts that will be mounted in */docker-entrypoint.init-db*. Mount these extra scripts using a ConfigMap or a Secret (in case of sensitive data) and specify them via the *initScriptsCM* and *initScriptsSecret* chart parameters, as shown below:
 
 ~~~
 elasticsearch.hosts[0]=elasticsearch-host
