@@ -1,0 +1,16 @@
+<%
+=begin
+apps: metrics-server
+platforms: kubernetes, tanzu-application-catalog
+id: enable_rbac
+title: Enable RBAC
+category: administration
+weight: 10
+highlight: 10
+=end %>
+
+To enable Role-Based Access Control (RBAC), set the following chart parameter:
+
+~~~
+rbac.create=true
+~~~
