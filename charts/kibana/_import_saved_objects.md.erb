@@ -8,6 +8,14 @@ category: configuration
 weight: 100
 =end %>
 
-If you have visualizations and dashboards (in NDJSON format) that you want to import to Kibana. You can create a ConfigMap that includes them and then install the chart with the savedObjects.configmap value: savedObjects.configmap=my-import
+If you have visualizations and dashboards (in NDJSON format) to import to Kibana, create a ConfigMap that includes them and then install the chart with the *savedObjects.configmap* chart parameter, as shown below:
 
-Alternatively, if it is available via URL, you can install the chart as follows: savedObjects.urls[0]=www.my-site.com/import.ndjson
+```
+savedObjects.configmap=my-import
+```
+
+Alternatively, if the saved objects are available at a URL, import them with the *savedObjects.urls* chart parameter, as shown below:
+
+```
+savedObjects.urls[0]=www.my-site.com/import.ndjson
+```
