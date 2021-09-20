@@ -28,8 +28,8 @@ This method involves the following steps:
 
 This method involves copying the persistent data volumes for the etcd nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
 
-* The Kubernetes provider is [supported by Velero](https://velero.io/docs/master/supported-providers/).
-* Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/v1.5/migration-case/).
+* The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+* Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
 * The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
 
 This method involves the following steps:
