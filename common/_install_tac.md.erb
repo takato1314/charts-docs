@@ -13,7 +13,7 @@ highlight: 20
 
 To start using any <%= variable :catalog_name, :platform %> Helm chart, it is necessary to first add the <%= variable :catalog_name, :platform %> Helm chart repository to Helm and then run the *helm install* command to deploy this chart. Follow these steps:
 
-* Add the <%= variable :catalog_name, :platform %> repository to Helm with the following command. Replace the USERNAME and PASSWORD placeholders with the correct username and token and the REGISTRY placeholder with a reference to your Tanzu Application Catalog container registry.
+* Add the <%= variable :catalog_name, :platform %> repository to Helm with the following command. Replace the USERNAME and PASSWORD placeholders with the correct username and token and the REPOSITORY placeholder with a reference to your Tanzu Application Catalog chart repository.
 
         $ helm repo add tac REPOSITORY --username "USERNAME" --password "PASSWORD"
 
