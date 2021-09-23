@@ -9,26 +9,32 @@ weight: 20
 highlight: 20
 =end %>
 
-### Default: Master-Slave
+#### Default: Master-Replicas
 
-When installing the chart with *cluster.enabled=true*, it will deploy a Redis master StatefulSet (only one master node allowed) and a Redis slave StatefulSet. The slaves will be read-replicas of the master. Two services will be exposed:
+When installing the chart with *architecture=replication*, it will deploy a Redis&trade; master StatefulSet (only one master node allowed) and a Redis&trade; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
 
-* Redis Master service: Points to the master, where read-write operations can be performed
-* Redis Slave service: Points to the slaves, where only read operations are allowed.
+- Redis&trade; Master service: Points to the master, where read-write operations can be performed
+- Redis&trade; Replicas service: Points to the replicas, where only read operations are allowed.
 
-In case the master crashes, the slaves will wait until the master node is respawned again by the Kubernetes Controller Manager.
+In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
-### Master-Slave with Sentinel
+#### Standalone
 
-When installing the chart with *cluster.enabled=true* and *sentinel.enabled=true*, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain en extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with *architecture=standalone*, it will deploy a standalone Redis&trade; StatefulSet (only one node allowed) and a Redis&trade; replicas StatefulSet. A single service will be exposed:
 
-* Redis service: Exposes port 6379 for Redis read-only operations and port 26379 for accessing Redis Sentinel.
+- Redis&trade; Master service: Points to the master, where read-write operations can be performed
 
-  For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis Sentinel cluster and query the current master using the command below (using redis-cli or similar):
+#### Master-Replicas with Sentinel
 
-  ~~~
-  SENTINEL get-master-addr-by-name <name of your MasterSet. Example: mymaster>
-  ~~~
+When installing the chart with *architecture=replication* and *sentinel.enabled=true*, it will deploy a Redis&trade; master StatefulSet (only one master allowed) and a Redis&trade; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&trade; Sentinel. This container will form a cluster of Redis&trade; Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+
+- Redis&trade; service: Exposes port 6379 for Redis&trade; read-only operations and port 26379 for accessing Redis&trade; Sentinel.
+
+For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis&trade; Sentinel cluster and query the current master using the command below (using redis-cli or similar):
+
+```
+SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
+```
 
 This command will return the address of the current master, which can be accessed from inside the cluster.
 
