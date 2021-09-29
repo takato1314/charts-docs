@@ -1,0 +1,12 @@
+<%
+=begin
+apps: spring-cloud-dataflow
+platforms: kubernetes, tanzu-application-catalog
+id: customize_skipper_server
+title: Customize the configuration of the Skipper server
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+This Helm chart supports using custom configuration for the Skipper server. Specify the configuration for the Dataflow server by setting the *skipper.existingConfigmap* parameter to an external ConfigMap with the configuration file.
