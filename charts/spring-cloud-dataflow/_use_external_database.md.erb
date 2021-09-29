@@ -1,0 +1,25 @@
+<%
+=begin
+apps: spring-cloud-dataflow
+platforms: kubernetes, tanzu-application-catalog
+id: use_external_database
+title: Use an external database
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+<%= partial 'platforms/kubernetes/common/use_external_database.md.erb', var: { db: 'mariadb'} %>
+
+> NOTE: When using the individual properties (scheme, host, port, database, optional JDBC parameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database driver but may not work for other database vendors.
+
+To use an alternate database vendor (other than MariaDB) you can use the *externalDatabase.dataflow.url* and *externalDatabase.skipper.url* properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. Here is an example of configuring an external MS-SQL Server database:
+
+  ```console
+  mariadb.enabled=false
+  externalDatabase.password=mypassword
+  externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
+  externalDatabase.dataflow.user=mydataflowuser
+  externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
+  externalDatabase.skipper.user=myskipperuser
+  externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect

@@ -1,0 +1,31 @@
+<%
+=begin
+apps: spring-cloud-dataflow
+platforms: kubernetes, tanzu-application-catalog
+id: disable_streaming_batch_features
+title: Disable streaming or batch features
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+
+To deploy only tasks and schedules, streaming and Skipper can be disabled by setting the *server.configuration.streamingEnabled*, *skipper.enabled* and *rabbitmq.enabled* parameters to *false*. Here is an example:
+
+```console
+server.configuration.batchEnabled=true
+server.configuration.streamingEnabled=false
+skipper.enabled=false
+rabbitmq.enabled=false
+```
+
+To deploy only streams, tasks and schedules can be disabled by setting the *server.configuration.batchEnabled* parameter to *false*. Here is an example:
+
+```console
+server.configuration.batchEnabled=false
+server.configuration.streamingEnabled=true
+skipper.enabled=true
+rabbitmq.enabled=true
+```
+
+> NOTE: Both *server.configuration.batchEnabled* and *server.configuration.streamingEnabled* should not be set to *false* at the same time.

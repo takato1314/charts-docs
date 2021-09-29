@@ -1,0 +1,21 @@
+<%
+=begin
+apps: spring-cloud-dataflow
+platforms: kubernetes, tanzu-application-catalog
+id: change_messaging_layer
+title: Change the messaging layer
+category: configuration
+weight: 20
+highlight: 20
+=end %>
+
+There are two supported messaging solutions in this chart: RabbitMQ (default) and Kafka.
+
+To change the messaging layer to Kafka, use the the following configuration:
+
+```console
+rabbitmq.enabled=false
+kafka.enabled=true
+```
+
+> NOTE: Only one messaging layer can be used at a given time.
