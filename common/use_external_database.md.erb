@@ -18,15 +18,26 @@ An example of the parameters set when deploying the chart with an external datab
 <% else %>
 When using these parameters, it is necessary to disable installation of the bundled MariaDB database using the *mariadb.enabled=false* parameter.
 
-An example of the parameters set when deploying the chart with an external database are shown below:
-
-  mariadb.enabled=false
-  externalDatabase.host=myexternalhost
-  externalDatabase.user=myuser
-  externalDatabase.password=mypassword
-  externalDatabase.database=mydatabase
-  externalDatabase.port=3306
-<% end %>
-
 > NOTE: If disabling the bundled database server as described above, it is mandatory to supply values for the *externalDatabase.\** parameters.
 
+An example of the parameters set when deploying the chart with an external database are shown below:
+
+<% if current.app == 'spring-cloud-dataflow' %>
+    mariadb.enabled=false
+    externalDatabase.scheme=mariadb
+    externalDatabase.host=myexternalhost
+    externalDatabase.password=mypassword
+    externalDatabase.port=3306
+    externalDatabase.dataflow.username=mydataflowuser
+    externalDatabase.dataflow.database=mydataflowdatabase
+    externalDatabase.skipper.username=myskipperuser
+    externalDatabase.dataflow.database=myskipperdatabase
+<% else %>
+    mariadb.enabled=false
+    externalDatabase.host=myexternalhost
+    externalDatabase.user=myuser
+    externalDatabase.password=mypassword
+    externalDatabase.database=mydatabase
+    externalDatabase.port=3306
+<% end %>
+<% end %>
