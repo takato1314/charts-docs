@@ -15,7 +15,7 @@ To start using any <%= variable :catalog_name, :platform %> Helm chart, it is ne
 
 * Add the <%= variable :catalog_name, :platform %> repository to Helm with the following command. Replace the USERNAME and PASSWORD placeholders with the correct username and token and the REPOSITORY placeholder with a reference to your Tanzu Application Catalog chart repository.
 
-        $ helm repo add tac REPOSITORY --username "USERNAME" --password "PASSWORD"
+        $ helm repo add <%= variable :repository_name, :platform %> REPOSITORY --username "USERNAME" --password "PASSWORD"
 
     If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, it is necessary to first  create a Kubernetes ImagePullSecret for *registry.pivotal.io/tac-for-tanzu-advanced* with the registry credentials, and then log in to the registry with the registry credentials. The commands are shown below. Replace the USERNAME and TOKEN placeholders with the correct registry credentials and the SECRET-NAME placeholder with a custom name for the secret.
 
