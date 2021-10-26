@@ -1,7 +1,7 @@
 <%
 =begin
 apps: all
-platforms: kubernetes, tanzu-application-catalog
+platforms: kubernetes  tanzu-application-catalog
 id: expose_service
 title: Expose services
 category: get-started
@@ -11,10 +11,12 @@ highlight: 40
 
 The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
 
+<% if %w(airflow apache argo-cd argo-workflows aspnet-core consul discourse dokuwiki drupal ejbca fluentd geode ghost grafana grafana-operator harbor influxdb jasperreports jenkins joomla jupyterhub keycloak kibana kong kubeapps logstash magento mediawiki moodle minio nats nginx node odoo opencart orangehrm osclass owncloud parse phabricator phpbb phpmyadmin prestashop rabbitmq redmine sealed-secrets solr sonarqube spark spring-cloud-dataflow suitecrm testlink tomcat wildfly wordpress).include? current.app %>
 * Ingress: This requires an Ingress controller to be installed in the Kubernetes cluster. Set *\*.ingress.enabled=true* to expose the corresponding service(s) through Ingress. <% if there_is "../../configuration/configure-ingress" %>[Learn more about configuring and using Ingress](../../configuration/configure-ingress).<% end %>
 
+<% end %>
 * Cluster IP address: This exposes the service(s) on a cluster-internal IP address. This approach makes the corresponding service(s) reachable only from within the cluster. Set *\*.service.type=ClusterIP* to choose this approach.
 
-* Node port: This exposes the service() on each node's IP address at a static port (the NodePort). This approach makes the corresponding service(s) reachable from outside the cluster, by requesting the static port using the node's IP address, such as *NODE-IP:NODE-PORT*. Set *\*.service.type=NodePort* to choose this approach.
+* Node port: This exposes the service() on each node's IP address at a static port (the NodePort). This approach makes the corresponding service(s) reachable from outside the cluster by requesting the static port using the node's IP address, such as *NODE-IP:NODE-PORT*. Set *\*.service.type=NodePort* to choose this approach.
 
 * Load balancer IP address: This exposes the service(s) externally using a cloud provider's load balancer. Set *\*.service.type=LoadBalancer* to choose this approach.
