@@ -1,6 +1,6 @@
 <%
 =begin
-apps: ejbca, keycloak, ghost, odoo, sonarqube
+apps: ejbca, keycloak, ghost, odoo, sonarqube, concourse
 platforms: kubernetes, tanzu-application-catalog
 id: use_external_database
 title: Use an external database
@@ -9,7 +9,7 @@ weight: 20
 highlight: 20
 =end %>
 
-<% if %w(keycloak, odoo, sonarqube).include? current.app %>
+<% if %w(keycloak, odoo, sonarqube concourse).include? current.app %>
 <%= partial 'platforms/kubernetes/common/use_external_database.md.erb', var: { db: 'postgres' } %>
 <% elsif %w(ejbca ghost).include? current.app %>
 <%= partial 'platforms/kubernetes/common/use_external_database.md.erb', var: { db: 'mariadb' } %>
