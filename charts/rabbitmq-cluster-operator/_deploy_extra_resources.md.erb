@@ -1,0 +1,27 @@
+<%
+=begin
+apps: rabbitmq-cluster-operator
+platforms: kubernetes, tanzu-application-catalog
+id: deploy_extra_resources
+title: Deploy extra resources
+category: configuration
+weight: 40
+highlight: 40
+=end %>
+
+There are cases where it may be necessary to deploy extra objects, such a ConfigMap containing application configuration or an extra deployment with a micro-service used by an application. For these cases, this chart supports adding the full specification of other objects via the *extraDeploy* parameter.
+
+For instance, to deploy your custom *RabbitmqCluster* definition, install the RabbitMQ Cluster Operator using the values below:
+
+```yaml
+extraDeploy:
+  - apiVersion: rabbitmq.com/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmq-custom-configuration
+    spec:
+      replicas: 1
+      rabbitmq:
+        additionalConfig: |
+          log.console.level = debug
+```

@@ -1,0 +1,87 @@
+<%
+=begin
+apps: rabbitmq, rabbitmq-cluster-operator
+platforms: kubernetes, tanzu-application-catalog
+id: compare_solutions
+title: Differences between the RabbitMQ and the RabbitMQ Operator Helm charts
+category: get-started
+weight: 40
+highlight: 40
+=end %>
+
+The RabbitMQ chart deploys a single RabbitMQ installation using a Kubernetes StatefulSet object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after chart installation:
+
+```
+                    +--------------+             +-----+
+                    |              |             |     |
+ Service            |   RabbitMQ   +<------------+ PVC |
+<-------------------+              |             |     |
+                    |  StatefulSet |             +-----+
+                    |              |
+                    +-----------+--+
+                                ^                +------------+
+                                |                |            |
+                                +----------------+ Configmaps |
+                                                 | Secrets    |
+                                                 +------------+
+
+```
+
+Its lifecycle is managed using Helm and, at the RabbitMQ container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The StatefulSet does not require any ServiceAccounts with special RBAC privileges, so this solution fits better in more restricted Kubernetes installations.
+
+The RabbitMQ Operator chart deploys a RabbitMQ Operator installation using a Kubernetes Deployment.  The figure below shows the RabbitMQ operator deployment after chart installation:
+
+```
++--------------------+
+|                    |      +---------------+
+|  RabbitMQ Operator |      |               |
+|                    |      |     RBAC      |
+|     Deployment     |      | Privileges    |
++-------+------------+      +-------+-------+
+        ^                           |
+        |   +-----------------+     |
+        +---+ Service Account +<----+
+            +-----------------+
+```
+
+The Operator extends the Kubernetes API with the RabbitmqCluster object. The user will then be able to deploy these objects and the previously deployed Operator will take care of deploying all the required StatefulSets, ConfigMaps and Services for running a RabbitMQ instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects. The following figure shows the deployed objects after deploying a RabbitmqCluster object using *kubectl*:
+
+
+```
+  +--------------------+
+  |                    |      +---------------+
+  |  RabbitMQ Operator |      |               |
+  |                    |      |     RBAC      |
+  |     Deployment     |      | Privileges    |
+  +-------+------------+      +-------+-------+
+    |     ^                           |
+    |     |   +-----------------+     |
+    |     +---+ Service Account +<----+
+    |         +-----------------+
+    |
+    |
+    |
+    |
+    |    |-----------------------------------------------------------------------|
+    |    |                                                                       |
+    |    |                        +--------------+             +-----+           |
+    |    |                        |              |             |     |           |
+    |---->     Service            |   RabbitMQ   +<------------+ PVC |           |
+         |    <-------------------+              |             |     |           |
+         |                        |  StatefulSet |             +-----+           |
+         |                        |              |                               |
+         |                        +-----------+--+                               |
+         |                                    ^                +------------+    |
+         |                                    |                |            |    |
+         |                                    +----------------+ Configmaps |    |
+         |                                                     | Secrets    |    |
+         |                                                     +------------+    |
+         |                                                                       |
+         |                                                                       |
+         |-----------------------------------------------------------------------|
+
+```
+
+This RabbitMQ Operator chart allows users to easily deploy multiple RabbitMQ instances compared to the RabbitMQ chart.
+
+> NOTE: As the Operator automatically deploys RabbitMQ installations, the RabbitMQ Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
