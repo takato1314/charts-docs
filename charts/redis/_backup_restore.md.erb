@@ -31,9 +31,9 @@ To restore the data in a new cluster, you will need to create a PVC and then upl
 
 Follow the following steps:
 
-* In the *values.yaml* file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
+* In the [*values.yaml*](https://github.com/bitnami/charts/blob/ae086acff0dd7c4f4b3101ebf1a7328e6a8ddcf5/bitnami/redis/values.yaml#L131) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
 
-        configmap: |-
+        commonConfiguration: |-
            # Enable AOF https://redis.io/topics/persistence#append-only-file
            appendonly no
            # Disable RDB persistence, AOF persistence already enabled.
