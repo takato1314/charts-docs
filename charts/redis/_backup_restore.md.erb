@@ -39,6 +39,8 @@ Follow the following steps:
            # Disable RDB persistence, AOF persistence already enabled.
            save ""
 
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+
 * Start the new cluster to create the PVCs. Use the command below as an example:
 
         $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
@@ -82,5 +84,7 @@ Follow the following steps:
         $ kubectl delete pod volpod
 
 * Restart the cluster:
+
+    > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
 
         $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
