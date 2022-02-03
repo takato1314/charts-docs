@@ -44,9 +44,18 @@ chart_name = data[1].strip
 %>
     If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, use the commands below to deploy the chart instead. Replace the SECRET-NAME placeholder with the same Kubernetes ImagePullSecret name used previously.
 
+        **If you are using Helm CLI version older than 3.7.0**
+
         $ helm chart pull registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %>:latest
         $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %>:latest
         $ helm install MY-RELEASE <%= chart_name %>/ --set "global.imagePullSecrets[0]=SECRET-NAME"
+
+        **If you are using Helm CLI version 3.7.x (please note `export HELM_EXPERIMENTAL_OCI=1` is not needed from 3.8.0 onwards)**
+
+        $ export HELM_EXPERIMENTAL_OCI=1
+        $ helm registry login registry.pivotal.io/tac-for-tanzu-advanced/charts
+        $ helm install MY-RELEASE oci://registry.pivotal.io/tac-for-tanzu-advanced/charts/<%= chart_name %> --set "global.imagePullSecrets[0]=SECRET-NAME"
+
 <% else %>
     > NOTE: Remember that MY-RELEASE and CHART are placeholders. Replace MY-RELEASE with the name you want to give to the deployment or add the *--generate-name* parameter to automatically generate a name, and replace CHART with the chart name. The name must start and end with a lower-case alphanumeric character and can only contain alphanumeric character, '-' or '.'.
 
@@ -54,7 +63,15 @@ chart_name = data[1].strip
 
     If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, use the commands below to deploy the chart instead. Replace the SECRET-NAME placeholder with the same Kubernetes ImagePullSecret name used previously.
 
+        **If you are using Helm CLI version older than 3.7.0**
+
         $ helm chart pull registry.pivotal.io/tac-for-tanzu-advanced/charts/CHART:latest
         $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/CHART:latest
         $ helm install MY-RELEASE CHART/ --set "global.imagePullSecrets[0]=SECRET-NAME"
+
+        **If you are using Helm CLI version 3.7.x (please note `export HELM_EXPERIMENTAL_OCI=1` is not needed from 3.8.0 onwards)**
+
+        $ export HELM_EXPERIMENTAL_OCI=1
+        $ helm registry login registry.pivotal.io/tac-for-tanzu-advanced/charts
+        $ helm install MY-RELEASE oci://registry.pivotal.io/tac-for-tanzu-advanced/charts/CHART --set "global.imagePullSecrets[0]=SECRET-NAME"
 <% end %>

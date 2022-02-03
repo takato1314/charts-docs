@@ -45,9 +45,21 @@ To start using any <%= variable :catalog_name, :platform %> Helm chart, it is ne
 
     If using <%= variable :catalog_name, :platform %> for Tanzu Advanced, use the commands below to deploy the chart instead. Replace the SECRET-NAME placeholder with the same Kubernetes ImagePullSecret name used previously.
 
+        **If you are using Helm CLI version older than 3.7.0**
+
         $ helm chart pull registry.pivotal.io/tac-for-tanzu-advanced/charts/wavefront:latest
         $ helm chart export registry.pivotal.io/tac-for-tanzu-advanced/charts/wavefront:latest
         $ helm install MY-RELEASE wavefront/ --set "global.imagePullSecrets[0]=SECRET-NAME" \
+            --namespace wavefront \
+            --set clusterName=K8s-CLUSTER-NAME \
+            --set wavefront.url=https://YOUR_CLUSTER.wavefront.com \
+            --set wavefront.token=YOUR_API_TOKEN
+
+        **If you are using Helm CLI version 3.7.x (please note `export HELM_EXPERIMENTAL_OCI=1` is not needed from 3.8.0 onwards)**
+
+        $ export HELM_EXPERIMENTAL_OCI=1
+        $ helm registry login registry.pivotal.io/tac-for-tanzu-advanced/charts
+        $ helm install MY-RELEASE oci://registry.pivotal.io/tac-for-tanzu-advanced/charts/wavefront --set "global.imagePullSecrets[0]=SECRET-NAME" \
             --namespace wavefront \
             --set clusterName=K8s-CLUSTER-NAME \
             --set wavefront.url=https://YOUR_CLUSTER.wavefront.com \
