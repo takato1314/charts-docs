@@ -25,8 +25,13 @@ This major release renames several values in this chart and adds missing feature
 * *ingress* map is completely redefined.
 * *metrics.service.port* has been regrouped under the *metrics.service.ports* map.
 * Support for Network Policies is dropped and it'll be properly added in the future.
+* The secret keys *airflow-fernetKey* and *airflow-secretKey* were renamed to *airflow-fernet-key* and *airflow-secret-key*, respectively.
 
 #### Upgrading Instructions
+
+To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
@@ -108,7 +113,7 @@ This major updates the Redis&trade; subchart to it newest major, 14.0.0, which c
 
 #### Upgrading Instructions
 
-To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow*):
+To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
