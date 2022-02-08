@@ -37,6 +37,13 @@ This major release renames several values in this chart and adds missing feature
         export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
+2. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*) and secrets:
+
+        kubectl delete statefulsets.apps --cascade=false airflow-postgresql
+        kubectl delete statefulsets.apps --cascade=false airflow-worker
+        kubectl delete secret postgresql --namespace default
+        kubectl delete secret airflow --namespace default
+
 3. Upgrade your release using the same PostgreSQL version:
 
         CURRENT_PG_VERSION=$(kubectl exec airflow-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
