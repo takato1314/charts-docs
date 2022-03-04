@@ -11,9 +11,15 @@ highlight: 20
 
 ### To 7.0.0
 
-This major upgrades the Discourse version to 2.8.0. This version includes a breaking change in the *lazy-yt* plugin, and the recommendation is to remove it, or manually upgrade it. To do so, follow these steps:
+This major upgrades the Discourse version to *2.8.0*.
 
-1. Upgrade to the latest version of the *bitnami/discourse* chart with Diagnostics mode:
+#### What changes were introduced in this major version?
+
+This version includes a breaking change in the *lazy-yt* plugin, and the recommendation is to remove it, or manually upgrade it.
+
+#### Upgrading Instructions
+
+To upgrade to *7.0.0* from *6.x*, follow these steps below:
 
         $ helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
 
