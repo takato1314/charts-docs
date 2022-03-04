@@ -21,6 +21,8 @@ This version includes a breaking change in the *lazy-yt* plugin, and the recomme
 
 To upgrade to *7.0.0* from *6.x*, follow these steps below:
 
+1. Upgrade to the latest version of the *bitnami/discourse* chart with Diagnostics mode:
+
         $ helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
 
 2. Remove or upgrade the *lazy-yt* plugin. To remove it, execute the following command inside the *discourse* container's shell:
