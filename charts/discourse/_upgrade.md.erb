@@ -9,6 +9,24 @@ weight: 20
 highlight: 20
 =end %>
 
+### To 7.0.0
+
+This major upgrades the Discourse version to 2.8.0. This version includes a breaking change in the *lazy-yt* plugin, and the recommendation is to remove it, or manually upgrade it. To do so, follow these steps:
+
+1. Upgrade to the latest version of the *bitnami/discourse* chart with Diagnostics mode:
+
+        $ helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+
+2. Remove or upgrade the *lazy-yt* plugin. To remove it, execute the following command inside the *discourse* container's shell:
+
+        $ rm -rf /bitnami/discourse/plugins/lazy-yt
+
+3. Ensure that the initialization scripts work:
+
+        $ /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+
+4. Upgrade the Helm deployment without Diagnostics mode.
+
 ### To 6.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
