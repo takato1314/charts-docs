@@ -51,10 +51,10 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
 
         CURRENT_PG_VERSION=$(kubectl exec harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
         helm upgrade harbor bitnami/harbor \
-          --set adminPassword=$HARBOR_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.postgresPassword=$POSTGRESQL_PASSWORD \
-          --set postgresql.primary.persistence.existingClaim=$POSTGRESQL_PVC
+          --set adminPassword="${HARBOR_PASSWORD:?}" \
+          --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+          --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+          --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
 
 4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
