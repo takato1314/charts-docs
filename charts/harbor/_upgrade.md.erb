@@ -15,18 +15,20 @@ This major release renames several values in this chart and adds missing feature
 
 #### What changes were introduced in this major version?
 
-* `harborAdminPassword` was renamed to `adminPassword` and `forcePassword` is deprecated.
+* `harborAdminPassword` was renamed to `adminPassword`
+* `forcePassword` was deprecated
 * Traffic exposure was completely redesigned:
-  * The new parameter `exposureType` allows deciding whether to expose Harbor using Ingress or an NGINX proxy.
-  * `service.type` doesn't accept `Ingress` as a valid value anymore. To configure traffic exposure through Ingress set `exposureType` to `ingress`.
-  * `service.tls` map has been renamed to `nginx.tls`. To configure TLS termination with Ingress, set `ingress.tls` parameter.
-* `xxxImage` parameters (e.g. `nginxImage`) have been renamed to `xxx.image` (e.g. `nginx.image`).
-* `xxx.replicas` parameters (e.g. `nginx.replicas`) have been renamed to `xxx.replicaCount` (e.g. `nginx.replicaCount`).
-* `persistence.persistentVolumeClaim.xxx.accessMode` parameters (e.g. `persistence.persistentVolumeClaim.registry.accessMode`) have been renamed to `persistence.persistentVolumeClaim.xxx.accessModes` (e.g. `persistence.persistentVolumeClaim.registry.accessModes`) and expect an array instead of a string.
-* `caBundleSecretName` was renamed to `internalTLS.caBundleSecret`.
-* `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`.
-* `core.uaaSecretName` was renamed to `core.uaaSecret`.
-* `ingress` map is completely redefined.
+  * The new parameter `exposureType` allows deciding whether to expose Harbor using Ingress or an NGINX proxy
+  * `service.type` doesn't accept `Ingress` as a valid value anymore. To configure traffic exposure through Ingress, set `exposureType` to `ingress`
+  * `service.tls` map has been renamed to `nginx.tls`
+  * To configure TLS termination with Ingress, set the `ingress.core.tls` and `ingress.notary.tls` parameters
+  * `ingress` map is completely redefined
+* `xxxImage` parameters (e.g. `nginxImage`) have been renamed to `xxx.image` (e.g. `nginx.image`)
+* `xxx.replicas` parameters (e.g. `nginx.replicas`) have been renamed to `xxx.replicaCount` (e.g. `nginx.replicaCount`)
+* `persistence.persistentVolumeClaim.xxx.accessMode` parameters (e.g. `persistence.persistentVolumeClaim.registry.accessMode`) have been renamed to `persistence.persistentVolumeClaim.xxx.accessModes` (e.g. `persistence.persistentVolumeClaim.registry.accessModes`) and expect an array instead of a string
+* `caBundleSecretName` was renamed to `internalTLS.caBundleSecret`
+* `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`
+* `core.uaaSecretName` was renamed to `core.uaaSecret`
 
 #### Upgrading Instructions
 
