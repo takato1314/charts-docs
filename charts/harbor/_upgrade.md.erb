@@ -49,7 +49,7 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
 
 3. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec harbor-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        CURRENT_PG_VERSION=$(kubectl exec harbor-postgresql-0 -c harbor-postgresql -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
         helm upgrade harbor bitnami/harbor \
           --set adminPassword=$HARBOR_PASSWORD \
           --set postgresql.image.tag=$CURRENT_PG_VERSION \
