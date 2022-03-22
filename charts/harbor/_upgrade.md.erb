@@ -32,25 +32,29 @@ This major release renames several values in this chart and adds missing feature
 
 #### Upgrading Instructions
 
-To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor` and the release namespace `default`):
+To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
+1. Select the namespace where Harbor is deployed:
+
+        HARBOR_NAMESPACE='default'
+
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-        POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+        POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
         POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
 1. Delete the PostgreSQL statefulset (notice the option `--cascade=false`) and secret:
 
-        kubectl delete statefulsets.apps --namespace default --cascade=false harbor-postgresql
-        kubectl delete secret --namespace default harbor-postgresql
+        kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=false harbor-postgresql
+        kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
 
 1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec --namespace default harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
-        helm --namespace default upgrade harbor bitnami/harbor \
+        CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
+        helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
           --set adminPassword="${HARBOR_PASSWORD:?}" \
           --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
           --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
@@ -58,7 +62,7 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
 
 1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod --namespace default harbor-postgresql-0
+        kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
 
 ### To 11.0.0
 
