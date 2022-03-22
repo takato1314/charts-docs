@@ -38,9 +38,9 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+        HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+        POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
 2. Delete the PostgreSQL statefulset (notice the option `--cascade=false`) and secret:
 
