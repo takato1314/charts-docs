@@ -9,54 +9,80 @@ weight: 20
 highlight: 20
 =end %>
 
-### To 12.0.0
+### To 12.x.x
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
 
 #### What changes were introduced in this major version?
 
-* *harborAdminPassword* was renamed to *adminPassword* and *forcePassword* is deprecated.
+* `harborAdminPassword` was renamed to `adminPassword`
+* `forcePassword` was deprecated
 * Traffic exposure was completely redesigned:
-  * The new parameter *exposureType* allows deciding whether to expose Harbor using Ingress or an NGINX proxy.
-  * *service.type* doesn't accept "Ingress" as a valid value anymore. To configure traffic exposure through Ingress set *exposureType* to "ingress".
-  * *service.tls* map has been renamed to *nginx.tls*. To configure TLS termination with Ingress, set *ingress.tls* parameter.
-* *xxxImage* parameters (e.g. "nginxImage") have been renamed to *xxx.image* (e.g. "nginx.image").
-* *xxx.replicas* parameters (e.g. "nginx.replicas") have been renamed to *xxx.replicaCount* (e.g. "nginx.replicaCount").
-* *persistence.persistentVolumeClaim.xxx.accessMode* parameters (e.g. "persistence.persistentVolumeClaim.registry.accessMode") have been renamed to *persistence.persistentVolumeClaim.xxx.accessModes* (e.g. "persistence.persistentVolumeClaim.registry.accessModes") and expect an array instead of a string.
-* *caBundleSecretName* was renamed to *internalTLS.caBundleSecret*.
-* *persistence.imageChartStorage.caBundleSecretName* was renamed to *persistence.imageChartStorage.caBundleSecret*.
-* *core.uaaSecretName* was renamed to *core.uaaSecret*.
-* *ingress* map is completely redefined.
+  * The new parameter `exposureType` allows deciding whether to expose Harbor using Ingress or an NGINX proxy
+  * `service.type` doesn't accept `Ingress` as a valid value anymore. To configure traffic exposure through Ingress, set `exposureType` to `ingress`
+  * `service.tls` map has been renamed to `nginx.tls`
+  * To configure TLS termination with Ingress, set the `ingress.core.tls` and `ingress.notary.tls` parameters
+  * `ingress` map is completely redefined
+* `xxxImage` parameters (e.g. `nginxImage`) have been renamed to `xxx.image` (e.g. `nginx.image`)
+* `xxx.replicas` parameters (e.g. `nginx.replicas`) have been renamed to `xxx.replicaCount` (e.g. `nginx.replicaCount`)
+* `persistence.persistentVolumeClaim.xxx.accessMode` parameters (e.g. `persistence.persistentVolumeClaim.registry.accessMode`) have been renamed to `persistence.persistentVolumeClaim.xxx.accessModes` (e.g. `persistence.persistentVolumeClaim.registry.accessModes`) and expect an array instead of a string
+* `caBundleSecretName` was renamed to `internalTLS.caBundleSecret`
+* `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`
+* `core.uaaSecretName` was renamed to `core.uaaSecret`
 
 #### Upgrading Instructions
 
-To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *harbor* and the release namespace *default*):
+To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
+1. Select the namespace where Harbor is deployed:
+
+    ```shell
+    HARBOR_NAMESPACE='default'
+    ```
+
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+    ```shell
+    HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+    POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+    POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+    ```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false harbor-postgresql
-        kubectl delete secret harbor-postgresql --namespace default
+    ```shell
+    kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+    kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+    ```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec harbor-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade harbor bitnami/harbor \
-          --set adminPassword=$HARBOR_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+    ```shell
+    CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
+    helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+      --set adminPassword="${HARBOR_PASSWORD:?}" \
+      --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+      --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+      --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+    ```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod harbor-postgresql-0
+    ```shell
+    kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+    ```
+
+> **NOTE:** the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+>
+> ```console
+> $ kubectl --namespace "${HARBOR_NAMESPACE:?}" logs harbor-postgresql-0 --container harbor-postgresql
+>     ...
+> postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+> 2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+> 2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+> ```
 
 ### To 11.0.0
 
@@ -97,7 +123,7 @@ Please note that Clair might be fully deprecated from this chart in following up
 
 #### Upgrading Instructions
 
-To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *harbor* and the release namespace *default*):
+To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor` and the release namespace `default`):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
