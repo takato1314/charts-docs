@@ -74,6 +74,16 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
     kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
     ```
 
+> **NOTE:** the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+>
+> ```console
+> $ kubectl --namespace "${HARBOR_NAMESPACE:?}" logs harbor-postgresql-0 --container harbor-postgresql
+>     ...
+> postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+> 2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+> 2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+> ```
+
 ### To 11.0.0
 
 This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
