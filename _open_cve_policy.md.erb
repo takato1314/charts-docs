@@ -13,15 +13,7 @@ Bitnami's images are based on Debian and Oracle Linux - at the moment of writing
 
 #### How can I check if a container or chart includes an open CVE?
 
-* To check if there is any open CVE in a container or chart, navigate to its README file, and in the "Why use Bitnami images" section click the "CVE scan report" link. You will be redirected to the Bitnami Quay repository for the selected image. [Check out this example for the Bitnami WordPress Docker image](https://quay.io/repository/bitnami/wordpress?tab=tags). Follow these steps:
-
-* Find the "latest" tag and click the vulnerability report link under the "Security scan" section.
-
-    <%= documentation_img '/images/img/platforms/common/vulnerability-report.png', 'Check container vulnerability report' %>
-
-* In the resulting screen, activate the "Only show fixable" checkbox.
-
-    <%= documentation_img '/images/img/platforms/common/show-fixable.png', 'Only show fixable' %>
+* To check if there is any open CVE in a container you can use any CVE scanner such as `trivy` and execute it by running `trivy image --ignore-unfixed bitnami/CONTAINER`. In this way, the result will contain those CVEs present in the underlying distro or in the application itself which already contains a fix but this fix is not present in the analyzed container image.
 
 #### Is Bitnami releasing charts or containers that include CVEs? 
 
