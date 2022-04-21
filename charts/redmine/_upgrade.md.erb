@@ -9,6 +9,10 @@ weight: 20
 highlight: 20
 =end %>
 
+### To 20.0.0
+
+The MariaDB subchart has been updated to the latest version (now it uses 10.6). No major issues are expected during the upgrade.
+
 ### To 18.0.0
 
 This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/) to obtain more information).
@@ -131,4 +135,3 @@ To upgrade to *15.0.0* from *14.x*, it should be done reusing the credentials on
           --set redminePassword=$REDMINE_PASSWORD \
           --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
           --set mariadb.auth.password=$MARIADB_PASSWORD
-
