@@ -28,7 +28,7 @@ Relying on Helm to generate random credentials is the root of many issues when d
 
 Here is an example illustrating the issue:
 
-* Install a chart that uses a stateful application, such as the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql):
+* Install a chart that uses a stateful application, such as the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql):
 
         $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/postgresql
 
@@ -118,7 +118,7 @@ If a Helm Chart includes a Statefulset which uses VolumeClaimTemplates to genera
 
 Reproduce the issue by following the steps below:
 
-* Install a chart that uses a Statefulset such as the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and wait for the release to be marked as successful:
+* Install a chart that uses a Statefulset such as the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) and wait for the release to be marked as successful:
 
         $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/mariadb --wait
 
@@ -163,7 +163,7 @@ Our [guide on container hardening best practices](https://docs.bitnami.com/tutor
 
 The example below analyzes a common issue faced by Bitnami users in this context:
 
-* Install a chart that uses a non-root container, such as the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mongodb):
+* Install a chart that uses a non-root container, such as the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mongodb):
 
         $ helm install MY-RELEASE <%= variable :repository_name, :platform %>/mongodb
 

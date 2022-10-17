@@ -103,7 +103,7 @@ Install Minikube in your local system, either by using a virtualization software
 
 * Open a new console window on the local system or open your VirtualBox.
 
-* To obtain the latest Minikube release, execute the following command depending on your OS. Replace the OS_DISTRIBUTION placeholder with the software distribution for your platform, which are "darwin" for OS X, "linux" for Linux and "windows" for Windows. 
+* To obtain the latest Minikube release, execute the following command depending on your OS. Replace the OS_DISTRIBUTION placeholder with the software distribution for your platform, which are "darwin" for OS X, "linux" for Linux and "windows" for Windows.
 
         $ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-OS_DISTRIBUTION-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
@@ -158,7 +158,7 @@ You can find an example of the installation of Redis using Helm charts below:
         $ helm repo add bitnami https://charts.bitnami.com/bitnami
         $ helm install redis bitnami/redis
 
-> NOTE: Check the configurable parameters of the Redis chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/redis#configuration).
+> NOTE: Check the configurable parameters of the Redis chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/main/bitnami/redis#configuration).
 
 Once you have the chart installed a "Notes" section will be shown at the bottom of the installation information. It contains important instructions about how to obtain your application's IP address or credentials. Please check it carefully:
 
@@ -182,23 +182,23 @@ Find how to install MongoDB, Odoo or WordPress in the examples below:
 * To install on Minikube, run the following command:
 
         $ helm repo add bitnami https://charts.bitnami.com/bitnami
-        $ helm install mongodb bitnami/mongodb --set serviceType=NodePort 
+        $ helm install mongodb bitnami/mongodb --set serviceType=NodePort
 
-    > NOTE: Check the configurable parameters of the MongoDB chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#configuration).
+    > NOTE: Check the configurable parameters of the MongoDB chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#configuration).
 
 * To install on Minikube, run the following command:
 
         $ helm repo add bitnami https://charts.bitnami.com/bitnami
         $ helm install odoo bitnami/odoo --set serviceType=NodePort
 
-    > NOTE: Check the configurable parameters of the Odoo chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/odoo#configuration).
+    > NOTE: Check the configurable parameters of the Odoo chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/main/bitnami/odoo#configuration).
 
 * To install on Minikube, run the following command:
 
         $ helm repo add bitnami https://charts.bitnami.com/bitnami
         $ helm install wordpress bitnami/wordpress --set mariadb.image=bitnami/mariadb:10.1.21-r0 --set serviceType=NodePort
 
-    > NOTE: Check the configurable parameters of the WordPress chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/wordpress#configuration).
+    > NOTE: Check the configurable parameters of the WordPress chart and their default values at the [GitHub repository](https://github.com/bitnami/charts/tree/main/bitnami/wordpress#configuration).
 
 Now, you can manage your deployments from the Kubernetes Dashboard. Follow the instructions below to access the Web user interface.
 
