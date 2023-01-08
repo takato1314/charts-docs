@@ -3,9 +3,10 @@
 This repository contains the Kubernetes guides and tutorials available in the [Bitnami Documentation](https://docs.bitnami.com).
 
 The specific guides for each helm chart can be found under the `charts/` folder. The `common/` folder contains guides applicable to all the charts. The guides are written in Markdown using [Middleman](https://middlemanapp.com/) templates.
-# License
 
-Copyright (c) 2015-2021 Bitnami
+## License
+
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
